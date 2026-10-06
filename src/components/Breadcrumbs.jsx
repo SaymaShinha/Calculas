@@ -20,21 +20,31 @@ export default function Breadcrumbs({ items }) {
 
   const breadcrumbItems = items || generatedItems;
 
+  // Don't render breadcrumbs on the homepage.
+  if (!location.pathname || location.pathname === "/") {
+    return null;
+  }
+
   return (
     <nav
       aria-label="Breadcrumb"
-      className="mx-auto w-full max-w-7xl px-4 pt-6 sm:px-6 lg:px-8"
+      className="mx-auto w-full max-w-[1180px] px-4 pt-5 sm:px-6 lg:px-8"
     >
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm">
+      <ol className="flex flex-wrap items-center gap-1 text-sm">
+        {/* Home */}
+
         <li>
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-base-content/50 transition hover:bg-base-200 hover:text-primary"
+            className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 !text-[#687481] transition-colors hover:bg-[#F8F7F4] hover:!text-[#17324D]"
           >
-            <Home size={15} />
+            <Home size={15} strokeWidth={1.8} />
+
             <span className="hidden sm:inline">Home</span>
           </Link>
         </li>
+
+        {/* Breadcrumb items */}
 
         {breadcrumbItems.map((item, index) => {
           const isLast = index === breadcrumbItems.length - 1;
@@ -42,21 +52,26 @@ export default function Breadcrumbs({ items }) {
           return (
             <li
               key={`${item.path}-${item.label}`}
-              className="flex items-center gap-1.5"
+              className="flex min-w-0 items-center gap-1"
             >
-              <ChevronRight size={15} className="text-base-content/30" />
+              <ChevronRight
+                size={15}
+                strokeWidth={1.7}
+                className="shrink-0 text-[#B4BCC4]"
+              />
 
               {isLast ? (
                 <span
-                  className="max-w-[220px] truncate rounded-lg px-2 py-1.5 font-medium text-base-content/75"
+                  className="max-w-[220px] truncate rounded-md px-2 py-1.5 font-medium text-[#34404C]"
                   aria-current="page"
+                  title={item.label}
                 >
                   {item.label}
                 </span>
               ) : (
                 <Link
                   to={item.path}
-                  className="rounded-lg px-2 py-1.5 text-base-content/50 transition hover:bg-base-200 hover:text-primary"
+                  className="max-w-[180px] truncate rounded-md px-2 py-1.5 !text-[#687481] transition-colors hover:bg-[#F8F7F4] hover:!text-[#17324D]"
                 >
                   {item.label}
                 </Link>

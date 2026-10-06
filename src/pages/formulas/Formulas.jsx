@@ -1,10 +1,11 @@
+// src/pages/Formulas.jsx
+
 import { useMemo, useState } from "react";
 import {
   AlertTriangle,
   BookOpen,
   Calculator,
   Check,
-  ChevronDown,
   Clipboard,
   Compass,
   Copy,
@@ -18,6 +19,7 @@ import {
 
 import SEO from "../../components/SEO.jsx";
 import PageHeader from "../../components/PageHeader.jsx";
+import MathRenderer from "../../components/MathRenderer.jsx";
 
 const formulaCategories = [
   {
@@ -29,47 +31,45 @@ const formulaCategories = [
     formulas: [
       {
         name: "Difference of Squares",
-        formula: "a² − b² = (a − b)(a + b)",
+        formula: "a^2-b^2=(a-b)(a+b)",
         description:
           "The difference between two squares factors into the difference and sum of the two quantities.",
         conditions: "Valid for all real or complex a and b.",
         variables: "a and b are arbitrary quantities.",
         use: "Useful for factoring expressions and simplifying limits.",
         example:
-          "x² − 9 = (x − 3)(x + 3). This is especially useful when evaluating limits that initially produce 0/0.",
-        note: "Recognizing algebraic structure can often turn a difficult-looking limit into a simple substitution.",
+          "x^2-9=(x-3)(x+3). This is especially useful when evaluating limits that initially produce 0/0.",
+        note: "Recognizing algebraic structure can turn a difficult-looking limit into a simple substitution.",
       },
       {
         name: "Perfect Square",
-        formula: "a² ± 2ab + b² = (a ± b)²",
+        formula: "a^2\\pm2ab+b^2=(a\\pm b)^2",
         description:
           "A quadratic expression with the appropriate middle term can be written as a squared binomial.",
         conditions: "Valid for all a and b.",
         variables: "a and b represent algebraic quantities.",
         use: "Useful for factoring, completing the square, and simplifying functions.",
-        example: "x² + 6x + 9 = (x + 3)².",
+        example: "x^2+6x+9=(x+3)^2.",
         note: "The middle term must be exactly ±2ab.",
       },
       {
         name: "Quadratic Formula",
-        formula: "x = [−b ± √(b² − 4ac)]/(2a)",
-        description:
-          "Finds the roots of a quadratic equation ax² + bx + c = 0.",
-        conditions: "a ≠ 0.",
+        formula: "x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}",
+        description: "Finds the roots of a quadratic equation ax²+bx+c=0.",
+        conditions: "a≠0.",
         variables: "a, b, and c are coefficients of the quadratic equation.",
         use: "Useful when a quadratic cannot be factored easily.",
-        example:
-          "For x² − 5x + 6 = 0, x = [5 ± √(25 − 24)]/2, giving x = 2 or x = 3.",
-        note: "The discriminant b² − 4ac determines whether the roots are real, repeated, or complex.",
+        example: "For x^2-5x+6=0, x=(5±√1)/2, giving x=2 or x=3.",
+        note: "The discriminant b²−4ac determines whether the roots are real, repeated, or complex.",
       },
       {
         name: "Binomial Expansion",
-        formula: "(a + b)ⁿ = Σₖ₌₀ⁿ C(n,k)aⁿ⁻ᵏbᵏ",
+        formula: "(a+b)^n=\\sum_{k=0}^{n}\\binom{n}{k}a^{n-k}b^k",
         description: "Expands a power of a binomial into a sum of terms.",
         conditions: "For non-negative integer n in this finite form.",
-        variables: "C(n,k) = n!/[k!(n−k)!] is the binomial coefficient.",
+        variables: "C(n,k)=n!/[k!(n−k)!] is the binomial coefficient.",
         use: "Useful for algebraic expansion, approximations, and Taylor-related calculations.",
-        example: "(x + 1)² = x² + 2x + 1.",
+        example: "(x+1)^2=x^2+2x+1.",
         note: "The binomial theorem becomes especially useful when working with polynomial approximations.",
       },
     ],
@@ -84,106 +84,106 @@ const formulaCategories = [
     formulas: [
       {
         name: "Pythagorean Identity",
-        formula: "sin²x + cos²x = 1",
+        formula: "\\sin^2x+\\cos^2x=1",
         description: "The fundamental identity relating sine and cosine.",
         conditions: "Valid for every real x.",
         variables: "x is an angle measured in radians or degrees.",
         use: "Useful for simplifying trigonometric expressions and integration.",
-        example: "If sin x = 3/5, then cos²x = 1 − 9/25 = 16/25.",
+        example: "If sin x=3/5, then cos²x=1−9/25=16/25.",
         note: "Remember that cos x may be positive or negative depending on the quadrant.",
       },
       {
         name: "Tangent Identity",
-        formula: "tan x = sin x / cos x",
+        formula: "\\tan x=\\frac{\\sin x}{\\cos x}",
         description: "Defines tangent as the ratio of sine to cosine.",
-        conditions: "cos x ≠ 0.",
+        conditions: "cos x≠0.",
         variables: "x is an angle.",
         use: "Useful when converting between trigonometric functions.",
-        example: "If sin x = 3/5 and cos x = 4/5, then tan x = 3/4.",
-        note: "Tangent is undefined whenever cos x = 0.",
+        example: "If sin x=3/5 and cos x=4/5, then tan x=3/4.",
+        note: "Tangent is undefined whenever cos x=0.",
       },
       {
         name: "Secant Identity",
-        formula: "1 + tan²x = sec²x",
+        formula: "1+\\tan^2x=\\sec^2x",
         description: "A Pythagorean identity involving tangent and secant.",
         conditions: "Valid wherever the functions are defined.",
         variables: "x is an angle.",
         use: "Common in differentiation and integration.",
-        example: "sec²x − tan²x = 1.",
-        note: "This identity follows from dividing sin²x + cos²x = 1 by cos²x.",
+        example: "\\sec^2x-\\tan^2x=1.",
+        note: "This identity follows from dividing sin²x+cos²x=1 by cos²x.",
       },
       {
         name: "Cosecant Identity",
-        formula: "1 + cot²x = csc²x",
+        formula: "1+\\cot^2x=\\csc^2x",
         description: "A Pythagorean identity involving cotangent and cosecant.",
         conditions: "Valid wherever the functions are defined.",
         variables: "x is an angle.",
         use: "Useful in trigonometric integration and simplification.",
-        example: "csc²x − cot²x = 1.",
+        example: "\\csc^2x-\\cot^2x=1.",
         note: "It follows by dividing the fundamental identity by sin²x.",
       },
       {
         name: "Sine Addition Formula",
-        formula: "sin(a + b) = sin a cos b + cos a sin b",
+        formula: "\\sin(a+b)=\\sin a\\cos b+\\cos a\\sin b",
         description:
           "Expresses the sine of a sum using the sine and cosine of the individual angles.",
         conditions: "Valid for all real a and b.",
         variables: "a and b are angles.",
         use: "Useful for trigonometric manipulation and deriving other identities.",
-        example: "sin(x + π/2) = cos x.",
+        example: "\\sin(x+\\pi/2)=\\cos x.",
         note: "Do not confuse the signs with the cosine addition formula.",
       },
       {
         name: "Cosine Addition Formula",
-        formula: "cos(a + b) = cos a cos b − sin a sin b",
+        formula: "\\cos(a+b)=\\cos a\\cos b-\\sin a\\sin b",
         description:
           "Expresses the cosine of a sum using individual sine and cosine values.",
         conditions: "Valid for all real a and b.",
         variables: "a and b are angles.",
         use: "Useful for deriving double-angle identities.",
-        example: "cos(x + x) = cos²x − sin²x.",
+        example: "\\cos(2x)=\\cos^2x-\\sin^2x.",
         note: "The minus sign between the two products is essential.",
       },
       {
         name: "Double-Angle Sine",
-        formula: "sin(2x) = 2sin x cos x",
+        formula: "\\sin(2x)=2\\sin x\\cos x",
         description: "Expresses the sine of twice an angle as a product.",
         conditions: "Valid for all real x.",
         variables: "x is an angle.",
         use: "Useful in integration and trigonometric simplification.",
-        example: "2sin x cos x = sin(2x).",
-        note: "This identity is often useful for converting products into single trigonometric functions.",
+        example: "2\\sin x\\cos x=\\sin(2x).",
+        note: "This identity converts products into a single trigonometric function.",
       },
       {
         name: "Double-Angle Cosine",
-        formula: "cos(2x) = cos²x − sin²x",
+        formula: "\\cos(2x)=\\cos^2x-\\sin^2x",
         description: "One form of the cosine double-angle identity.",
         conditions: "Valid for all real x.",
         variables: "x is an angle.",
         use: "Useful for trigonometric simplification and integration.",
-        example: "cos(2x) = 1 − 2sin²x = 2cos²x − 1.",
+        example: "\\cos(2x)=1-2\\sin^2x=2\\cos^2x-1.",
         note: "There are three commonly useful equivalent forms.",
       },
       {
         name: "Half-Angle Sine",
-        formula: "sin²(x/2) = [1 − cos x]/2",
+        formula: "\\sin^2\\left(\\frac{x}{2}\\right)=\\frac{1-\\cos x}{2}",
         description:
           "Expresses the square of a half-angle sine using cosine of the full angle.",
         conditions: "Valid for all real x.",
         variables: "x is an angle.",
         use: "Especially useful when integrating powers of sine.",
-        example: "sin²x = [1 − cos(2x)]/2.",
+        example: "\\sin^2x=\\frac{1-\\cos(2x)}{2}.",
         note: "This identity is also called a power-reduction formula.",
       },
       {
         name: "Half-Angle Cosine",
-        formula: "cos²(x/2) = [1 + cos x]/2",
+        formula: "\\cos^2\\left(\\frac{x}{2}\\right)=\\frac{1+\\cos x}{2}",
         description:
           "Expresses the square of a half-angle cosine using cosine of the full angle.",
         conditions: "Valid for all real x.",
         variables: "x is an angle.",
         use: "Useful for integration and trigonometric simplification.",
-        example: "cos²x = [1 + cos(2x)]/2.",
+        example: "\\cos^2x=\\frac{1+\\cos(2x)}{2}.",
         note: "For the unsquared half-angle formula, the sign depends on the quadrant.",
       },
     ],
@@ -198,39 +198,39 @@ const formulaCategories = [
     formulas: [
       {
         name: "Limit of a Sum",
-        formula: "limₓ→a [f(x) + g(x)] = L + M",
+        formula: "\\lim_{x\\to a}[f(x)+g(x)]=L+M",
         description:
           "The limit of a sum equals the sum of the individual limits.",
         conditions: "Both limits must exist as finite values.",
-        variables: "L = lim f(x), M = lim g(x).",
+        variables: "L=lim f(x) and M=lim g(x) as x approaches a.",
         use: "Useful for breaking complicated limits into simpler parts.",
         example: "If lim f(x)=3 and lim g(x)=5, then lim[f(x)+g(x)]=8.",
         note: "Similar laws apply to differences, products, and constant multiples.",
       },
       {
         name: "Limit of a Product",
-        formula: "limₓ→a [f(x)g(x)] = LM",
+        formula: "\\lim_{x\\to a}[f(x)g(x)]=LM",
         description: "The limit of a product equals the product of the limits.",
         conditions: "Both individual limits must exist.",
-        variables: "L = lim f(x), M = lim g(x).",
+        variables: "L and M are the respective limits.",
         use: "Useful for polynomial and composite expressions.",
-        example: "limₓ→2 x(x+1) = 2(3) = 6.",
+        example: "\\lim_{x\\to2}x(x+1)=2(3)=6.",
         note: "Direct substitution works for many continuous functions.",
       },
       {
         name: "Limit of a Quotient",
-        formula: "limₓ→a [f(x)/g(x)] = L/M",
+        formula: "\\lim_{x\\to a}\\frac{f(x)}{g(x)}=\\frac{L}{M}",
         description:
           "The limit of a quotient equals the quotient of the limits.",
-        conditions: "The denominator limit must satisfy M ≠ 0.",
+        conditions: "The denominator limit must satisfy M≠0.",
         variables: "L and M are the respective limits.",
         use: "Useful for rational functions and many algebraic limits.",
-        example: "limₓ→2 (x+1)/x = 3/2.",
+        example: "\\lim_{x\\to2}\\frac{x+1}{x}=\\frac32.",
         note: "If the denominator approaches zero, another method may be required.",
       },
       {
         name: "Continuity at a Point",
-        formula: "limₓ→a f(x) = f(a)",
+        formula: "\\lim_{x\\to a}f(x)=f(a)",
         description:
           "A function is continuous at a when its limit equals its actual function value.",
         conditions:
@@ -242,7 +242,8 @@ const formulaCategories = [
       },
       {
         name: "Squeeze Theorem",
-        formula: "g(x) ≤ f(x) ≤ h(x), and lim g = lim h = L ⇒ lim f = L",
+        formula:
+          "g(x)\\le f(x)\\le h(x),\\quad \\lim g(x)=\\lim h(x)=L\\Rightarrow\\lim f(x)=L",
         description:
           "If a function is trapped between two functions with the same limit, it must have that limit as well.",
         conditions:
@@ -250,50 +251,50 @@ const formulaCategories = [
         variables: "f is the target function; g and h bound it.",
         use: "Useful for difficult trigonometric and oscillating limits.",
         example:
-          "Since −|x| ≤ x sin(1/x) ≤ |x| and both bounds approach 0, the limit is 0.",
+          "-|x|\\le x\\sin(1/x)\\le|x|, and both bounds approach 0, so the limit is 0.",
         note: "The theorem is especially useful when direct substitution does not reveal the answer.",
       },
       {
         name: "Important Trigonometric Limit",
-        formula: "limₓ→0 (sin x)/x = 1",
+        formula: "\\lim_{x\\to0}\\frac{\\sin x}{x}=1",
         description:
           "A foundational limit used to derive many trigonometric derivative formulas.",
         conditions: "x must be measured in radians.",
         variables: "x approaches zero.",
         use: "Essential in proving derivatives of sine and cosine.",
-        example: "limₓ→0 sin(5x)/(5x) = 1.",
+        example: "\\lim_{x\\to0}\\frac{\\sin(5x)}{5x}=1.",
         note: "The radians condition is important.",
       },
       {
         name: "Exponential Limit",
-        formula: "limₓ→0 (eˣ − 1)/x = 1",
+        formula: "\\lim_{x\\to0}\\frac{e^x-1}{x}=1",
         description:
           "A fundamental limit associated with the natural exponential function.",
         conditions: "x approaches zero.",
         variables: "x is the variable approaching zero.",
         use: "Useful in deriving the derivative of eˣ.",
-        example: "limₓ→0 (eˣ−1)/x = 1.",
+        example: "\\lim_{x\\to0}\\frac{e^x-1}{x}=1.",
         note: "This is one reason e is especially important in calculus.",
       },
       {
         name: "Logarithmic Limit",
-        formula: "limₓ→0 ln(1+x)/x = 1",
+        formula: "\\lim_{x\\to0}\\frac{\\ln(1+x)}{x}=1",
         description: "A fundamental limit for the natural logarithm.",
-        conditions: "x approaches zero with 1+x > 0.",
+        conditions: "x approaches zero with 1+x>0.",
         variables: "x is the variable.",
         use: "Useful in logarithmic differentiation and derivative proofs.",
-        example: "limₓ→0 ln(1+x)/x = 1.",
+        example: "\\lim_{x\\to0}\\frac{\\ln(1+x)}{x}=1.",
         note: "The domain restriction of ln(1+x) must be respected.",
       },
       {
         name: "Limit at Infinity",
-        formula: "limₓ→∞ 1/xⁿ = 0, n > 0",
+        formula: "\\lim_{x\\to\\infty}\\frac{1}{x^n}=0,\\quad n>0",
         description:
           "A positive power of x in the denominator grows without bound, causing the reciprocal to approach zero.",
         conditions: "n must be positive.",
         variables: "n is a positive constant.",
         use: "Useful for analyzing rational functions and asymptotic behavior.",
-        example: "limₓ→∞ 1/x³ = 0.",
+        example: "\\lim_{x\\to\\infty}\\frac{1}{x^3}=0.",
         note: "This does not mean 1/xⁿ equals zero for finite x.",
       },
     ],
@@ -303,180 +304,179 @@ const formulaCategories = [
     id: "derivatives",
     name: "Derivatives",
     description:
-      "Definitions, differentiation rules, algebraic derivatives, exponential functions, logarithms, and trigonometric derivatives.",
+      "Definitions, differentiation rules, exponential functions, logarithms, and trigonometric derivatives.",
     icon: FunctionSquare,
     formulas: [
       {
         name: "Derivative from First Principles",
-        formula: "f′(x) = limₕ→0 [f(x+h) − f(x)]/h",
+        formula: "f'(x)=\\lim_{h\\to0}\\frac{f(x+h)-f(x)}{h}",
         description:
           "Defines the derivative as the limiting instantaneous rate of change.",
         conditions: "The limit must exist.",
         variables:
           "h is a small change in x; f(x+h) and f(x) are function values.",
         use: "Used to understand the fundamental meaning of differentiation.",
-        example: "For f(x)=x², the definition simplifies to f′(x)=2x.",
+        example: "For f(x)=x², the definition simplifies to f'(x)=2x.",
         note: "This definition is the foundation from which derivative rules are developed.",
       },
       {
         name: "Constant Rule",
-        formula: "d/dx[C] = 0",
+        formula: "\\frac{d}{dx}[C]=0",
         description: "A constant has no rate of change.",
         conditions: "C is independent of x.",
         variables: "C is any constant.",
         use: "Used whenever a term contains no variable x.",
-        example: "d/dx[12] = 0.",
+        example: "\\frac{d}{dx}[12]=0.",
         note: "The derivative of a constant is always zero.",
       },
       {
         name: "Power Rule",
-        formula: "d/dx[xⁿ] = nxⁿ⁻¹",
+        formula: "\\frac{d}{dx}[x^n]=nx^{n-1}",
         description:
           "Differentiates a power of x by multiplying by the exponent and reducing the exponent by one.",
-        conditions:
-          "For standard real-power differentiation, domain considerations apply.",
+        conditions: "Domain considerations apply for general real powers.",
         variables: "n is a constant exponent.",
         use: "One of the most frequently used derivative rules.",
-        example: "d/dx[x⁵] = 5x⁴.",
+        example: "\\frac{d}{dx}[x^5]=5x^4.",
         note: "The rule also works for negative and fractional powers where the function is defined.",
       },
       {
         name: "Constant Multiple Rule",
-        formula: "d/dx[Cf(x)] = C f′(x)",
+        formula: "\\frac{d}{dx}[Cf(x)]=Cf'(x)",
         description:
           "A constant multiplier can be carried outside the derivative.",
         conditions: "C must be constant with respect to x.",
         variables: "C is constant and f is differentiable.",
         use: "Useful for simplifying differentiation of polynomial terms.",
-        example: "d/dx[7x³] = 21x².",
+        example: "\\frac{d}{dx}[7x^3]=21x^2.",
         note: "Differentiate the function and keep the constant unchanged.",
       },
       {
         name: "Sum Rule",
-        formula: "(f + g)′ = f′ + g′",
+        formula: "(f+g)'=f'+g'",
         description:
           "The derivative of a sum equals the sum of the derivatives.",
         conditions: "Both functions must be differentiable.",
         variables: "f and g are differentiable functions.",
         use: "Useful for differentiating multi-term expressions.",
-        example: "d/dx[x³+x²] = 3x²+2x.",
+        example: "\\frac{d}{dx}[x^3+x^2]=3x^2+2x.",
         note: "The same principle applies to subtraction.",
       },
       {
         name: "Product Rule",
-        formula: "(fg)′ = f′g + fg′",
+        formula: "(fg)'=f'g+fg'",
         description: "Differentiates the product of two functions.",
         conditions: "Both functions must be differentiable.",
         variables: "f and g are functions of x.",
         use: "Use when two variable-dependent functions are multiplied.",
-        example: "d/dx[x² sin x] = 2x sin x + x² cos x.",
+        example: "\\frac{d}{dx}[x^2\\sin x]=2x\\sin x+x^2\\cos x.",
         note: "A common mistake is differentiating both factors and multiplying the derivatives.",
       },
       {
         name: "Quotient Rule",
-        formula: "(f/g)′ = [g f′ − f g′]/g²",
+        formula: "\\left(\\frac{f}{g}\\right)'=\\frac{gf'-fg'}{g^2}",
         description: "Differentiates the quotient of two functions.",
-        conditions: "g(x) ≠ 0 and both functions are differentiable.",
+        conditions: "g(x)≠0 and both functions are differentiable.",
         variables: "f and g are functions of x.",
         use: "Useful when one differentiable function is divided by another.",
-        example: "For f=x and g=x²+1, use [(x²+1)(1)−x(2x)]/(x²+1)².",
+        example: "For f=x and g=x²+1, use [(x²+1)(1)-x(2x)]/(x²+1)².",
         note: "Keep the denominator squared in the final expression.",
       },
       {
         name: "Chain Rule",
-        formula: "d/dx[f(g(x))] = f′(g(x))g′(x)",
+        formula: "\\frac{d}{dx}[f(g(x))]=f'(g(x))g'(x)",
         description:
           "Differentiates a composite function by multiplying the derivative of the outer function by the derivative of the inner function.",
         conditions:
           "Both functions must be differentiable at the relevant points.",
         variables: "g is the inner function and f is the outer function.",
         use: "Essential for nested functions.",
-        example: "d/dx[(3x+1)⁵] = 15(3x+1)⁴.",
-        note: "Think: differentiate the outside, keep the inside, then multiply by the derivative of the inside.",
+        example: "\\frac{d}{dx}[(3x+1)^5]=15(3x+1)^4.",
+        note: "Differentiate the outside, keep the inside, then multiply by the derivative of the inside.",
       },
       {
         name: "Exponential Function",
-        formula: "d/dx[eˣ] = eˣ",
+        formula: "\\frac{d}{dx}[e^x]=e^x",
         description: "The natural exponential function is its own derivative.",
         conditions: "All real x.",
         variables: "x is the independent variable.",
         use: "Common in growth, decay, differential equations, and modeling.",
-        example: "d/dx[eˣ] = eˣ.",
+        example: "\\frac{d}{dx}[e^x]=e^x.",
         note: "For e^{g(x)}, use the chain rule.",
       },
       {
         name: "General Exponential",
-        formula: "d/dx[aˣ] = aˣ ln(a)",
+        formula: "\\frac{d}{dx}[a^x]=a^x\\ln a",
         description:
           "Differentiates an exponential function with a positive constant base.",
-        conditions: "a > 0 and a ≠ 1.",
+        conditions: "a>0 and a≠1.",
         variables: "a is a positive constant; x is the variable.",
         use: "Useful for exponential growth and decay models.",
-        example: "d/dx[2ˣ] = 2ˣ ln 2.",
-        note: "If the exponent is a function g(x), multiply by g′(x).",
+        example: "\\frac{d}{dx}[2^x]=2^x\\ln2.",
+        note: "If the exponent is a function g(x), multiply by g'(x).",
       },
       {
         name: "Natural Logarithm",
-        formula: "d/dx[ln|x|] = 1/x",
+        formula: "\\frac{d}{dx}[\\ln|x|]=\\frac1x",
         description:
           "The derivative of the natural logarithm of the absolute value of x.",
-        conditions: "x ≠ 0.",
+        conditions: "x≠0.",
         variables: "x is the independent variable.",
         use: "Useful in logarithmic differentiation and integration.",
-        example: "d/dx[ln|x|] = 1/x.",
+        example: "\\frac{d}{dx}[\\ln|x|]=\\frac1x.",
         note: "For ln x specifically, x must be positive.",
       },
       {
         name: "Sine",
-        formula: "d/dx[sin x] = cos x",
+        formula: "\\frac{d}{dx}[\\sin x]=\\cos x",
         description: "The derivative of sine is cosine.",
         conditions: "All real x.",
         variables: "x is measured in radians.",
         use: "Essential in oscillation and periodic models.",
-        example: "d/dx[sin(3x)] = 3cos(3x).",
+        example: "\\frac{d}{dx}[\\sin(3x)]=3\\cos(3x).",
         note: "The chain rule is required when the argument is not simply x.",
       },
       {
         name: "Cosine",
-        formula: "d/dx[cos x] = −sin x",
+        formula: "\\frac{d}{dx}[\\cos x]=-\sin x",
         description: "The derivative of cosine is negative sine.",
         conditions: "All real x.",
         variables: "x is measured in radians.",
         use: "Common in periodic and harmonic models.",
-        example: "d/dx[cos(2x)] = −2sin(2x).",
+        example: "\\frac{d}{dx}[\\cos(2x)]=-2\\sin(2x).",
         note: "Remember the negative sign.",
       },
       {
         name: "Tangent",
-        formula: "d/dx[tan x] = sec²x",
+        formula: "\\frac{d}{dx}[\\tan x]=\\sec^2x",
         description: "The derivative of tangent is secant squared.",
-        conditions: "cos x ≠ 0.",
+        conditions: "cos x≠0.",
         variables: "x is measured in radians.",
         use: "Useful in trigonometric differentiation.",
-        example: "d/dx[tan(4x)] = 4sec²(4x).",
+        example: "\\frac{d}{dx}[\\tan(4x)]=4\\sec^2(4x).",
         note: "The chain rule applies to a composite tangent function.",
       },
       {
         name: "Second Derivative",
-        formula: "f″(x) = d²f/dx²",
+        formula: "f''(x)=\\frac{d^2f}{dx^2}",
         description:
           "The second derivative measures how the first derivative changes.",
         conditions: "The function must be twice differentiable.",
-        variables: "f″ is the second derivative.",
+        variables: "f'' is the second derivative.",
         use: "Used for concavity, acceleration, and optimization tests.",
-        example: "If f(x)=x³, then f′(x)=3x² and f″(x)=6x.",
-        note: "f″ > 0 generally indicates concave up; f″ < 0 generally indicates concave down.",
+        example: "If f(x)=x³, then f'(x)=3x² and f''(x)=6x.",
+        note: "f''>0 generally indicates concave up; f''<0 generally indicates concave down.",
       },
       {
         name: "Implicit Differentiation",
-        formula: "Differentiate both sides with respect to x",
+        formula: "\\text{Differentiate both sides with respect to }x",
         description:
           "A method for finding dy/dx when y is defined implicitly rather than explicitly.",
         conditions:
           "The equation should represent a differentiable relationship locally.",
         variables: "x and y are related variables.",
         use: "Useful for circles, curves, and equations that are difficult to solve explicitly for y.",
-        example: "For x²+y²=25: 2x+2y(dy/dx)=0, so dy/dx=−x/y.",
+        example: "For x²+y²=25: 2x+2y(dy/dx)=0, so dy/dx=-x/y.",
         note: "Whenever differentiating a term containing y, remember the chain rule.",
       },
     ],
@@ -491,141 +491,141 @@ const formulaCategories = [
     formulas: [
       {
         name: "Indefinite Integral",
-        formula: "∫f(x)dx = F(x) + C",
+        formula: "\\int f(x)\\,dx=F(x)+C",
         description: "Represents the family of all antiderivatives of f.",
-        conditions: "F′(x)=f(x) on the relevant interval.",
+        conditions: "F'(x)=f(x) on the relevant interval.",
         variables: "C is an arbitrary constant.",
         use: "Used to find antiderivatives.",
-        example: "∫2x dx = x² + C.",
+        example: "\\int2x\\,dx=x^2+C.",
         note: "Always include +C for an indefinite integral.",
       },
       {
         name: "Power Rule for Integration",
-        formula: "∫xⁿdx = xⁿ⁺¹/(n+1) + C",
+        formula: "\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C",
         description:
           "Integrates a power of x by increasing the exponent by one and dividing by the new exponent.",
-        conditions: "n ≠ −1.",
+        conditions: "n≠-1.",
         variables: "n is a constant.",
         use: "Useful for polynomial and power functions.",
-        example: "∫x³dx = x⁴/4 + C.",
-        note: "The case n = −1 is special and gives ln|x|.",
+        example: "\\int x^3\\,dx=\\frac{x^4}{4}+C.",
+        note: "The case n=-1 is special and gives ln|x|.",
       },
       {
         name: "Constant Integral",
-        formula: "∫C dx = Cx + C₁",
+        formula: "\\int C\\,dx=Cx+C_1",
         description: "The antiderivative of a constant is a linear function.",
         conditions: "C is constant.",
         variables: "C and C₁ are constants.",
         use: "Useful for integrating constant terms.",
-        example: "∫5dx = 5x+C.",
+        example: "\\int5\\,dx=5x+C.",
         note: "The integration constant can simply be written as C.",
       },
       {
         name: "Exponential Integral",
-        formula: "∫eˣdx = eˣ + C",
+        formula: "\\int e^x\\,dx=e^x+C",
         description:
           "The natural exponential function is its own antiderivative.",
         conditions: "All real x.",
         variables: "x is the integration variable.",
         use: "Common in growth and differential equations.",
-        example: "∫eˣdx = eˣ+C.",
-        note: "For e^{g(x)}, substitution or the chain rule relationship may be needed.",
+        example: "\\int e^x\\,dx=e^x+C.",
+        note: "For e^{g(x)}, substitution or the chain-rule relationship may be needed.",
       },
       {
         name: "General Exponential Integral",
-        formula: "∫aˣdx = aˣ/ln(a) + C",
+        formula: "\\int a^x\\,dx=\\frac{a^x}{\\ln a}+C",
         description: "Integrates an exponential function with constant base a.",
-        conditions: "a > 0 and a ≠ 1.",
+        conditions: "a>0 and a≠1.",
         variables: "a is constant.",
         use: "Useful for exponential models.",
-        example: "∫2ˣdx = 2ˣ/ln2 + C.",
+        example: "\\int2^x\\,dx=\\frac{2^x}{\\ln2}+C.",
         note: "The ln(a) denominator is essential.",
       },
       {
         name: "Logarithmic Integral",
-        formula: "∫1/x dx = ln|x| + C",
+        formula: "\\int\\frac1x\\,dx=\\ln|x|+C",
         description:
           "The antiderivative of 1/x is the natural logarithm of the absolute value.",
-        conditions: "x ≠ 0.",
+        conditions: "x≠0.",
         variables: "x is the integration variable.",
         use: "Common in rational-function integration.",
-        example: "∫(1/x)dx = ln|x|+C.",
+        example: "\\int\\frac1x\\,dx=\\ln|x|+C.",
         note: "The absolute value is needed for a general real-domain antiderivative.",
       },
       {
         name: "Sine Integral",
-        formula: "∫sin x dx = −cos x + C",
+        formula: "\\int\\sin x\\,dx=-\\cos x+C",
         description: "The antiderivative of sine is negative cosine.",
         conditions: "x measured in radians.",
         variables: "x is the integration variable.",
         use: "Used in periodic and oscillatory problems.",
-        example: "∫sin x dx = −cos x+C.",
+        example: "\\int\\sin x\\,dx=-\\cos x+C.",
         note: "Differentiate the answer to verify it.",
       },
       {
         name: "Cosine Integral",
-        formula: "∫cos x dx = sin x + C",
+        formula: "\\int\\cos x\\,dx=\\sin x+C",
         description: "The antiderivative of cosine is sine.",
         conditions: "x measured in radians.",
         variables: "x is the integration variable.",
         use: "Common in trigonometric integration.",
-        example: "∫cos x dx = sin x+C.",
+        example: "\\int\\cos x\\,dx=\\sin x+C.",
         note: "Always check by differentiation when unsure.",
       },
       {
         name: "Secant Squared Integral",
-        formula: "∫sec²x dx = tan x + C",
+        formula: "\\int\\sec^2x\\,dx=\\tan x+C",
         description:
           "Uses the derivative relationship between tangent and secant squared.",
         conditions: "Where tan x is defined.",
         variables: "x is an angle.",
         use: "Common in trigonometric integration.",
-        example: "∫sec²x dx = tan x+C.",
+        example: "\\int\\sec^2x\\,dx=\\tan x+C.",
         note: "This formula is the reverse of d/dx[tan x].",
       },
       {
         name: "Definite Integral",
-        formula: "∫ₐᵇ f(x)dx",
+        formula: "\\int_a^b f(x)\\,dx",
         description:
           "Represents accumulated signed area or another accumulated quantity over an interval.",
         conditions:
           "The function must be integrable over the interval under the chosen definition.",
         variables: "a is the lower limit and b is the upper limit.",
         use: "Used for area, accumulation, displacement, work, probability, and many other quantities.",
-        example: "∫₀² x dx = 2.",
+        example: "\\int_0^2x\\,dx=2.",
         note: "A definite integral produces a number, not a family of functions.",
       },
       {
         name: "Fundamental Theorem of Calculus",
-        formula: "∫ₐᵇ f(x)dx = F(b) − F(a)",
+        formula: "\\int_a^b f(x)\\,dx=F(b)-F(a)",
         description: "Connects definite integration with antiderivatives.",
         conditions: "F must be an antiderivative of f on the interval.",
-        variables: "F′(x)=f(x).",
+        variables: "F'(x)=f(x).",
         use: "The standard method for evaluating many definite integrals.",
-        example: "∫₀² x dx = [x²/2]₀² = 2.",
+        example: "\\int_0^2x\\,dx=[x^2/2]_0^2=2.",
         note: "This theorem is one of the central connections between differentiation and integration.",
       },
       {
         name: "Integration by Substitution",
-        formula: "∫f(g(x))g′(x)dx = ∫f(u)du",
+        formula: "\\int f(g(x))g'(x)\\,dx=\\int f(u)\\,du",
         description:
           "Replaces a complicated inner expression with a simpler variable.",
         conditions:
           "The substitution should simplify the integral and be differentiable.",
         variables: "u=g(x).",
         use: "Useful for composite functions.",
-        example: "∫2x(x²+1)³dx. Let u=x²+1, du=2x dx, giving ∫u³du.",
+        example: "For ∫2x(x²+1)³dx, let u=x²+1 and du=2x dx.",
         note: "For definite integrals, either change the bounds or substitute back.",
       },
       {
         name: "Integration by Parts",
-        formula: "∫u dv = uv − ∫v du",
+        formula: "\\int u\\,dv=uv-\\int v\\,du",
         description:
           "Transforms an integral involving a product into another integral that may be easier.",
         conditions: "u and v must be differentiable/integrable as required.",
         variables: "u is chosen to differentiate; dv is chosen to integrate.",
         use: "Useful for products involving logarithms, polynomials, exponentials, and trigonometric functions.",
-        example: "∫x eˣ dx = xeˣ − ∫eˣdx = eˣ(x−1)+C.",
+        example: "\\int xe^x\\,dx=xe^x-\\int e^x\\,dx=e^x(x-1)+C.",
         note: "Choosing u effectively is often the key step.",
       },
     ],
@@ -640,19 +640,19 @@ const formulaCategories = [
     formulas: [
       {
         name: "Average Rate of Change",
-        formula: "[f(b) − f(a)]/(b − a)",
+        formula: "\\frac{f(b)-f(a)}{b-a}",
         description:
           "Measures the average change in a function per unit change in its input.",
-        conditions: "a ≠ b.",
+        conditions: "a≠b.",
         variables: "a and b define the interval.",
         use: "Useful for secant slopes and average velocity.",
         example:
-          "If position changes from 10 m to 30 m over 5 s, average velocity = 20/5 = 4 m/s.",
+          "If position changes from 10 m to 30 m over 5 s, average velocity=20/5=4 m/s.",
         note: "This is different from instantaneous rate of change.",
       },
       {
         name: "Instantaneous Velocity",
-        formula: "v(t) = s′(t)",
+        formula: "v(t)=s'(t)",
         description:
           "Velocity is the derivative of position with respect to time.",
         conditions: "Position must be differentiable.",
@@ -663,7 +663,7 @@ const formulaCategories = [
       },
       {
         name: "Acceleration",
-        formula: "a(t) = v′(t) = s″(t)",
+        formula: "a(t)=v'(t)=s''(t)",
         description: "Acceleration measures the rate of change of velocity.",
         conditions: "Position must be twice differentiable.",
         variables: "s is position, v is velocity, t is time.",
@@ -673,73 +673,74 @@ const formulaCategories = [
       },
       {
         name: "Critical Point",
-        formula: "f′(c) = 0 or f′(c) does not exist",
+        formula: "f'(c)=0\\quad\\text{or}\\quad f'(c)\\text{ does not exist}",
         description:
           "A critical point occurs where the derivative is zero or undefined, provided c is in the domain.",
         conditions: "c must belong to the domain of f.",
         variables: "c is the candidate critical number.",
         use: "Used in optimization and graph analysis.",
-        example: "For f(x)=x², f′(x)=2x, so x=0 is a critical point.",
+        example: "For f(x)=x², f'(x)=2x, so x=0 is a critical point.",
         note: "Not every critical point is a maximum or minimum.",
       },
       {
         name: "Second Derivative Test",
-        formula: "f′(c)=0; f″(c)>0 ⇒ local minimum; f″(c)<0 ⇒ local maximum",
+        formula:
+          "f'(c)=0,\\quad f''(c)>0\\Rightarrow\\text{local minimum},\\quad f''(c)<0\\Rightarrow\\text{local maximum}",
         description: "Uses concavity to classify certain critical points.",
         conditions: "f must be twice differentiable near c.",
         variables: "c is a critical point.",
         use: "Useful for local optimization.",
         example:
-          "For f(x)=x², f′(0)=0 and f″(0)=2>0, so x=0 is a local minimum.",
-        note: "If f″(c)=0, the test is inconclusive.",
+          "For f(x)=x², f'(0)=0 and f''(0)=2>0, so x=0 is a local minimum.",
+        note: "If f''(c)=0, the test is inconclusive.",
       },
       {
         name: "Tangent Line",
-        formula: "y − f(a) = f′(a)(x − a)",
+        formula: "y-f(a)=f'(a)(x-a)",
         description:
           "Gives the equation of the tangent line to a differentiable function at x=a.",
         conditions: "f must be differentiable at a.",
         variables: "a is the point of tangency.",
         use: "Useful for local approximation and geometric interpretation.",
-        example: "For f(x)=x² at a=2: y−4=4(x−2).",
+        example: "For f(x)=x² at a=2: y-4=4(x-2).",
         note: "The derivative supplies the slope of the tangent line.",
       },
       {
         name: "Linear Approximation",
-        formula: "f(x) ≈ f(a) + f′(a)(x−a)",
+        formula: "f(x)\\approx f(a)+f'(a)(x-a)",
         description: "Approximates a function near a using its tangent line.",
         conditions: "x should be reasonably close to a.",
         variables: "a is the nearby reference point.",
         use: "Useful for estimation and error analysis.",
         example:
-          "Use a nearby convenient value to estimate square roots or other functions.",
+          "A nearby convenient value can be used to estimate square roots or other functions.",
         note: "The approximation generally becomes better as x approaches a.",
       },
       {
         name: "Average Value of a Function",
-        formula: "f_avg = 1/(b−a) ∫ₐᵇ f(x)dx",
+        formula: "f_{\\mathrm{avg}}=\\frac{1}{b-a}\\int_a^b f(x)\\,dx",
         description:
           "Gives the average value of a continuous function over an interval.",
-        conditions: "a ≠ b and the integral exists.",
+        conditions: "a≠b and the integral exists.",
         variables: "a and b are interval endpoints.",
         use: "Useful for average temperature, velocity, density, and other quantities.",
-        example: "For f(x)=x on [0,2], f_avg = (1/2)∫₀²x dx = 1.",
+        example: "For f(x)=x on [0,2], f_avg=(1/2)∫₀²x dx=1.",
         note: "The average value is not generally the same as the value at the midpoint.",
       },
       {
         name: "Area Under a Curve",
-        formula: "A = ∫ₐᵇ f(x)dx",
+        formula: "A=\\int_a^b f(x)\\,dx",
         description:
           "Calculates signed area between a function and the x-axis.",
         conditions: "The function must be integrable.",
         variables: "a and b are the interval endpoints.",
         use: "Used for geometric area and accumulated quantities.",
-        example: "∫₀² x dx = 2.",
+        example: "\\int_0^2x\\,dx=2.",
         note: "If f becomes negative, the definite integral gives signed rather than total geometric area.",
       },
       {
         name: "Volume by Disks",
-        formula: "V = π∫ₐᵇ [R(x)]²dx",
+        formula: "V=\\pi\\int_a^b[R(x)]^2\\,dx",
         description:
           "Calculates the volume of a solid formed by rotating a region around an axis.",
         conditions: "R(x) describes the radius and the integral exists.",
@@ -751,7 +752,7 @@ const formulaCategories = [
       },
       {
         name: "Volume by Shells",
-        formula: "V = 2π∫ₐᵇ radius × height dx",
+        formula: "V=2\\pi\\int_a^b(\\text{radius})(\\text{height})\\,dx",
         description: "Calculates volume using cylindrical shells.",
         conditions:
           "The radius and height functions must describe the region correctly.",
@@ -764,7 +765,7 @@ const formulaCategories = [
       },
       {
         name: "Work",
-        formula: "W = ∫ₐᵇ F(x)dx",
+        formula: "W=\\int_a^bF(x)\\,dx",
         description: "Calculates work done by a variable force along a path.",
         conditions:
           "The force must be integrable over the displacement interval.",
@@ -785,85 +786,87 @@ const formulaCategories = [
     formulas: [
       {
         name: "Arithmetic Sequence",
-        formula: "aₙ = a₁ + (n−1)d",
+        formula: "a_n=a_1+(n-1)d",
         description:
           "Finds the nth term of an arithmetic sequence with constant difference.",
         conditions:
           "The difference between consecutive terms must be constant.",
-        variables: "a₁ is the first term, d is the common difference.",
+        variables: "a₁ is the first term and d is the common difference.",
         use: "Useful for sequences with linear growth.",
-        example: "For 2,5,8,..., aₙ=2+3(n−1).",
+        example: "For 2,5,8,..., a_n=2+3(n-1).",
         note: "The difference between consecutive terms is d.",
       },
       {
         name: "Arithmetic Series",
-        formula: "Sₙ = n/2 [2a₁ + (n−1)d]",
+        formula: "S_n=\\frac n2[2a_1+(n-1)d]",
         description:
           "Finds the sum of the first n terms of an arithmetic sequence.",
         conditions: "The sequence must have constant difference d.",
         variables: "n is the number of terms.",
         use: "Useful for finite sums with linear patterns.",
-        example: "1+3+5+7 = 16.",
-        note: "An equivalent formula is Sₙ=n(a₁+aₙ)/2.",
+        example: "1+3+5+7=16.",
+        note: "An equivalent formula is S_n=n(a_1+a_n)/2.",
       },
       {
         name: "Geometric Sequence",
-        formula: "aₙ = a₁rⁿ⁻¹",
+        formula: "a_n=a_1r^{n-1}",
         description: "Finds the nth term of a sequence with constant ratio.",
         conditions: "The ratio between consecutive nonzero terms is constant.",
         variables: "r is the common ratio.",
         use: "Useful for exponential growth or decay patterns.",
-        example: "For 2,6,18,..., aₙ=2(3ⁿ⁻¹).",
+        example: "For 2,6,18,..., a_n=2(3^{n-1}).",
         note: "The ratio can be negative or fractional.",
       },
       {
         name: "Finite Geometric Series",
-        formula: "Sₙ = a₁(1−rⁿ)/(1−r)",
+        formula: "S_n=a_1\\frac{1-r^n}{1-r}",
         description:
           "Calculates the sum of the first n terms of a geometric sequence.",
-        conditions: "r ≠ 1.",
+        conditions: "r≠1.",
         variables: "a₁ is the first term and r is the common ratio.",
         use: "Useful for finite repeated growth or decay.",
-        example: "1+2+4+8 = 15.",
+        example: "1+2+4+8=15.",
         note: "When r=1, the sum is simply na₁.",
       },
       {
         name: "Infinite Geometric Series",
-        formula: "S = a₁/(1−r), |r| < 1",
+        formula: "S=\\frac{a_1}{1-r},\\quad |r|<1",
         description:
           "Gives the finite sum approached by an infinite geometric series.",
-        conditions: "|r| < 1 is essential.",
+        conditions: "|r|<1 is essential.",
         variables: "a₁ is the first term and r is the common ratio.",
         use: "Useful for infinite repeated processes and convergence problems.",
-        example: "1+1/2+1/4+... = 1/(1−1/2)=2.",
-        note: "If |r| ≥ 1, the infinite geometric series does not converge to a finite sum.",
+        example: "1+1/2+1/4+\\cdots=2.",
+        note: "If |r|≥1, the infinite geometric series does not converge to a finite sum.",
       },
       {
         name: "Series Convergence",
-        formula: "Σaₙ converges if its partial sums approach a finite limit",
+        formula:
+          "\\sum a_n\\text{ converges if }\\lim_{N\\to\\infty}\\sum_{n=1}^Na_n\\text{ exists and is finite}",
         description:
           "A series converges when the sequence of its partial sums approaches a finite number.",
         conditions: "The partial sums must have a finite limit.",
         variables: "aₙ represents the terms of the series.",
         use: "Fundamental for deciding whether an infinite sum has a finite value.",
-        example: "Σₙ₌₁∞(1/2)ⁿ converges to 1.",
+        example: "\\sum_{n=1}^{\\infty}(1/2)^n=1.",
         note: "The condition aₙ→0 is necessary but not sufficient for convergence.",
       },
       {
         name: "Necessary Condition for Series Convergence",
-        formula: "If Σaₙ converges, then limₙ→∞ aₙ = 0",
+        formula:
+          "\\sum a_n\\text{ convergent}\\Rightarrow\\lim_{n\\to\\infty}a_n=0",
         description:
           "The terms of a convergent infinite series must approach zero.",
         conditions: "This is a necessary condition, not a sufficient one.",
         variables: "aₙ is the nth term.",
         use: "Quickly detects many divergent series.",
         example:
-          "Σ1/n cannot converge because 1/n→0 actually satisfies the condition; another test is needed.",
+          "For the harmonic series, 1/n→0, so this test alone is inconclusive.",
         note: "Do not conclude convergence merely because the terms approach zero.",
       },
       {
         name: "Ratio Test",
-        formula: "L = limₙ→∞ |aₙ₊₁/aₙ|",
+        formula: "L=\\lim_{n\\to\\infty}\\left|\\frac{a_{n+1}}{a_n}\\right|",
         description:
           "A convergence test based on the ratio of consecutive absolute term values.",
         conditions:
@@ -876,7 +879,7 @@ const formulaCategories = [
       },
       {
         name: "Root Test",
-        formula: "L = limₙ→∞ ⁿ√|aₙ|",
+        formula: "L=\\lim_{n\\to\\infty}\\sqrt[n]{|a_n|}",
         description:
           "Tests convergence using the nth root of the absolute value of the terms.",
         conditions:
@@ -888,25 +891,25 @@ const formulaCategories = [
       },
       {
         name: "Taylor Series",
-        formula: "f(x)=Σₙ₌₀∞ [f⁽ⁿ⁾(a)/n!](x−a)ⁿ",
+        formula: "f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}(x-a)^n",
         description:
           "Represents a function as an infinite power series centered at a.",
         conditions:
           "The series must converge to the function on the region being considered.",
         variables: "a is the center; f⁽ⁿ⁾ is the nth derivative.",
         use: "Useful for approximation, analysis, and numerical computation.",
-        example: "For eˣ centered at 0, eˣ=1+x+x²/2!+x³/3!+⋯.",
+        example: "For e^x centered at 0, e^x=1+x+x²/2!+x³/3!+⋯.",
         note: "Having derivatives of all orders does not automatically guarantee convergence to the function.",
       },
       {
         name: "Maclaurin Series",
-        formula: "f(x)=Σₙ₌₀∞ [f⁽ⁿ⁾(0)/n!]xⁿ",
+        formula: "f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(0)}{n!}x^n",
         description: "A Taylor series centered specifically at x=0.",
         conditions:
           "The series must converge to the function on the interval considered.",
         variables: "All derivatives are evaluated at zero.",
         use: "Useful for standard approximations.",
-        example: "sin x = x − x³/3! + x⁵/5! − ⋯.",
+        example: "\\sin x=x-\\frac{x^3}{3!}+\\frac{x^5}{5!}-\\cdots.",
         note: "Maclaurin series are simply Taylor series with a=0.",
       },
     ],
@@ -921,7 +924,7 @@ const formulaCategories = [
     formulas: [
       {
         name: "Function of Two Variables",
-        formula: "z = f(x,y)",
+        formula: "z=f(x,y)",
         description: "Maps two independent variables to an output value.",
         conditions: "The function must be defined at the point being studied.",
         variables:
@@ -932,29 +935,29 @@ const formulaCategories = [
       },
       {
         name: "Partial Derivative with Respect to x",
-        formula: "fₓ = ∂f/∂x",
+        formula: "f_x=\\frac{\\partial f}{\\partial x}",
         description:
           "Measures how f changes with x while holding the other variables constant.",
         conditions: "The relevant partial derivative must exist.",
         variables: "Other independent variables are treated as constants.",
         use: "Useful for analyzing surfaces and multivariable rates of change.",
-        example: "For f=x²y, fₓ=2xy.",
+        example: "For f=x²y, f_x=2xy.",
         note: "Only differentiate with respect to the selected variable.",
       },
       {
         name: "Partial Derivative with Respect to y",
-        formula: "fᵧ = ∂f/∂y",
+        formula: "f_y=\\frac{\\partial f}{\\partial y}",
         description:
           "Measures how f changes with y while holding other variables constant.",
         conditions: "The partial derivative must exist.",
         variables: "Other independent variables remain fixed.",
         use: "Useful for multivariable optimization and modeling.",
-        example: "For f=x²y, fᵧ=x².",
+        example: "For f=x²y, f_y=x².",
         note: "x is treated as a constant when differentiating with respect to y.",
       },
       {
         name: "Gradient",
-        formula: "∇f = ⟨fₓ,fᵧ,f_z⟩",
+        formula: "\\nabla f=\\langle f_x,f_y,f_z\\rangle",
         description: "Collects the first partial derivatives into a vector.",
         conditions: "The required partial derivatives must exist.",
         variables:
@@ -965,30 +968,29 @@ const formulaCategories = [
       },
       {
         name: "Directional Derivative",
-        formula: "Dᵤf = ∇f · u",
+        formula: "D_{\\mathbf u}f=\\nabla f\\cdot\\mathbf u",
         description:
           "Measures the rate of change of f in a specified direction.",
-        conditions:
-          "u must be a unit vector for the standard directional derivative formula.",
+        conditions: "u must be a unit vector for the standard formula.",
         variables: "u is the direction vector.",
         use: "Useful when the direction of movement matters.",
-        example: "If ∇f=⟨2,3⟩ and u=⟨1/√2,1/√2⟩, then Dᵤf=(5/√2).",
+        example: "If ∇f=⟨2,3⟩ and u=⟨1/√2,1/√2⟩, then Dᵤf=5/√2.",
         note: "Normalize the direction vector before using the standard formula.",
       },
       {
         name: "Tangent Plane",
-        formula: "z−f(a,b)=fₓ(a,b)(x−a)+fᵧ(a,b)(y−b)",
+        formula: "z-f(a,b)=f_x(a,b)(x-a)+f_y(a,b)(y-b)",
         description: "Approximates a surface by a plane near a point.",
         conditions: "The function should be differentiable near (a,b).",
         variables: "(a,b) is the point of tangency.",
         use: "Useful for local approximation and surface geometry.",
-        example:
-          "For f=x²+y² at (1,1), the tangent plane is z−2=2(x−1)+2(y−1).",
+        example: "For f=x²+y² at (1,1), z-2=2(x-1)+2(y-1).",
         note: "The tangent plane is the multivariable analogue of the tangent line.",
       },
       {
         name: "Divergence",
-        formula: "∇·F = ∂P/∂x + ∂Q/∂y + ∂R/∂z",
+        formula:
+          "\\nabla\\cdot\\mathbf F=\\frac{\\partial P}{\\partial x}+\\frac{\\partial Q}{\\partial y}+\\frac{\\partial R}{\\partial z}",
         description:
           "Measures the local tendency of a vector field to spread outward.",
         conditions: "The required partial derivatives must exist.",
@@ -999,7 +1001,7 @@ const formulaCategories = [
       },
       {
         name: "Curl",
-        formula: "∇×F",
+        formula: "\\nabla\\times\\mathbf F",
         description:
           "Measures local rotational behavior of a three-dimensional vector field.",
         conditions: "The required first partial derivatives must exist.",
@@ -1010,22 +1012,22 @@ const formulaCategories = [
       },
       {
         name: "Double Integral",
-        formula: "∬ᴿ f(x,y)dA",
+        formula: "\\iint_Rf(x,y)\\,dA",
         description: "Integrates a function over a two-dimensional region.",
         conditions: "The function must be integrable over R.",
         variables: "R is the region of integration.",
         use: "Used for volume, mass, probability, and area-weighted quantities.",
-        example: "∬ᴿ1 dA gives the area of region R.",
+        example: "\\iint_R1\\,dA gives the area of R.",
         note: "The region can often be described using iterated integrals.",
       },
       {
         name: "Triple Integral",
-        formula: "∭ᵥ f(x,y,z)dV",
+        formula: "\\iiint_Vf(x,y,z)\\,dV",
         description: "Integrates a function over a three-dimensional volume.",
         conditions: "The function must be integrable over V.",
         variables: "V is the volume region.",
         use: "Used for mass, volume, density, and physical quantities.",
-        example: "∭ᵥ1 dV gives the volume of V.",
+        example: "\\iiint_V1\\,dV gives the volume of V.",
         note: "Coordinate changes such as cylindrical or spherical coordinates can simplify some problems.",
       },
     ],
@@ -1040,7 +1042,8 @@ const formulaCategories = [
     formulas: [
       {
         name: "Vector Field",
-        formula: "F(x,y,z)=⟨P(x,y,z),Q(x,y,z),R(x,y,z)⟩",
+        formula:
+          "\\mathbf F(x,y,z)=\\langle P(x,y,z),Q(x,y,z),R(x,y,z)\\rangle",
         description: "Assigns a vector to every point in a region.",
         conditions: "The component functions must be defined in the region.",
         variables: "P, Q, and R are scalar component functions.",
@@ -1050,7 +1053,7 @@ const formulaCategories = [
       },
       {
         name: "Line Integral of a Scalar Field",
-        formula: "∫C f ds",
+        formula: "\\int_C f\\,ds",
         description: "Accumulates a scalar quantity along a curve.",
         conditions: "The function and curve must be sufficiently well behaved.",
         variables: "C is the curve and ds is an element of arc length.",
@@ -1061,18 +1064,18 @@ const formulaCategories = [
       },
       {
         name: "Line Integral of a Vector Field",
-        formula: "∫C F · dr",
+        formula: "\\int_C\\mathbf F\\cdot d\\mathbf r",
         description:
           "Measures the accumulated component of a vector field along a curve.",
         conditions: "The field should be defined along the curve.",
-        variables: "dr is the differential displacement vector.",
+        variables: "d r is the differential displacement vector.",
         use: "Commonly used to calculate work done by a force field.",
         example: "Work along a path C can be written as W=∫C F·dr.",
         note: "For conservative fields, the result depends only on the endpoints.",
       },
       {
         name: "Green's Theorem",
-        formula: "∮C(P dx + Q dy) = ∬ᴿ(Qₓ − Pᵧ)dA",
+        formula: "\\oint_C(P\\,dx+Q\\,dy)=\\iint_R\\left(Q_x-P_y\\right)dA",
         description:
           "Relates a line integral around a closed planar curve to a double integral over the enclosed region.",
         conditions:
@@ -1080,12 +1083,13 @@ const formulaCategories = [
         variables: "R is the region enclosed by C.",
         use: "Converts between circulation around a boundary and a quantity over an area.",
         example:
-          "Can transform a difficult closed-curve integral into an area integral.",
+          "A difficult closed-curve integral can sometimes be transformed into an area integral.",
         note: "Orientation matters: positive orientation is counterclockwise.",
       },
       {
         name: "Stokes' Theorem",
-        formula: "∮C F·dr = ∬S(∇×F)·n dS",
+        formula:
+          "\\oint_C\\mathbf F\\cdot d\\mathbf r=\\iint_S(\\nabla\\times\\mathbf F)\\cdot\\mathbf n\\,dS",
         description:
           "Relates circulation around a boundary curve to curl through a surface.",
         conditions:
@@ -1098,7 +1102,8 @@ const formulaCategories = [
       },
       {
         name: "Divergence Theorem",
-        formula: "∭ᵥ(∇·F)dV = ∬S F·n dS",
+        formula:
+          "\\iiint_V(\\nabla\\cdot\\mathbf F)\\,dV=\\iint_S\\mathbf F\\cdot\\mathbf n\\,dS",
         description:
           "Relates the divergence inside a volume to the outward flux through its closed surface.",
         conditions:
@@ -1121,7 +1126,7 @@ const formulaCategories = [
     formulas: [
       {
         name: "Basic First-Order ODE",
-        formula: "dy/dx = f(x,y)",
+        formula: "\\frac{dy}{dx}=f(x,y)",
         description:
           "A first-order ordinary differential equation relates a function to its first derivative.",
         conditions:
@@ -1129,24 +1134,24 @@ const formulaCategories = [
         variables:
           "y is the dependent variable and x is the independent variable.",
         use: "Used to model changing systems.",
-        example: "dy/dx = ky models exponential growth or decay.",
+        example: "dy/dx=ky models exponential growth or decay.",
         note: "The order of an ODE is determined by its highest derivative.",
       },
       {
         name: "Separable Differential Equation",
-        formula: "dy/dx = g(x)h(y)",
+        formula: "\\frac{dy}{dx}=g(x)h(y)",
         description:
           "An equation whose variables can be separated into different sides.",
         conditions:
-          "The equation must be rearrangeable and the necessary divisions must be valid.",
+          "The equation must be rearrangeable and necessary divisions must be valid.",
         variables: "g depends on x and h depends on y.",
         use: "One of the most common exact solution techniques for first-order ODEs.",
-        example: "dy/dx = ky gives dy/y = k dx.",
+        example: "dy/dx=ky gives dy/y=k dx.",
         note: "Dividing by h(y) can exclude solutions where h(y)=0, so those solutions should be checked separately.",
       },
       {
         name: "Exponential Growth/Decay",
-        formula: "y(t)=y₀eᵏᵗ",
+        formula: "y(t)=y_0e^{kt}",
         description:
           "Models continuous growth or decay at a rate proportional to the current amount.",
         conditions:
@@ -1154,52 +1159,52 @@ const formulaCategories = [
         variables:
           "y₀ is the initial amount and k is the growth/decay constant.",
         use: "Population, finance, radioactive decay, and many other models.",
-        example: "If y₀=100 and k=0.05, then y(t)=100e⁰·⁰⁵ᵗ.",
+        example: "If y₀=100 and k=0.05, then y(t)=100e^{0.05t}.",
         note: "k>0 represents growth and k<0 represents decay.",
       },
       {
         name: "First-Order Linear ODE",
-        formula: "y′ + P(x)y = Q(x)",
+        formula: "y'+P(x)y=Q(x)",
         description:
           "Standard form of a first-order linear differential equation.",
         conditions: "P and Q should be suitably continuous on the interval.",
         variables: "P and Q are known functions.",
         use: "Solved using an integrating factor.",
-        example: "y′+2y=x is a first-order linear ODE.",
+        example: "y'+2y=x is a first-order linear ODE.",
         note: "The integrating factor is μ(x)=e^{∫P(x)dx}.",
       },
       {
         name: "Integrating Factor",
-        formula: "μ(x)=e^{∫P(x)dx}",
+        formula: "\\mu(x)=e^{\\int P(x)\\,dx}",
         description:
           "Transforms a first-order linear ODE into a form that can be integrated directly.",
         conditions: "The equation must be in standard linear form.",
-        variables: "P(x) comes from y′+P(x)y=Q(x).",
+        variables: "P(x) comes from y'+P(x)y=Q(x).",
         use: "Standard method for first-order linear ODEs.",
-        example: "For y′+2y=x, μ=e^{∫2dx}=e²ˣ.",
+        example: "For y'+2y=x, μ=e^{2x}.",
         note: "The constant of integration in the exponent can be omitted because it only scales the integrating factor.",
       },
       {
         name: "Second-Order Linear ODE",
-        formula: "ay″ + by′ + cy = 0",
+        formula: "ay''+by'+cy=0",
         description:
           "A common homogeneous second-order linear differential equation with constant coefficients.",
-        conditions: "a, b, c are constants and a ≠ 0.",
+        conditions: "a, b, c are constants and a≠0.",
         variables: "y is the unknown function.",
         use: "Used in oscillations, circuits, mechanics, and engineering.",
-        example: "y″−3y′+2y=0.",
+        example: "y''-3y'+2y=0.",
         note: "The characteristic equation determines the form of the solution.",
       },
       {
         name: "Characteristic Equation",
-        formula: "ar² + br + c = 0",
+        formula: "ar^2+br+c=0",
         description:
           "Algebraic equation associated with a constant-coefficient second-order homogeneous ODE.",
         conditions:
           "The differential equation must have constant coefficients in the stated form.",
         variables: "r represents exponential solution behavior.",
         use: "Used to solve second-order linear homogeneous ODEs.",
-        example: "For y″−3y′+2y=0, r²−3r+2=0 gives r=1,2.",
+        example: "For y''-3y'+2y=0, r²-3r+2=0 gives r=1,2.",
         note: "Repeated and complex roots require special solution forms.",
       },
     ],
@@ -1214,7 +1219,7 @@ const formulaCategories = [
     formulas: [
       {
         name: "Forward Difference",
-        formula: "f′(x) ≈ [f(x+h)−f(x)]/h",
+        formula: "f'(x)\\approx\\frac{f(x+h)-f(x)}{h}",
         description:
           "Approximates the derivative using the current point and a point ahead.",
         conditions:
@@ -1226,18 +1231,18 @@ const formulaCategories = [
       },
       {
         name: "Backward Difference",
-        formula: "f′(x) ≈ [f(x)−f(x−h)]/h",
+        formula: "f'(x)\\approx\\frac{f(x)-f(x-h)}{h}",
         description:
           "Approximates the derivative using the current point and a point behind it.",
         conditions: "h must be chosen appropriately.",
         variables: "h is the step size.",
         use: "Useful near a boundary where values ahead are unavailable.",
-        example: "Use known values at x and x−h to estimate f′(x).",
+        example: "Use known values at x and x−h to estimate f'(x).",
         note: "Like forward difference, the basic truncation error is O(h).",
       },
       {
         name: "Central Difference",
-        formula: "f′(x) ≈ [f(x+h)−f(x−h)]/(2h)",
+        formula: "f'(x)\\approx\\frac{f(x+h)-f(x-h)}{2h}",
         description:
           "Uses points on both sides of x for a derivative approximation.",
         conditions: "Function values should be available on both sides.",
@@ -1249,7 +1254,7 @@ const formulaCategories = [
       },
       {
         name: "Second Derivative Approximation",
-        formula: "f″(x) ≈ [f(x+h)−2f(x)+f(x−h)]/h²",
+        formula: "f''(x)\\approx\\frac{f(x+h)-2f(x)+f(x-h)}{h^2}",
         description:
           "Approximates the second derivative using symmetric function values.",
         conditions: "Function values should be available at x−h, x, and x+h.",
@@ -1261,12 +1266,13 @@ const formulaCategories = [
       },
       {
         name: "Trapezoidal Rule",
-        formula: "Tₙ = h/2[f(x₀)+2Σᵢ₌₁ⁿ⁻¹f(xᵢ)+f(xₙ)]",
+        formula:
+          "T_n=\\frac h2\\left[f(x_0)+2\\sum_{i=1}^{n-1}f(x_i)+f(x_n)\\right]",
         description:
           "Approximates a definite integral by replacing the curve with trapezoids.",
         conditions:
           "The function should be sufficiently smooth for useful accuracy.",
-        variables: "h=(b−a)/n.",
+        variables: "h=(b-a)/n.",
         use: "Numerical integration when an exact antiderivative is unavailable.",
         example:
           "Increasing n generally improves the approximation for smooth functions.",
@@ -1274,11 +1280,12 @@ const formulaCategories = [
       },
       {
         name: "Simpson's Rule",
-        formula: "Sₙ = h/3[f(x₀)+4Σf(xodd)+2Σf(xeven)+f(xₙ)]",
+        formula:
+          "S_n=\\frac h3\\left[f(x_0)+4\\sum f(x_{\\mathrm{odd}})+2\\sum f(x_{\\mathrm{even}})+f(x_n)\\right]",
         description:
           "Approximates an integral using quadratic rather than linear interpolation.",
         conditions: "n must be even in the standard composite Simpson's rule.",
-        variables: "h=(b−a)/n.",
+        variables: "h=(b-a)/n.",
         use: "Often provides high accuracy for smooth functions.",
         example:
           "For a smooth function, Simpson's rule can achieve much better accuracy than a comparable basic trapezoidal approximation.",
@@ -1286,37 +1293,37 @@ const formulaCategories = [
       },
       {
         name: "Midpoint Rule",
-        formula: "Mₙ = hΣᵢ₌₁ⁿ f(xᵢ*)",
+        formula: "M_n=h\\sum_{i=1}^{n}f(x_i^*)",
         description:
           "Approximates an integral by evaluating the function at the midpoint of each subinterval.",
         conditions: "The function should be integrable and reasonably smooth.",
-        variables: "xᵢ* is the midpoint of subinterval i.",
+        variables: "x_i^* is the midpoint of subinterval i.",
         use: "Useful for simple numerical integration.",
         example: "For each interval [xᵢ₋₁,xᵢ], evaluate f at (xᵢ₋₁+xᵢ)/2.",
         note: "The composite midpoint rule has O(h²) error for sufficiently smooth functions.",
       },
       {
         name: "Newton-Raphson",
-        formula: "xₙ₊₁ = xₙ − f(xₙ)/f′(xₙ)",
+        formula: "x_{n+1}=x_n-\\frac{f(x_n)}{f'(x_n)}",
         description:
           "Iteratively improves an estimate of a root using the tangent line.",
         conditions:
-          "f′(xₙ) must be nonzero and the starting guess should be suitable.",
-        variables: "xₙ is the current approximation.",
+          "f'(x_n) must be nonzero and the starting guess should be suitable.",
+        variables: "x_n is the current approximation.",
         use: "Fast root-finding for many differentiable functions.",
         example: "Starting near a known root can lead to rapid convergence.",
         note: "A poor initial guess can cause divergence or convergence to an unexpected root.",
       },
       {
         name: "Bisection Method",
-        formula: "m = (a+b)/2",
+        formula: "m=\\frac{a+b}{2}",
         description: "Repeatedly halves an interval containing a root.",
         conditions:
           "For the standard theorem, f must be continuous and f(a)f(b)<0.",
         variables: "a and b are endpoints of the current interval.",
         use: "Reliable numerical root finding.",
         example:
-          "If f(a)<0 and f(b)>0, evaluate f(m) and retain the half interval containing the sign change.",
+          "Evaluate f(m) and retain the half interval containing the sign change.",
         note: "Bisection is slower than Newton-Raphson but has strong convergence guarantees under its assumptions.",
       },
     ],
@@ -1331,28 +1338,28 @@ const formulaCategories = [
     formulas: [
       {
         name: "Complex Number",
-        formula: "z = a + bi",
+        formula: "z=a+bi",
         description:
           "Represents a complex number using a real part and an imaginary part.",
         conditions: "a and b are real numbers.",
-        variables: "i² = −1.",
+        variables: "i²=-1.",
         use: "Useful in differential equations, signals, and advanced mathematics.",
         example: "z=3+4i.",
         note: "a is the real part and b is the imaginary coefficient.",
       },
       {
         name: "Complex Conjugate",
-        formula: "z̄ = a − bi",
+        formula: "\\overline z=a-bi",
         description: "Changes the sign of the imaginary component.",
         conditions: "z=a+bi.",
         variables: "a and b are real.",
         use: "Useful for complex division and magnitude calculations.",
         example: "If z=3+4i, then z̄=3−4i.",
-        note: "z z̄ = a²+b².",
+        note: "z z̄=a²+b².",
       },
       {
         name: "Complex Magnitude",
-        formula: "|z| = √(a²+b²)",
+        formula: "|z|=\\sqrt{a^2+b^2}",
         description:
           "Measures the distance of a complex number from the origin.",
         conditions: "z=a+bi.",
@@ -1363,13 +1370,13 @@ const formulaCategories = [
       },
       {
         name: "Euler's Formula",
-        formula: "eⁱˣ = cos x + i sin x",
+        formula: "e^{ix}=\\cos x+i\\sin x",
         description:
           "Connects exponential and trigonometric functions through complex numbers.",
         conditions: "x is real.",
-        variables: "i²=−1.",
+        variables: "i²=-1.",
         use: "Fundamental in Fourier analysis, differential equations, and signal processing.",
-        example: "eⁱπ = −1.",
+        example: "e^{i\\pi}=-1.",
         note: "Euler's formula is one of the most important identities connecting different areas of mathematics.",
       },
     ],
@@ -1378,11 +1385,12 @@ const formulaCategories = [
 
 function FormulaCard({ formula, onCopy, copied }) {
   return (
-    <article className="pml-card p-6">
+    <article className="pml-card p-6 sm:p-7">
       <div className="flex items-start justify-between gap-4">
-        <div>
+        <div className="min-w-0">
           <div className="pml-eyebrow">Formula</div>
-          <h3 className="mt-2 text-xl font-semibold text-[#17202A]">
+
+          <h3 className="mt-2 text-xl font-semibold leading-tight text-[#17202A]">
             {formula.name}
           </h3>
         </div>
@@ -1402,10 +1410,8 @@ function FormulaCard({ formula, onCopy, copied }) {
         </button>
       </div>
 
-      <div className="my-5 overflow-x-auto rounded-lg border border-[#E9E9E6] bg-[#F8F7F4] p-5 text-center">
-        <code className="whitespace-nowrap font-mono text-base font-semibold text-[#17324D] sm:text-lg">
-          {formula.formula}
-        </code>
+      <div className="my-6 overflow-x-auto rounded-lg border border-[#E9E9E6] bg-[#F8F7F4] px-4 py-5">
+        <MathRenderer>{formula.formula}</MathRenderer>
       </div>
 
       <div className="space-y-5">
@@ -1413,6 +1419,7 @@ function FormulaCard({ formula, onCopy, copied }) {
           <h4 className="text-sm font-semibold text-[#17324D]">
             What it means
           </h4>
+
           <p className="mt-1 text-sm leading-6 text-[#34404C]">
             {formula.description}
           </p>
@@ -1420,6 +1427,7 @@ function FormulaCard({ formula, onCopy, copied }) {
 
         <div>
           <h4 className="text-sm font-semibold text-[#17324D]">Conditions</h4>
+
           <p className="mt-1 text-sm leading-6 text-[#34404C]">
             {formula.conditions}
           </p>
@@ -1427,6 +1435,7 @@ function FormulaCard({ formula, onCopy, copied }) {
 
         <div>
           <h4 className="text-sm font-semibold text-[#17324D]">Variables</h4>
+
           <p className="mt-1 text-sm leading-6 text-[#34404C]">
             {formula.variables}
           </p>
@@ -1436,6 +1445,7 @@ function FormulaCard({ formula, onCopy, copied }) {
           <h4 className="text-sm font-semibold text-[#17324D]">
             When to use it
           </h4>
+
           <p className="mt-1 text-sm leading-6 text-[#34404C]">{formula.use}</p>
         </div>
 
@@ -1466,6 +1476,58 @@ function FormulaCard({ formula, onCopy, copied }) {
         </div>
       </div>
     </article>
+  );
+}
+
+function CategoryOverview({ onSelect }) {
+  return (
+    <section className="border-y border-[#E9E9E6] bg-white">
+      <div className="mx-auto max-w-[1180px] px-4 py-10 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="pml-eyebrow">Browse by topic</div>
+
+            <h2 className="mt-2 text-2xl font-semibold text-[#17202A]">
+              A structured calculus reference
+            </h2>
+          </div>
+
+          <p className="max-w-xl text-sm leading-6 text-[#687481]">
+            Start with the topic closest to your problem, then use the
+            explanations and conditions to decide whether a formula applies.
+          </p>
+        </div>
+
+        <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {formulaCategories.map((category) => {
+            const Icon = category.icon;
+
+            return (
+              <button
+                key={category.id}
+                type="button"
+                onClick={() => onSelect(category.id)}
+                className="group flex items-center gap-3 border border-[#DEDEDB] bg-[#F8F7F4] p-4 text-left transition hover:border-[#2F5BEA] hover:bg-white"
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#EEF3FF] text-[#2F5BEA]">
+                  <Icon size={18} />
+                </span>
+
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold text-[#17202A]">
+                    {category.name}
+                  </span>
+
+                  <span className="mt-0.5 block text-xs text-[#687481]">
+                    {category.formulas.length} entries
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -1516,9 +1578,15 @@ export default function Formulas() {
       .filter((category) => category.formulas.length > 0);
   }, [search, activeCategory]);
 
+  const visibleFormulaCount = filteredCategories.reduce(
+    (total, category) => total + category.formulas.length,
+    0,
+  );
+
   async function copyFormula(formula) {
     try {
       await navigator.clipboard.writeText(formula);
+
       setCopiedFormula(formula);
 
       window.setTimeout(() => {
@@ -1534,6 +1602,21 @@ export default function Formulas() {
     setActiveCategory("all");
   }
 
+  function selectCategory(categoryId) {
+    setActiveCategory(categoryId);
+
+    window.setTimeout(() => {
+      const element = document.getElementById(categoryId);
+
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 50);
+  }
+
   return (
     <>
       <SEO
@@ -1545,13 +1628,15 @@ export default function Formulas() {
       <PageHeader
         eyebrow="Reference"
         title="Calculus Formulas"
-        description="A comprehensive reference for the formulas, identities, rules, and methods used throughout calculus."
+        description="A structured reference for the formulas, identities, rules, and methods used throughout calculus."
       />
+
+      <CategoryOverview onSelect={selectCategory} />
 
       <main className="mx-auto max-w-[1180px] px-4 pb-20 sm:px-6 lg:px-8">
         {/* Introduction */}
-        <section className="py-10 md:py-14">
-          <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
+        <section className="py-12 md:py-16">
+          <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
             <div>
               <div className="pml-eyebrow">How to use this reference</div>
 
@@ -1560,16 +1645,17 @@ export default function Formulas() {
               </h2>
 
               <p className="mt-4 max-w-3xl text-base leading-8 text-[#34404C]">
-                A formula is more useful when you know what each symbol means,
-                when the formula applies, and what its result represents. This
-                reference therefore gives more than a mathematical expression:
-                each entry explains the idea, conditions, variables, practical
-                use, and an example.
+                Memorizing a formula is only part of solving a calculus problem.
+                You also need to know what the symbols represent, which
+                assumptions are required, and what mathematical quantity the
+                formula describes.
               </p>
 
               <p className="mt-4 max-w-3xl text-base leading-8 text-[#34404C]">
-                Use the search box to find a specific formula or browse the
-                categories to review a complete topic.
+                Each entry in this reference therefore includes the formula, its
+                meaning, conditions, variables, typical use, an example, and an
+                important note. Search across all of these fields or browse the
+                categories above.
               </p>
             </div>
 
@@ -1601,7 +1687,7 @@ export default function Formulas() {
 
               <div className="mt-3 flex items-center gap-2 text-sm text-[#34404C]">
                 <Search size={16} />
-                <span>Search every explanation</span>
+                <span>Search explanations and examples</span>
               </div>
             </div>
           </div>
@@ -1667,16 +1753,13 @@ export default function Formulas() {
           <p className="text-sm text-[#687481]">
             Showing{" "}
             <span className="font-semibold text-[#34404C]">
-              {filteredCategories.reduce(
-                (total, category) => total + category.formulas.length,
-                0,
-              )}
+              {visibleFormulaCount}
             </span>{" "}
-            formulas
+            {visibleFormulaCount === 1 ? "formula" : "formulas"}
             {search && (
               <>
                 {" "}
-                matching <strong>"{search}"</strong>
+                matching <strong className="text-[#34404C]">"{search}"</strong>
               </>
             )}
           </p>
@@ -1706,7 +1789,8 @@ export default function Formulas() {
             </h2>
 
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#687481]">
-              Try a different search phrase or browse all categories.
+              No reference entry matches your current search. Try a broader term
+              such as derivative, integral, limit, series, or trigonometry.
             </p>
 
             <button
@@ -1777,8 +1861,8 @@ export default function Formulas() {
 
                 <p className="mt-2 max-w-3xl text-sm leading-7 text-[#687481]">
                   Selecting a formula is often more important than performing
-                  the arithmetic. Start with the mathematical idea represented
-                  by the problem.
+                  the arithmetic. Start with the mathematical quantity the
+                  problem is asking you to determine.
                 </p>
               </div>
             </div>
@@ -1788,7 +1872,7 @@ export default function Formulas() {
                 {
                   number: "01",
                   title: "Identify the quantity",
-                  text: "Decide what you are trying to calculate: a limit, rate of change, accumulated quantity, root, approximation, or another mathematical quantity.",
+                  text: "Decide what you are trying to calculate: a limit, rate of change, accumulated quantity, root, approximation, derivative, integral, or another mathematical quantity.",
                 },
                 {
                   number: "02",
@@ -1798,7 +1882,7 @@ export default function Formulas() {
                 {
                   number: "03",
                   title: "Verify the result",
-                  text: "Check units, signs, magnitude, domain, and whether the answer makes sense in the original problem.",
+                  text: "Check units, signs, magnitude, domain, and whether the result makes sense in the original mathematical or physical context.",
                 },
               ].map((item) => (
                 <div
@@ -1841,9 +1925,9 @@ export default function Formulas() {
                   symbols appear to match a problem. Check its assumptions
                   first. For example, the quotient rule requires a nonzero
                   denominator, the infinite geometric-series formula requires
-                  |r| &lt; 1, Simpson's rule requires an even number of
-                  subintervals in its standard composite form, and a directional
-                  derivative normally requires a unit direction vector.
+                  |r|&lt;1, Simpson's rule requires an even number of
+                  subintervals in its standard composite form, and a standard
+                  directional derivative uses a unit direction vector.
                 </p>
               </div>
             </div>
@@ -1866,11 +1950,33 @@ export default function Formulas() {
                   their meaning. A derivative describes local change, an
                   integral describes accumulation, a limit describes behavior
                   near a point, and a series represents an infinite process
-                  through partial sums. Use this reference together with the
+                  through its partial sums. Use this reference together with the
                   Practical Math Lab learning guides, worked examples, and
                   calculators.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Final reference note */}
+        <section className="mt-8">
+          <div className="bg-[#17324D] p-8 text-white sm:p-10">
+            <div className="max-w-3xl">
+              <div className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+                A better way to study
+              </div>
+
+              <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">
+                Use formulas as tools, not just facts to memorize.
+              </h2>
+
+              <p className="mt-4 text-sm leading-7 text-white/75">
+                When you encounter a formula, ask three questions: What does it
+                describe? Under what conditions is it valid? Why does it solve
+                this particular problem? Those questions turn a formula sheet
+                into a genuine mathematical reference.
+              </p>
             </div>
           </div>
         </section>

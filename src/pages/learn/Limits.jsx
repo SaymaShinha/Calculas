@@ -1,3 +1,5 @@
+// src/pages/learn/Limits.jsx
+
 import {
   ArrowRight,
   CheckCircle2,
@@ -8,15 +10,15 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import SEO from "../../components/SEO";
-import PageHeader from "../../components/PageHeader";
-import MathRenderer from "../../components/MathRenderer";
+import SEO from "../../components/SEO.jsx";
+import PageHeader from "../../components/PageHeader.jsx";
+import MathRenderer from "../../components/MathRenderer.jsx";
 
 const whyLimitsMatter = [
   {
     title: "Derivatives",
     description:
-      "The derivative is defined using a limit, allowing us to describe instantaneous rate of change.",
+      "The derivative is defined using a limit, allowing us to describe instantaneous rates of change.",
     path: "/learn/derivatives",
   },
   {
@@ -60,6 +62,14 @@ const limitMethods = [
   },
 ];
 
+const summaryPoints = [
+  "A limit describes what a function approaches as the input gets close to a particular value.",
+  "The value of a limit does not necessarily equal the function's actual value at that point.",
+  "Direct substitution often works when the function is continuous at the point.",
+  "A two-sided limit exists only when the corresponding left-hand and right-hand limits agree.",
+  "Limits provide the foundation for derivatives, continuity, and the limiting process behind definite integrals.",
+];
+
 export default function Limits() {
   return (
     <>
@@ -95,7 +105,14 @@ export default function Limits() {
                 <p>
                   The important idea is <strong>approach</strong>. We are
                   interested in the behavior of the function near a point,
-                  rather than simply substituting the point into the function.
+                  rather than simply asking what happens when the input is
+                  exactly equal to that point.
+                </p>
+
+                <p>
+                  This distinction becomes especially important when a function
+                  is undefined at the point, has a removable discontinuity, or
+                  behaves differently from the left and right.
                 </p>
               </div>
 
@@ -105,7 +122,7 @@ export default function Limits() {
                 </p>
 
                 <div className="pml-formula mt-5 text-center">
-                  <MathRenderer block>{"lim x→a f(x) = L"}</MathRenderer>
+                  <MathRenderer>{"\\lim_{x\\to a} f(x) = L"}</MathRenderer>
                 </div>
 
                 <p className="mt-5 text-sm leading-7 text-slate-600">
@@ -154,7 +171,7 @@ export default function Limits() {
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
                   {[
-                    ["x = a − 0.1", "approaching"],
+                    ["x = a - 0.1", "approaching"],
                     ["x = a", "target"],
                     ["x = a + 0.1", "approaching"],
                   ].map(([value, label]) => (
@@ -259,11 +276,11 @@ export default function Limits() {
                 </div>
 
                 <div className="pml-formula mt-6">
-                  <MathRenderer block>{"lim x→2 (x² + 3x)"}</MathRenderer>
+                  <MathRenderer>{"\\lim_{x\\to 2}(x^2+3x)"}</MathRenderer>
                 </div>
 
                 <div className="pml-formula mt-4">
-                  <MathRenderer block>{"= 2² + 3(2) = 10"}</MathRenderer>
+                  <MathRenderer>{"= 2^2 + 3(2) = 10"}</MathRenderer>
                 </div>
               </div>
 
@@ -353,7 +370,12 @@ export default function Limits() {
                   whether we approach a point from the left or from the right.
                 </p>
 
-                <p>These are called one-sided limits:</p>
+                <p>
+                  These are called one-sided limits. The superscript minus
+                  indicates approach from values smaller than the target, while
+                  the superscript plus indicates approach from values larger
+                  than the target.
+                </p>
               </div>
             </div>
 
@@ -363,7 +385,7 @@ export default function Limits() {
                   From the left
                 </p>
 
-                <MathRenderer block>{"lim x→a⁻ f(x)"}</MathRenderer>
+                <MathRenderer>{"\\lim_{x\\to a^-}f(x)"}</MathRenderer>
               </div>
 
               <div className="pml-formula">
@@ -371,7 +393,7 @@ export default function Limits() {
                   From the right
                 </p>
 
-                <MathRenderer block>{"lim x→a⁺ f(x)"}</MathRenderer>
+                <MathRenderer>{"\\lim_{x\\to a^+}f(x)"}</MathRenderer>
               </div>
             </div>
 
@@ -389,12 +411,12 @@ export default function Limits() {
 
                   <p className="mt-2 text-sm leading-7 text-slate-600">
                     A two-sided limit exists only when the left-hand and
-                    right-hand limits exist and are equal.
+                    right-hand limits both exist and are equal.
                   </p>
 
                   <div className="mt-4">
-                    <MathRenderer block>
-                      {"lim x→a⁻ f(x) = lim x→a⁺ f(x)"}
+                    <MathRenderer>
+                      {"\\lim_{x\\to a^-}f(x)=\\lim_{x\\to a^+}f(x)=L"}
                     </MathRenderer>
                   </div>
                 </div>
@@ -427,7 +449,7 @@ export default function Limits() {
                   </p>
 
                   <div className="mt-4">
-                    <MathRenderer block>{"f(a)"}</MathRenderer>
+                    <MathRenderer>{"f(a)"}</MathRenderer>
                   </div>
 
                   <p className="mt-4 text-sm leading-6 text-slate-500">
@@ -441,7 +463,7 @@ export default function Limits() {
                   </p>
 
                   <div className="mt-4">
-                    <MathRenderer block>{"lim x→a f(x)"}</MathRenderer>
+                    <MathRenderer>{"\\lim_{x\\to a}f(x)"}</MathRenderer>
                   </div>
 
                   <p className="mt-4 text-sm leading-6 text-slate-500">
@@ -454,7 +476,7 @@ export default function Limits() {
         </section>
 
         {/* Continuity */}
-        <section id="continuity" className="pml-section">
+        <section id="continuity" className="pml-section scroll-mt-24">
           <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8">
             <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
               <div>
@@ -500,7 +522,130 @@ export default function Limits() {
                 </div>
 
                 <div className="pml-formula mt-7">
-                  <MathRenderer block>{"lim x→a f(x) = f(a)"}</MathRenderer>
+                  <MathRenderer>{"\\lim_{x\\to a}f(x)=f(a)"}</MathRenderer>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Limits at infinity */}
+        <section className="border-y border-slate-200 bg-[#f8f7f4]">
+          <div className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+            <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+              <div>
+                <div className="pml-eyebrow">04 · Limits at infinity</div>
+
+                <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                  Study long-term behavior.
+                </h2>
+
+                <p className="mt-5 max-w-lg text-base leading-8 text-slate-600">
+                  Limits are also used to describe what happens as the input
+                  becomes arbitrarily large or arbitrarily negative.
+                </p>
+
+                <p className="mt-4 max-w-lg text-base leading-8 text-slate-600">
+                  These limits help us understand horizontal asymptotes and the
+                  long-term behavior of functions.
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-white p-7">
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-400">
+                  Example
+                </p>
+
+                <div className="pml-formula mt-5">
+                  <MathRenderer>
+                    {"\\lim_{x\\to\\infty}\\frac{1}{x}=0"}
+                  </MathRenderer>
+                </div>
+
+                <p className="mt-5 text-sm leading-7 text-slate-600">
+                  As <strong>x</strong> becomes increasingly large,{" "}
+                  <strong>1/x</strong> gets closer and closer to zero.
+                </p>
+
+                <div className="mt-6 border-t border-slate-200 pt-5">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-400">
+                    Interpretation
+                  </p>
+
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
+                    The function approaches zero without requiring x to equal
+                    any finite value.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Epsilon intuition */}
+        <section className="pml-section">
+          <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-3xl">
+              <div className="pml-eyebrow">A deeper definition</div>
+
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Precision: the epsilon-delta idea.
+              </h2>
+
+              <div className="pml-prose mt-5">
+                <p>
+                  The intuitive idea of getting closer can be made precise. The
+                  formal definition of a limit uses two positive quantities,
+                  usually written as <strong>ε</strong> and <strong>δ</strong>.
+                </p>
+
+                <p>
+                  Roughly speaking, if we want the function values to be within
+                  a chosen distance <strong>ε</strong> of <strong>L</strong>, we
+                  can restrict <strong>x</strong> to be sufficiently close to{" "}
+                  <strong>a</strong>.
+                </p>
+              </div>
+
+              <div className="pml-formula mt-7">
+                <MathRenderer>
+                  {
+                    "\\forall\\,\\varepsilon>0,\\ \\exists\\,\\delta>0\\ \\text{such that}\\ 0<|x-a|<\\delta\\Rightarrow|f(x)-L|<\\varepsilon"
+                  }
+                </MathRenderer>
+              </div>
+
+              <p className="mt-5 text-sm leading-7 text-slate-500">
+                The formal definition is especially important in higher
+                mathematics because it replaces the informal phrase "gets
+                arbitrarily close" with a precise condition.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Key idea */}
+        <section className="border-y border-slate-200 bg-white">
+          <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-3xl rounded-xl border border-blue-100 bg-blue-50 p-6">
+              <div className="flex gap-4">
+                <Lightbulb
+                  size={20}
+                  className="mt-0.5 shrink-0 text-blue-700"
+                />
+
+                <div>
+                  <h3 className="font-bold text-slate-900">
+                    A useful way to think about limits
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
+                    A limit is fundamentally about{" "}
+                    <strong>behavior near a point</strong>. The function may
+                    have a value at the point, may have no value there, or may
+                    behave differently from either side. What matters for the
+                    limit is the value the function approaches.
+                  </p>
                 </div>
               </div>
             </div>
@@ -508,8 +653,8 @@ export default function Limits() {
         </section>
 
         {/* Summary */}
-        <section className="border-y border-slate-200 bg-[#f8f7f4]">
-          <div className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+        <section className="pml-section">
+          <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl">
               <div className="pml-eyebrow">Limits summary</div>
 
@@ -518,19 +663,20 @@ export default function Limits() {
               </h2>
 
               <div className="mt-8 divide-y divide-slate-200 border-y border-slate-200 bg-white">
-                {[
-                  "A limit describes what a function approaches near a particular input.",
-                  "The value of a limit does not necessarily equal the function's value at that point.",
-                  "Direct substitution works when the function is continuous at the point.",
-                  "A two-sided limit requires the left-hand and right-hand limits to agree.",
-                  "Limits provide the foundation for derivatives, continuity, and integral calculus.",
-                ].map((item, index) => (
+                {summaryPoints.map((item, index) => (
                   <div key={item} className="flex gap-4 p-5">
-                    <span className="font-mono text-xs font-semibold text-blue-700">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
+                    <CheckCircle2
+                      size={18}
+                      className="mt-0.5 shrink-0 text-[#18794e]"
+                    />
 
-                    <p className="text-sm leading-6 text-slate-600">{item}</p>
+                    <div className="flex gap-3">
+                      <span className="font-mono text-xs font-semibold text-blue-700">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+
+                      <p className="text-sm leading-6 text-slate-600">{item}</p>
+                    </div>
                   </div>
                 ))}
               </div>

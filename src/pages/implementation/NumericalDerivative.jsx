@@ -15,28 +15,57 @@ import MathRenderer from "../../components/MathRenderer";
 const methods = [
   {
     name: "Forward difference",
-    formula: "f'(x) \\approx \\frac{f(x+h)-f(x)}{h}",
+    formula: "f'(x)\\approx\\frac{f(x+h)-f(x)}{h}",
     order: "O(h)",
     bestFor: "Points near the beginning of a data set",
     description:
-      "Uses the current point and a point to its right. It is simple and useful when values before x are unavailable.",
+      "Uses the current point and a point to its right. It is useful when values before x are unavailable.",
   },
   {
     name: "Backward difference",
-    formula: "f'(x) \\approx \\frac{f(x)-f(x-h)}{h}",
+    formula: "f'(x)\\approx\\frac{f(x)-f(x-h)}{h}",
     order: "O(h)",
     bestFor: "Points near the end of a data set",
     description:
-      "Uses the current point and a point to its left. It is particularly useful when future data points are unavailable.",
+      "Uses the current point and a point to its left. It is useful when future data points are unavailable.",
   },
   {
     name: "Central difference",
-    formula: "f'(x) \\approx \\frac{f(x+h)-f(x-h)}{2h}",
+    formula: "f'(x)\\approx\\frac{f(x+h)-f(x-h)}{2h}",
     order: "O(h^2)",
     bestFor: "Interior points with data on both sides",
     description:
-      "Samples the function on both sides of x and generally provides better accuracy for smooth functions.",
+      "Uses values on both sides of x and generally provides a more accurate approximation for sufficiently smooth functions.",
   },
+];
+
+const methodComparison = [
+  {
+    method: "Forward",
+    formula: "f'(x)\\approx\\frac{f(x+h)-f(x)}{h}",
+    order: "O(h)",
+    points: "x, x+h",
+  },
+  {
+    method: "Backward",
+    formula: "f'(x)\\approx\\frac{f(x)-f(x-h)}{h}",
+    order: "O(h)",
+    points: "x-h, x",
+  },
+  {
+    method: "Central",
+    formula: "f'(x)\\approx\\frac{f(x+h)-f(x-h)}{2h}",
+    order: "O(h^2)",
+    points: "x-h, x+h",
+  },
+];
+
+const practicalChecks = [
+  "Is the function sufficiently smooth near the point?",
+  "Are values available on both sides of the point?",
+  "Is the chosen step size appropriate?",
+  "Could measurement noise affect the derivative?",
+  "Does the result agree with an exact or independent calculation?",
 ];
 
 export default function NumericalDerivative() {
@@ -44,7 +73,7 @@ export default function NumericalDerivative() {
     <>
       <SEO
         title="Numerical Derivatives | Forward, Backward & Central Difference"
-        description="Learn how numerical derivatives are approximated using forward, backward, and central finite differences. Understand step size, truncation error, round-off error, accuracy, and practical implementation."
+        description="Learn how numerical derivatives are approximated using forward, backward, and central finite differences. Understand Taylor-series error, step size, truncation error, round-off error, accuracy, and practical implementation."
         canonical="/implementation/numerical-derivative"
       />
 
@@ -55,7 +84,10 @@ export default function NumericalDerivative() {
       />
 
       <main className="mx-auto max-w-[1180px] px-4 pb-20 sm:px-6 lg:px-8">
-        {/* Introduction */}
+        {/* ---------------------------------------------------------------- */}
+        {/* Introduction                                                      */}
+        {/* ---------------------------------------------------------------- */}
+
         <section className="py-10 md:py-14">
           <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
             <article>
@@ -67,21 +99,24 @@ export default function NumericalDerivative() {
 
               <p className="mt-5 text-base leading-8 text-[#34404C]">
                 In calculus, the derivative describes the instantaneous rate of
-                change of a function. When we know an exact formula, symbolic
-                differentiation can often give us the derivative directly.
+                change of a function. When an exact formula is available,
+                symbolic differentiation can often produce the derivative
+                directly.
               </p>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
                 Computational problems are often different. A computer may
-                receive measurements such as temperature, position, pressure, or
-                sensor readings rather than a convenient symbolic function. In
-                these situations, the derivative can be estimated from nearby
-                values.
+                receive measurements such as position, temperature, pressure,
+                velocity, or sensor readings rather than a convenient symbolic
+                function. In these situations, derivatives can be estimated from
+                nearby values.
               </p>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
                 Finite-difference methods replace the limiting process in the
-                derivative definition with a small but finite step size h.
+                derivative definition with a small but finite step size,
+                allowing the calculation to be performed using ordinary
+                numerical operations.
               </p>
 
               <div className="pml-card mt-7 p-6">
@@ -94,8 +129,9 @@ export default function NumericalDerivative() {
                 </div>
 
                 <p className="mt-4 text-sm leading-7 text-[#687481]">
-                  A numerical method chooses a finite h and uses nearby function
-                  values to estimate the derivative.
+                  The derivative is defined by a limit. A numerical method
+                  replaces the ideal limiting process with a finite value of h
+                  and uses nearby function values to estimate the result.
                 </p>
               </div>
             </article>
@@ -114,12 +150,18 @@ export default function NumericalDerivative() {
               </p>
 
               <div className="mt-5 border-t border-[#E9E9E6] pt-5">
-                <div className="font-mono text-sm text-[#17324D]">small h</div>
+                <div className="font-mono text-sm text-[#17324D]">choose h</div>
 
                 <div className="my-2 text-[#687481]">↓</div>
 
                 <div className="font-mono text-sm text-[#17324D]">
-                  nearby values
+                  evaluate nearby points
+                </div>
+
+                <div className="my-2 text-[#687481]">↓</div>
+
+                <div className="font-mono text-sm text-[#17324D]">
+                  apply difference formula
                 </div>
 
                 <div className="my-2 text-[#687481]">↓</div>
@@ -132,7 +174,70 @@ export default function NumericalDerivative() {
           </div>
         </section>
 
-        {/* Finite difference methods */}
+        {/* ---------------------------------------------------------------- */}
+        {/* What finite differences mean                                      */}
+        {/* ---------------------------------------------------------------- */}
+
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="grid gap-8 lg:grid-cols-3">
+            <article className="pml-card p-6">
+              <div className="pml-eyebrow">01</div>
+
+              <h3 className="mt-3 text-lg font-semibold text-[#17202A]">
+                Difference in function values
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-[#687481]">
+                A finite difference measures how much the function changes
+                between nearby points.
+              </p>
+
+              <div className="mt-4 pml-formula">
+                <MathRenderer>{"\\Delta f=f(x+h)-f(x)"}</MathRenderer>
+              </div>
+            </article>
+
+            <article className="pml-card p-6">
+              <div className="pml-eyebrow">02</div>
+
+              <h3 className="mt-3 text-lg font-semibold text-[#17202A]">
+                Difference in the input
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-[#687481]">
+                The corresponding change in the independent variable is the step
+                size h.
+              </p>
+
+              <div className="mt-4 pml-formula">
+                <MathRenderer>{"\\Delta x=h"}</MathRenderer>
+              </div>
+            </article>
+
+            <article className="pml-card p-6">
+              <div className="pml-eyebrow">03</div>
+
+              <h3 className="mt-3 text-lg font-semibold text-[#17202A]">
+                Approximate rate of change
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-[#687481]">
+                Dividing the change in the function by the change in x produces
+                an average rate of change that approaches the derivative as the
+                step becomes smaller under suitable conditions.
+              </p>
+
+              <div className="mt-4 pml-formula">
+                <MathRenderer>{"\\frac{\\Delta f}{\\Delta x}"}</MathRenderer>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Methods                                                           */}
+        {/* ---------------------------------------------------------------- */}
+
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="mb-8">
             <div className="pml-eyebrow">Finite differences</div>
@@ -186,7 +291,59 @@ export default function NumericalDerivative() {
           </div>
         </section>
 
-        {/* Worked example */}
+        {/* ---------------------------------------------------------------- */}
+        {/* Method comparison                                                  */}
+        {/* ---------------------------------------------------------------- */}
+
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="mb-8">
+            <div className="pml-eyebrow">Comparison</div>
+
+            <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
+              How the finite-difference formulas differ
+            </h2>
+
+            <p className="mt-3 max-w-3xl text-base leading-7 text-[#687481]">
+              The main difference is where the method samples the function.
+              Central differences use information on both sides of the point,
+              while forward and backward differences are one-sided.
+            </p>
+          </div>
+
+          <div className="pml-table-wrap">
+            <table className="pml-table">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Formula</th>
+                  <th>Truncation order</th>
+                  <th>Sample locations</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {methodComparison.map((item) => (
+                  <tr key={item.method}>
+                    <td>{item.method}</td>
+
+                    <td>
+                      <MathRenderer inline>{item.formula}</MathRenderer>
+                    </td>
+
+                    <td>{item.order}</td>
+
+                    <td>{item.points}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Worked example                                                    */}
+        {/* ---------------------------------------------------------------- */}
+
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="grid gap-8 lg:grid-cols-2">
             <div>
@@ -198,9 +355,11 @@ export default function NumericalDerivative() {
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
                 Consider the function
-                <span className="mx-2 font-mono text-[#17324D]">f(x) = x²</span>
-                and estimate its derivative at x = 3 using a central difference
-                with h = 0.01.
+                <span className="mx-2 font-mono text-[#17324D]">f(x)=x²</span>
+                and estimate its derivative at
+                <span className="mx-1 font-mono text-[#17324D]">x=3</span>
+                using a central difference with
+                <span className="mx-1 font-mono text-[#17324D]">h=0.01</span>.
               </p>
 
               <div className="mt-6">
@@ -214,9 +373,7 @@ export default function NumericalDerivative() {
               </div>
 
               <div className="mt-7">
-                <div className="pml-eyebrow">
-                  Step 2 — substitute the values
-                </div>
+                <div className="pml-eyebrow">Step 2 — substitute x=3</div>
 
                 <div className="pml-formula mt-3">
                   <MathRenderer>
@@ -227,26 +384,34 @@ export default function NumericalDerivative() {
             </div>
 
             <div className="pml-card p-7">
-              <div className="pml-eyebrow">Step 3 — evaluate</div>
+              <div className="pml-eyebrow">
+                Step 3 — evaluate the function values
+              </div>
 
-              <div className="mt-5 space-y-4">
-                <div className="border-b border-[#E9E9E6] pb-4">
+              <div className="mt-5 space-y-5">
+                <div>
                   <div className="text-xs font-semibold uppercase tracking-wide text-[#687481]">
-                    Function values
+                    First value
                   </div>
 
                   <div className="mt-3">
-                    <MathRenderer>{"f(3.01)=3.01^2=9.0601"}</MathRenderer>
-                  </div>
-
-                  <div className="mt-3">
-                    <MathRenderer>{"f(2.99)=2.99^2=8.9401"}</MathRenderer>
+                    <MathRenderer>{"f(3.01)=(3.01)^2=9.0601"}</MathRenderer>
                   </div>
                 </div>
 
                 <div>
                   <div className="text-xs font-semibold uppercase tracking-wide text-[#687481]">
-                    Approximation
+                    Second value
+                  </div>
+
+                  <div className="mt-3">
+                    <MathRenderer>{"f(2.99)=(2.99)^2=8.9401"}</MathRenderer>
+                  </div>
+                </div>
+
+                <div className="border-t border-[#E9E9E6] pt-5">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-[#687481]">
+                    Step 4 — calculate the approximation
                   </div>
 
                   <div className="mt-3">
@@ -259,13 +424,18 @@ export default function NumericalDerivative() {
                 <div className="rounded-lg border border-[#CFE8DA] bg-[#EEF9F3] p-4">
                   <div className="flex items-center gap-2 text-sm font-semibold text-[#18794E]">
                     <CheckCircle2 size={17} />
-                    Exact derivative
+                    Result
                   </div>
 
                   <p className="mt-2 text-sm leading-6 text-[#34404C]">
-                    Since
-                    <span className="mx-1 font-mono">f′(x) = 2x</span>, the
-                    exact value at x = 3 is also 6.
+                    The numerical approximation is
+                    <span className="mx-1 font-mono font-semibold">6</span>.
+                  </p>
+
+                  <p className="mt-2 text-sm leading-6 text-[#34404C]">
+                    The exact derivative is
+                    <span className="mx-1 font-mono">f′(x)=2x</span>, so
+                    <span className="mx-1 font-mono">f′(3)=6</span>.
                   </p>
                 </div>
               </div>
@@ -273,7 +443,64 @@ export default function NumericalDerivative() {
           </div>
         </section>
 
-        {/* Accuracy comparison */}
+        {/* ---------------------------------------------------------------- */}
+        {/* Taylor error                                                      */}
+        {/* ---------------------------------------------------------------- */}
+
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="grid gap-8 lg:grid-cols-[0.85fr_1fr] lg:items-center">
+            <div>
+              <div className="pml-eyebrow">Where the error comes from</div>
+
+              <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
+                Taylor expansion explains the accuracy
+              </h2>
+
+              <p className="mt-4 text-base leading-8 text-[#34404C]">
+                The accuracy of finite-difference formulas can be understood
+                using Taylor series. Expanding a function around x reveals which
+                terms cancel and which terms remain in the approximation.
+              </p>
+
+              <p className="mt-4 text-base leading-8 text-[#34404C]">
+                This is why the three common formulas have different orders of
+                truncation error.
+              </p>
+            </div>
+
+            <div className="pml-card p-7">
+              <div className="pml-eyebrow">Central difference</div>
+
+              <div className="pml-formula mt-4">
+                <MathRenderer>
+                  {
+                    "f(x+h)=f(x)+hf'(x)+\\frac{h^2}{2}f''(x)+\\frac{h^3}{6}f'''(x)+O(h^4)"
+                  }
+                </MathRenderer>
+              </div>
+
+              <div className="pml-formula mt-4">
+                <MathRenderer>
+                  {
+                    "f(x-h)=f(x)-hf'(x)+\\frac{h^2}{2}f''(x)-\\frac{h^3}{6}f'''(x)+O(h^4)"
+                  }
+                </MathRenderer>
+              </div>
+
+              <p className="mt-5 text-sm leading-7 text-[#687481]">
+                Subtracting these expansions cancels the even-power terms and
+                leads to the central-difference approximation with a leading
+                truncation error proportional to
+                <span className="mx-1 font-mono text-[#17324D]">h²</span>.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Accuracy comparison                                               */}
+        {/* ---------------------------------------------------------------- */}
+
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="mb-8">
             <div className="pml-eyebrow">Accuracy</div>
@@ -290,44 +517,59 @@ export default function NumericalDerivative() {
             </p>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-[#DEDEDB] bg-white">
+          <div className="pml-table-wrap">
             <table className="pml-table">
               <thead>
                 <tr>
                   <th>Method</th>
-                  <th>Approximation</th>
                   <th>Typical truncation error</th>
-                  <th>Data requirement</th>
+                  <th>Accuracy as h decreases</th>
+                  <th>Typical use</th>
                 </tr>
               </thead>
 
               <tbody>
                 <tr>
                   <td>Forward</td>
-                  <td>Uses x and x + h</td>
                   <td>O(h)</td>
-                  <td>Point to the right</td>
+                  <td>First order</td>
+                  <td>One-sided data</td>
                 </tr>
 
                 <tr>
                   <td>Backward</td>
-                  <td>Uses x and x − h</td>
                   <td>O(h)</td>
-                  <td>Point to the left</td>
+                  <td>First order</td>
+                  <td>One-sided data</td>
                 </tr>
 
                 <tr>
                   <td>Central</td>
-                  <td>Uses x − h and x + h</td>
                   <td>O(h²)</td>
-                  <td>Points on both sides</td>
+                  <td>Second order</td>
+                  <td>Interior points</td>
                 </tr>
               </tbody>
             </table>
           </div>
+
+          <div className="mt-6 pml-card p-6">
+            <p className="text-sm leading-7 text-[#687481]">
+              Here,
+              <span className="mx-1 font-mono text-[#17324D]">O(h)</span>
+              and
+              <span className="mx-1 font-mono text-[#17324D]">O(h²)</span>
+              describe how the truncation error scales as h approaches zero.
+              Second-order error decreases more rapidly with h than first-order
+              error, provided the underlying function is sufficiently smooth.
+            </p>
+          </div>
         </section>
 
-        {/* Step size */}
+        {/* ---------------------------------------------------------------- */}
+        {/* Step size                                                         */}
+        {/* ---------------------------------------------------------------- */}
+
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="grid gap-8 lg:grid-cols-[0.85fr_1fr]">
             <div>
@@ -344,12 +586,9 @@ export default function NumericalDerivative() {
               </p>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
-                As h becomes smaller, the subtraction
-                <span className="mx-1 font-mono text-[#17324D]">
-                  f(x+h) − f(x)
-                </span>
-                can involve two numbers that are very close together. Rounding
-                errors can then become significant.
+                When h becomes very small, the two function values being
+                subtracted can become extremely close. The subtraction may then
+                magnify the effects of floating-point round-off.
               </p>
             </div>
 
@@ -367,7 +606,7 @@ export default function NumericalDerivative() {
 
                   <div className="mt-5 space-y-5">
                     <div>
-                      <div className="font-semibold text-sm text-[#17324D]">
+                      <div className="text-sm font-semibold text-[#17324D]">
                         Truncation error
                       </div>
 
@@ -378,19 +617,20 @@ export default function NumericalDerivative() {
                     </div>
 
                     <div>
-                      <div className="font-semibold text-sm text-[#17324D]">
+                      <div className="text-sm font-semibold text-[#17324D]">
                         Round-off error
                       </div>
 
                       <p className="mt-1 text-sm leading-6 text-[#687481]">
-                        Comes from the finite precision of computer arithmetic.
+                        Comes from the finite precision used to represent and
+                        manipulate numerical values.
                       </p>
                     </div>
 
                     <div className="border-t border-[#E9E9E6] pt-5">
                       <p className="text-sm font-medium leading-6 text-[#34404C]">
                         Good numerical practice balances these effects instead
-                        of blindly minimizing h.
+                        of simply minimizing h.
                       </p>
                     </div>
                   </div>
@@ -400,7 +640,66 @@ export default function NumericalDerivative() {
           </div>
         </section>
 
-        {/* Implementation */}
+        {/* ---------------------------------------------------------------- */}
+        {/* Data and noise                                                     */}
+        {/* ---------------------------------------------------------------- */}
+
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="mb-8">
+            <div className="pml-eyebrow">Real-world data</div>
+
+            <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
+              Differentiating measured data is different from differentiating an
+              exact formula
+            </h2>
+
+            <p className="mt-4 max-w-4xl text-base leading-8 text-[#34404C]">
+              Real measurements are rarely exact. Small fluctuations caused by
+              sensors, measurement conditions, or other sources of noise can
+              become much more noticeable when differences are taken.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            <article className="pml-card p-6">
+              <h3 className="text-lg font-semibold text-[#17202A]">
+                Smooth analytical function
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-[#687481]">
+                Finite differences usually behave predictably when the function
+                is sufficiently smooth and can be evaluated accurately.
+              </p>
+            </article>
+
+            <article className="pml-card p-6">
+              <h3 className="text-lg font-semibold text-[#17202A]">
+                Sampled measurements
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-[#687481]">
+                The derivative must be estimated from discrete observations,
+                which limits the available choices of step size and formula.
+              </p>
+            </article>
+
+            <article className="pml-card p-6">
+              <h3 className="text-lg font-semibold text-[#17202A]">
+                Noisy measurements
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-[#687481]">
+                Differentiation can amplify noise, so smoothing, fitting, or
+                specialized numerical techniques may be necessary.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Implementation                                                     */}
+        {/* ---------------------------------------------------------------- */}
+
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="grid gap-8 lg:grid-cols-2">
             <div>
@@ -415,10 +714,10 @@ export default function NumericalDerivative() {
               </h2>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Implementing a finite difference requires more than copying the
-                mathematical formula. The program must evaluate the function,
-                choose a step size, handle invalid inputs, and represent the
-                result using finite-precision numbers.
+                Implementing a finite difference requires more than copying a
+                mathematical formula. A program must evaluate the function,
+                choose a numerical parameter, handle invalid values, and
+                represent the result using finite-precision arithmetic.
               </p>
             </div>
 
@@ -426,61 +725,33 @@ export default function NumericalDerivative() {
               <div className="pml-eyebrow">Conceptual algorithm</div>
 
               <ol className="mt-5 space-y-4">
-                <li className="flex gap-3">
-                  <span className="font-mono text-sm font-semibold text-[#2F5BEA]">
-                    01
-                  </span>
+                {[
+                  "Choose the evaluation point x.",
+                  "Determine which neighboring data values are available.",
+                  "Choose an appropriate step size h.",
+                  "Evaluate the required function values.",
+                  "Apply the selected finite-difference formula.",
+                  "Check whether the result is numerically reasonable.",
+                ].map((item, index) => (
+                  <li key={item} className="flex gap-3">
+                    <span className="font-mono text-sm font-semibold text-[#2F5BEA]">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
 
-                  <span className="text-sm leading-6 text-[#34404C]">
-                    Choose the evaluation point x.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="font-mono text-sm font-semibold text-[#2F5BEA]">
-                    02
-                  </span>
-
-                  <span className="text-sm leading-6 text-[#34404C]">
-                    Choose an appropriate step size h.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="font-mono text-sm font-semibold text-[#2F5BEA]">
-                    03
-                  </span>
-
-                  <span className="text-sm leading-6 text-[#34404C]">
-                    Evaluate the required neighboring function values.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="font-mono text-sm font-semibold text-[#2F5BEA]">
-                    04
-                  </span>
-
-                  <span className="text-sm leading-6 text-[#34404C]">
-                    Apply the chosen finite-difference formula.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="font-mono text-sm font-semibold text-[#2F5BEA]">
-                    05
-                  </span>
-
-                  <span className="text-sm leading-6 text-[#34404C]">
-                    Check whether the result is numerically reasonable.
-                  </span>
-                </li>
+                    <span className="text-sm leading-6 text-[#34404C]">
+                      {item}
+                    </span>
+                  </li>
+                ))}
               </ol>
             </div>
           </div>
         </section>
 
-        {/* When to use */}
+        {/* ---------------------------------------------------------------- */}
+        {/* Practical selection                                               */}
+        {/* ---------------------------------------------------------------- */}
+
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="mb-8">
             <div className="pml-eyebrow">Practical selection guide</div>
@@ -488,45 +759,123 @@ export default function NumericalDerivative() {
             <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
               Which method should you use?
             </h2>
+
+            <p className="mt-3 max-w-3xl text-base leading-7 text-[#687481]">
+              Method selection depends on data availability, location within the
+              data set, smoothness, and accuracy requirements.
+            </p>
           </div>
 
           <div className="grid gap-5 md:grid-cols-3">
             <article className="pml-card p-6">
-              <h3 className="text-lg font-semibold text-[#17202A]">
-                Use forward difference
+              <div className="font-mono text-sm font-semibold text-[#2F5BEA]">
+                Forward
+              </div>
+
+              <h3 className="mt-3 text-lg font-semibold text-[#17202A]">
+                Use a forward difference
               </h3>
 
               <p className="mt-3 text-sm leading-7 text-[#687481]">
                 when values to the right of the point are available but values
                 to the left are not.
               </p>
+
+              <div className="mt-5 pml-formula">
+                <MathRenderer>
+                  {"f'(x)\\approx\\frac{f(x+h)-f(x)}{h}"}
+                </MathRenderer>
+              </div>
             </article>
 
             <article className="pml-card p-6">
-              <h3 className="text-lg font-semibold text-[#17202A]">
-                Use backward difference
+              <div className="font-mono text-sm font-semibold text-[#2F5BEA]">
+                Backward
+              </div>
+
+              <h3 className="mt-3 text-lg font-semibold text-[#17202A]">
+                Use a backward difference
               </h3>
 
               <p className="mt-3 text-sm leading-7 text-[#687481]">
-                when the point is near the end of your available data and future
+                when the point is near the end of the available data and future
                 values cannot be used.
               </p>
+
+              <div className="mt-5 pml-formula">
+                <MathRenderer>
+                  {"f'(x)\\approx\\frac{f(x)-f(x-h)}{h}"}
+                </MathRenderer>
+              </div>
             </article>
 
             <article className="pml-card p-6">
-              <h3 className="text-lg font-semibold text-[#17202A]">
-                Use central difference
+              <div className="font-mono text-sm font-semibold text-[#2F5BEA]">
+                Central
+              </div>
+
+              <h3 className="mt-3 text-lg font-semibold text-[#17202A]">
+                Use a central difference
               </h3>
 
               <p className="mt-3 text-sm leading-7 text-[#687481]">
                 when values exist on both sides of the point and improved
                 accuracy is important.
               </p>
+
+              <div className="mt-5 pml-formula">
+                <MathRenderer>
+                  {"f'(x)\\approx\\frac{f(x+h)-f(x-h)}{2h}"}
+                </MathRenderer>
+              </div>
             </article>
           </div>
         </section>
 
-        {/* Important notes */}
+        {/* ---------------------------------------------------------------- */}
+        {/* Practical checks                                                   */}
+        {/* ---------------------------------------------------------------- */}
+
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="grid gap-8 lg:grid-cols-[0.8fr_1fr]">
+            <div>
+              <div className="pml-eyebrow">Before trusting the result</div>
+
+              <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
+                A short numerical checklist
+              </h2>
+
+              <p className="mt-4 text-base leading-8 text-[#34404C]">
+                A derivative estimate should be interpreted in the context of
+                the function and the available data. Before using the result,
+                check the assumptions behind the approximation.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {practicalChecks.map((item) => (
+                <div
+                  key={item}
+                  className="flex items-start gap-3 border-b border-[#E9E9E6] pb-4"
+                >
+                  <CheckCircle2
+                    size={18}
+                    className="mt-0.5 shrink-0 text-[#18794E]"
+                  />
+
+                  <span className="text-sm leading-6 text-[#34404C]">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Important notes                                                   */}
+        {/* ---------------------------------------------------------------- */}
+
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="pml-card p-7 sm:p-9">
             <div className="flex items-start gap-4">
@@ -538,7 +887,7 @@ export default function NumericalDerivative() {
                 <div className="pml-eyebrow">Important notes</div>
 
                 <h2 className="mt-2 text-2xl font-semibold text-[#17202A]">
-                  Numerical results require interpretation
+                  Numerical differentiation has limitations
                 </h2>
               </div>
             </div>
@@ -546,48 +895,110 @@ export default function NumericalDerivative() {
             <div className="mt-7 grid gap-5 md:grid-cols-2">
               <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
                 <h3 className="font-semibold text-[#17202A]">
-                  Smooth functions
+                  Smoothness matters
                 </h3>
 
                 <p className="mt-2 text-sm leading-7 text-[#687481]">
-                  The standard accuracy results for finite differences assume
-                  sufficient smoothness of the underlying function.
-                </p>
-              </div>
-
-              <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
-                <h3 className="font-semibold text-[#17202A]">Noisy data</h3>
-
-                <p className="mt-2 text-sm leading-7 text-[#687481]">
-                  Differentiation can amplify measurement noise, so real-world
-                  data may require smoothing or specialized numerical methods.
+                  Standard finite-difference error estimates rely on sufficient
+                  differentiability near the point being evaluated.
                 </p>
               </div>
 
               <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
                 <h3 className="font-semibold text-[#17202A]">
-                  Boundary points
+                  Boundary points need care
                 </h3>
 
                 <p className="mt-2 text-sm leading-7 text-[#687481]">
-                  At a boundary, one-sided methods may be necessary because
-                  values may exist on only one side.
+                  At the edge of a data set, central differences may not be
+                  possible because data exists on only one side.
                 </p>
               </div>
 
               <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
-                <h3 className="font-semibold text-[#17202A]">Validation</h3>
+                <h3 className="font-semibold text-[#17202A]">
+                  Noise can be amplified
+                </h3>
 
                 <p className="mt-2 text-sm leading-7 text-[#687481]">
-                  Whenever possible, compare a numerical derivative with an
-                  exact derivative or an independent approximation.
+                  Differentiation can make small fluctuations in measured data
+                  more prominent.
+                </p>
+              </div>
+
+              <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
+                <h3 className="font-semibold text-[#17202A]">
+                  Numerical is not synonymous with exact
+                </h3>
+
+                <p className="mt-2 text-sm leading-7 text-[#687481]">
+                  A computed derivative is an approximation unless an exact
+                  mathematical argument establishes otherwise.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Related */}
+        {/* ---------------------------------------------------------------- */}
+        {/* Summary                                                           */}
+        {/* ---------------------------------------------------------------- */}
+
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+            <div>
+              <div className="pml-eyebrow">Summary</div>
+
+              <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
+                What to remember
+              </h2>
+
+              <div className="mt-6 space-y-4">
+                {[
+                  "Finite differences approximate derivatives using values at nearby points.",
+                  "Forward and backward differences are first-order methods.",
+                  "Central differences are second-order and often more accurate for smooth interior points.",
+                  "Step size creates a balance between truncation error and round-off error.",
+                  "Real-world noisy data may require additional processing before differentiation.",
+                  "A numerical result should be validated rather than accepted without checking.",
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-3">
+                    <CheckCircle2
+                      size={18}
+                      className="mt-0.5 shrink-0 text-[#18794E]"
+                    />
+
+                    <p className="text-sm leading-7 text-[#34404C]">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pml-card h-fit p-6">
+              <Sigma size={22} className="text-[#2F5BEA]" />
+
+              <h3 className="mt-4 text-lg font-semibold text-[#17202A]">
+                Central idea
+              </h3>
+
+              <div className="mt-4 pml-formula">
+                <MathRenderer>
+                  {"\\text{derivative}\\approx\\text{finite difference}"}
+                </MathRenderer>
+              </div>
+
+              <p className="mt-4 text-sm leading-7 text-[#687481]">
+                Numerical differentiation connects the definition of a
+                derivative with finite computational operations.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Related resources                                                 */}
+        {/* ---------------------------------------------------------------- */}
+
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="mb-8">
             <div className="pml-eyebrow">Continue learning</div>
@@ -609,8 +1020,24 @@ export default function NumericalDerivative() {
               </h3>
 
               <p className="mt-2 text-sm leading-6 text-[#687481]">
-                Understand the mathematical derivative before studying its
-                numerical approximation.
+                Understand the mathematical definition, rules, interpretation,
+                and applications of derivatives.
+              </p>
+            </Link>
+
+            <Link
+              to="/implementation"
+              className="pml-card p-6 transition hover:-translate-y-0.5"
+            >
+              <Code2 size={21} className="text-[#2F5BEA]" />
+
+              <h3 className="mt-4 font-semibold text-[#17202A]">
+                Numerical Calculus
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-[#687481]">
+                See how derivatives, integrals, and root-finding problems become
+                computational algorithms.
               </p>
             </Link>
 
@@ -625,46 +1052,35 @@ export default function NumericalDerivative() {
               </h3>
 
               <p className="mt-2 text-sm leading-6 text-[#687481]">
-                Learn how definite integrals can be approximated
-                computationally.
-              </p>
-            </Link>
-
-            <Link
-              to="/implementation/numerical-methods"
-              className="pml-card p-6 transition hover:-translate-y-0.5"
-            >
-              <Code2 size={21} className="text-[#2F5BEA]" />
-
-              <h3 className="mt-4 font-semibold text-[#17202A]">
-                Numerical Methods
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-[#687481]">
-                Explore root finding, iteration, convergence, and computational
-                algorithms.
+                Learn how definite integrals can be approximated from sampled
+                function values.
               </p>
             </Link>
           </div>
         </section>
 
-        {/* Final CTA */}
+        {/* ---------------------------------------------------------------- */}
+        {/* Final CTA                                                         */}
+        {/* ---------------------------------------------------------------- */}
+
         <section className="border-t border-[#DEDEDB] pt-12">
           <div className="bg-[#17324D] p-8 text-white sm:p-10">
-            <h2 className="text-2xl font-semibold">
-              From derivative theory to computation
+            <Code2 size={25} />
+
+            <h2 className="mt-4 text-2xl font-semibold">
+              Continue from derivatives to numerical integration
             </h2>
 
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-200">
-              Once you understand finite differences, the next step is to
-              explore how numerical integration and iterative algorithms use
-              similar ideas to solve practical mathematical problems.
+              Numerical differentiation is one example of a broader idea:
+              replacing an exact mathematical operation with a controlled
+              computational approximation.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 to="/implementation/numerical-integration"
-                className="inline-flex items-center rounded-md bg-white/30 px-4 py-2.5 text-sm font-semibold text-[#17324D] transition hover:bg-white/30"
+                className="inline-flex items-center gap-2 bg-white px-5 py-3 text-sm font-semibold text-[#17324D] transition-colors hover:bg-slate-100"
               >
                 Numerical integration
               </Link>

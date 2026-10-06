@@ -18,45 +18,52 @@ export default function TopicCard({
         h-full
         min-w-0
         flex-col
-        rounded-xl
         border
-        border-slate-200
+        border-[#DEDEDB]
         bg-white
         p-6
         shadow-sm
         transition-all
         duration-200
         hover:-translate-y-0.5
-        hover:border-slate-300
+        hover:border-[#BFC8D2]
         hover:shadow-md
       "
     >
+      {/* Header */}
+
       <div className="flex items-start justify-between gap-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-[#17324d]">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#17324D]">
           <Icon size={20} strokeWidth={1.8} />
         </div>
 
         {level && (
-          <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-500">
+          <span className="border border-[#DEDEDB] bg-[#F8F7F4] px-2.5 py-1 text-[11px] font-semibold text-[#687481]">
             {level}
           </span>
         )}
       </div>
 
-      <h3 className="mt-6 text-lg font-bold tracking-tight text-slate-900">
+      {/* Title */}
+
+      <h3 className="mt-6 text-lg font-bold tracking-tight text-[#17202A]">
         {title}
       </h3>
 
+      {/* Description */}
+
       {description && (
-        <p className="mt-3 text-sm leading-6 text-slate-500">{description}</p>
+        <p className="mt-3 text-sm leading-6 text-[#687481]">{description}</p>
       )}
+
+      {/* Topics */}
 
       {topics.length > 0 && (
         <div className="mt-5 flex flex-wrap gap-2">
           {topics.slice(0, 4).map((topic) => (
             <span
               key={topic}
-              className="rounded-md bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-500"
+              className="border border-[#E9E9E6] bg-[#F8F7F4] px-2.5 py-1 text-[11px] font-medium text-[#687481]"
             >
               {topic}
             </span>
@@ -64,12 +71,15 @@ export default function TopicCard({
         </div>
       )}
 
+      {/* CTA */}
+
       <div className="mt-auto pt-6">
-        <div className="flex items-center gap-2 text-sm font-semibold text-blue-700">
+        <div className="inline-flex items-center gap-2 text-sm font-semibold !text-[#2F5BEA] transition-colors group-hover:!text-[#2448C7]">
           <span>Explore topic</span>
 
           <ArrowRight
             size={15}
+            strokeWidth={1.8}
             className="transition-transform duration-200 group-hover:translate-x-1"
           />
         </div>

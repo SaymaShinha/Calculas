@@ -3,6 +3,7 @@ import {
   AreaChart,
   CheckCircle2,
   Code2,
+  Database,
   Lightbulb,
   Sigma,
 } from "lucide-react";
@@ -16,54 +17,90 @@ const methods = [
   {
     number: "01",
     name: "Left Riemann Sum",
-    formula: "I_n = h\\left[f(x_0)+f(x_1)+f(x_2)+\\cdots+f(x_{n-1})\\right]",
+    formula:
+      "L_n=h\\sum_{i=0}^{n-1}f(x_i)",
     order: "O(h)",
     description:
-      "Approximates the integral by using the function value at the left endpoint of every subinterval.",
+      "Uses the left endpoint of each subinterval as the representative function value.",
     bestFor:
-      "Simple approximations, introductory numerical integration, and understanding Riemann sums.",
+      "Learning the basic idea of Riemann sums and obtaining simple numerical estimates.",
   },
-
   {
     number: "02",
     name: "Right Riemann Sum",
-    formula: "I_n = h\\left[f(x_1)+f(x_2)+f(x_3)+\\cdots+f(x_n)\\right]",
+    formula:
+      "R_n=h\\sum_{i=1}^{n}f(x_i)",
     order: "O(h)",
     description:
-      "Approximates the integral using the right endpoint of each subinterval.",
+      "Uses the right endpoint of each subinterval to approximate the accumulated area.",
     bestFor:
-      "Simple numerical estimates and comparison with left-endpoint approximations.",
+      "Simple approximations and comparing endpoint-based estimates.",
   },
-
   {
     number: "03",
     name: "Midpoint Rule",
-    formula: "M_n = h\\left[f(m_1)+f(m_2)+\\cdots+f(m_n)\\right]",
+    formula:
+      "M_n=h\\sum_{i=1}^{n}f\\left(\\frac{x_{i-1}+x_i}{2}\\right)",
     order: "O(h^2)",
     description:
-      "Uses the midpoint of each subinterval to approximate the function.",
-    bestFor: "Smooth functions where a better approximation is desired.",
+      "Evaluates the function at the midpoint of every subinterval instead of at an endpoint.",
+    bestFor:
+      "Smooth functions where a relatively simple rule with second-order accuracy is useful.",
   },
-
   {
     number: "04",
     name: "Trapezoidal Rule",
     formula:
-      "T_n = \\frac{h}{2}\\left[f(x_0)+2f(x_1)+2f(x_2)+\\cdots+2f(x_{n-1})+f(x_n)\\right]",
+      "T_n=\\frac{h}{2}\\left[f(x_0)+2\\sum_{i=1}^{n-1}f(x_i)+f(x_n)\\right]",
     order: "O(h^2)",
     description:
-      "Approximates the curve using straight-line segments, creating a sequence of trapezoids.",
-    bestFor: "Smooth functions and practical numerical integration.",
+      "Connects neighboring function values with straight-line segments and integrates those linear approximations.",
+    bestFor:
+      "General-purpose numerical integration and situations where function values are already available on a grid.",
   },
-
   {
     number: "05",
     name: "Simpson's Rule",
     formula:
-      "S_n = \\frac{h}{3}\\left[f(x_0)+4f(x_1)+2f(x_2)+4f(x_3)+\\cdots+2f(x_{n-2})+4f(x_{n-1})+f(x_n)\\right]",
+      "S_n=\\frac{h}{3}\\left[f(x_0)+4\\sum_{i\\,\\mathrm{odd}}f(x_i)+2\\sum_{i\\,\\mathrm{even}}f(x_i)+f(x_n)\\right]",
     order: "O(h^4)",
-    description: "Uses quadratic approximations over pairs of subintervals.",
-    bestFor: "Smooth functions when higher numerical accuracy is required.",
+    description:
+      "Uses quadratic interpolation across pairs of subintervals to capture curvature more accurately.",
+    bestFor:
+      "Smooth functions when higher accuracy is needed without using an extremely fine grid.",
+  },
+];
+
+const comparisonRows = [
+  {
+    method: "Left Riemann",
+    approximation: "Rectangles",
+    order: "O(h)",
+    condition: "No special parity requirement",
+  },
+  {
+    method: "Right Riemann",
+    approximation: "Rectangles",
+    order: "O(h)",
+    condition: "No special parity requirement",
+  },
+  {
+    method: "Midpoint",
+    approximation: "Midpoint rectangles",
+    order: "O(h²)",
+    condition: "Requires midpoint evaluations",
+  },
+  {
+    method: "Trapezoidal",
+    approximation: "Straight-line segments",
+    order: "O(h²)",
+    condition: "Works naturally on an equally spaced grid",
+  },
+  {
+    method: "Simpson",
+    approximation: "Quadratic interpolation",
+    order: "O(h⁴)",
+    condition: "Requires an even number of subintervals",
   },
 ];
 
@@ -72,14 +109,14 @@ export default function NumericalIntegration() {
     <>
       <SEO
         title="Numerical Integration | Riemann Sums, Trapezoidal & Simpson's Rule"
-        description="Learn numerical integration using Riemann sums, the trapezoidal rule, and Simpson's rule. Understand step size, convergence, truncation error, accuracy, and practical implementation."
+        description="Learn numerical integration using Riemann sums, the midpoint and trapezoidal rules, and Simpson's rule. Understand step size, convergence, truncation error, numerical data, accuracy, and implementation."
         canonical="/implementation/numerical-integration"
       />
 
       <PageHeader
         eyebrow="Implementation • Numerical Calculus"
         title="Numerical Integration"
-        description="Learn how computers approximate definite integrals when an exact antiderivative is unavailable, inconvenient, or based on numerical data."
+        description="Learn how computers approximate definite integrals when an exact antiderivative is unavailable, inconvenient, or the available information consists of numerical data."
       />
 
       <main className="mx-auto max-w-[1180px] px-4 pb-20 sm:px-6 lg:px-8">
@@ -94,24 +131,25 @@ export default function NumericalIntegration() {
               </h2>
 
               <p className="mt-5 text-base leading-8 text-[#34404C]">
-                A definite integral measures accumulated quantity. In simple
-                cases, calculus gives us an exact antiderivative that can be
-                evaluated at the endpoints. But many practical functions do not
-                have elementary antiderivatives.
+                A definite integral represents accumulated quantity over an
+                interval. In elementary examples, we can often find an
+                antiderivative and evaluate it exactly. But many useful
+                functions do not have elementary antiderivatives, and some
+                problems do not provide a symbolic function at all.
               </p>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Numerical integration provides another approach. Instead of
-                searching for an exact antiderivative, we evaluate the function
-                at selected points and combine those values according to a
-                numerical rule.
+                Numerical integration provides a computational alternative.
+                Instead of finding an exact antiderivative, we evaluate the
+                function at selected points and combine those values using a
+                carefully designed numerical rule.
               </p>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
-                The result is an approximation rather than an exact symbolic
-                expression. Its quality depends on the method, the number of
-                subintervals, the behavior of the function, and numerical
-                precision.
+                The result is normally an approximation. Its accuracy depends on
+                the integration rule, the spacing between sample points, the
+                smoothness of the function, and the numerical precision of the
+                computation.
               </p>
 
               <div className="pml-card mt-7 p-6">
@@ -122,9 +160,8 @@ export default function NumericalIntegration() {
                 </div>
 
                 <p className="mt-4 text-sm leading-7 text-[#687481]">
-                  Numerical integration replaces the continuous accumulation
-                  represented by the integral with a finite weighted sum of
-                  function values.
+                  Numerical integration replaces continuous accumulation with a
+                  finite weighted combination of function values.
                 </p>
               </div>
             </article>
@@ -139,8 +176,8 @@ export default function NumericalIntegration() {
               </h3>
 
               <p className="mt-2 text-sm leading-7 text-[#687481]">
-                Replace continuous area with a finite collection of simple
-                geometric approximations.
+                Replace a continuous curve with a collection of simpler local
+                approximations, then add their contributions.
               </p>
 
               <div className="mt-5 border-t border-[#E9E9E6] pt-5">
@@ -151,7 +188,7 @@ export default function NumericalIntegration() {
                 <div className="my-2 text-[#687481]">↓</div>
 
                 <div className="font-mono text-sm text-[#17324D]">
-                  subintervals
+                  sample points
                 </div>
 
                 <div className="my-2 text-[#687481]">↓</div>
@@ -161,6 +198,72 @@ export default function NumericalIntegration() {
                 </div>
               </div>
             </aside>
+          </div>
+        </section>
+
+        {/* When numerical integration is useful */}
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="mb-8">
+            <div className="pml-eyebrow">Where it is useful</div>
+
+            <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
+              Three common reasons to integrate numerically
+            </h2>
+
+            <p className="mt-4 max-w-4xl text-base leading-8 text-[#34404C]">
+              Numerical integration is not simply a fallback for difficult
+              calculus exercises. It is an important computational technique
+              used when the mathematical or physical problem is naturally
+              numerical.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            <article className="pml-card p-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                <Sigma size={20} />
+              </div>
+
+              <h3 className="mt-5 font-semibold text-[#17202A]">
+                No elementary antiderivative
+              </h3>
+
+              <p className="mt-2 text-sm leading-7 text-[#687481]">
+                Some integrals have exact definitions but do not simplify to
+                elementary functions. Numerical rules can still estimate their
+                values.
+              </p>
+            </article>
+
+            <article className="pml-card p-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                <Database size={20} />
+              </div>
+
+              <h3 className="mt-5 font-semibold text-[#17202A]">
+                Numerical data
+              </h3>
+
+              <p className="mt-2 text-sm leading-7 text-[#687481]">
+                Experiments, sensors, measurements, and simulations often
+                produce sampled values rather than a symbolic formula.
+              </p>
+            </article>
+
+            <article className="pml-card p-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                <Code2 size={20} />
+              </div>
+
+              <h3 className="mt-5 font-semibold text-[#17202A]">
+                Repeated computation
+              </h3>
+
+              <p className="mt-2 text-sm leading-7 text-[#687481]">
+                Numerical rules can be implemented efficiently and repeatedly
+                inside scientific and engineering software.
+              </p>
+            </article>
           </div>
         </section>
 
@@ -176,8 +279,8 @@ export default function NumericalIntegration() {
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
                 Divide the interval from <strong>a</strong> to{" "}
-                <strong>b</strong> into <strong>n</strong> smaller pieces. If
-                every piece has the same width, then:
+                <strong>b</strong> into <strong>n</strong> equal subintervals.
+                Their common width is:
               </p>
 
               <div className="pml-formula mt-5">
@@ -185,18 +288,23 @@ export default function NumericalIntegration() {
               </div>
 
               <p className="mt-5 text-base leading-8 text-[#34404C]">
-                The area of each rectangle is approximately its height
-                multiplied by its width. Adding all of the rectangles produces a
-                numerical estimate of the integral.
+                Each subinterval contributes an approximate area. Depending on
+                the rule, the function may be sampled at the left endpoint,
+                right endpoint, or midpoint.
+              </p>
+
+              <p className="mt-4 text-base leading-8 text-[#34404C]">
+                As the subintervals become narrower, the local approximations
+                can more closely follow the original curve.
               </p>
             </div>
 
             <div className="pml-card p-7">
-              <div className="pml-eyebrow">Basic approximation</div>
+              <div className="pml-eyebrow">General approximation</div>
 
               <div className="pml-formula mt-5">
                 <MathRenderer>
-                  {"\\int_a^b f(x)\\,dx\\approx\\sum_{i=1}^{n}f(x_i^*)h"}
+                  {"\\int_a^b f(x)\\,dx\\approx h\\sum_{i=1}^{n}f(x_i^*)"}
                 </MathRenderer>
               </div>
 
@@ -207,42 +315,38 @@ export default function NumericalIntegration() {
                 </p>
 
                 <p className="text-sm leading-7 text-[#687481]">
-                  <strong className="text-[#34404C]">xᵢ*</strong> is a chosen
-                  sample point inside the subinterval.
+                  <strong className="text-[#34404C]">xᵢ*</strong> is a selected
+                  sample point in the i-th subinterval.
                 </p>
 
                 <p className="text-sm leading-7 text-[#687481]">
-                  More subintervals generally make the approximation finer and
-                  improve the result for sufficiently well-behaved functions.
+                  The choice of sample point determines which Riemann-sum rule
+                  is being used.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Readable notation */}
+        {/* Partition notation */}
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="mb-8">
             <div className="pml-eyebrow">Understanding the notation</div>
 
             <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
-              What does the summation formula mean?
+              Turning an interval into a grid
             </h2>
 
             <p className="mt-4 max-w-4xl text-base leading-8 text-[#34404C]">
-              The notation may look compact, but it represents a simple repeated
-              calculation. For the left Riemann sum, we evaluate the function at
-              the left endpoint of every subinterval and add the corresponding
-              rectangle areas.
+              Once the interval is divided into equal pieces, every grid point
+              can be generated from the starting point and the step size.
             </p>
           </div>
 
           <div className="pml-card p-7 sm:p-9">
             <div className="pml-formula">
               <MathRenderer>
-                {
-                  "\\boxed{\\int_a^b f(x)\\,dx\\approx h\\sum_{i=0}^{n-1}f(x_i)}"
-                }
+                {"x_i=a+ih,\\qquad h=\\frac{b-a}{n},\\qquad i=0,1,\\ldots,n"}
               </MathRenderer>
             </div>
 
@@ -251,9 +355,8 @@ export default function NumericalIntegration() {
                 <div className="font-mono text-lg font-semibold text-[#17324D]">
                   a
                 </div>
-
                 <p className="mt-2 text-sm leading-6 text-[#687481]">
-                  Lower limit of integration.
+                  Lower endpoint of the integration interval.
                 </p>
               </div>
 
@@ -261,9 +364,8 @@ export default function NumericalIntegration() {
                 <div className="font-mono text-lg font-semibold text-[#17324D]">
                   b
                 </div>
-
                 <p className="mt-2 text-sm leading-6 text-[#687481]">
-                  Upper limit of integration.
+                  Upper endpoint of the integration interval.
                 </p>
               </div>
 
@@ -271,9 +373,8 @@ export default function NumericalIntegration() {
                 <div className="font-mono text-lg font-semibold text-[#17324D]">
                   n
                 </div>
-
                 <p className="mt-2 text-sm leading-6 text-[#687481]">
-                  Number of subintervals.
+                  Number of equal subintervals.
                 </p>
               </div>
 
@@ -281,9 +382,8 @@ export default function NumericalIntegration() {
                 <div className="font-mono text-lg font-semibold text-[#17324D]">
                   h
                 </div>
-
                 <p className="mt-2 text-sm leading-6 text-[#687481]">
-                  Width of each subinterval.
+                  Width of every subinterval.
                 </p>
 
                 <div className="pml-formula mt-3">
@@ -295,9 +395,8 @@ export default function NumericalIntegration() {
                 <div className="font-mono text-lg font-semibold text-[#17324D]">
                   xᵢ
                 </div>
-
                 <p className="mt-2 text-sm leading-6 text-[#687481]">
-                  The i-th partition point.
+                  The i-th point of the partition.
                 </p>
 
                 <div className="pml-formula mt-3">
@@ -307,11 +406,11 @@ export default function NumericalIntegration() {
 
               <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
                 <div className="font-mono text-lg font-semibold text-[#17324D]">
-                  Σ
+                  n → ∞
                 </div>
-
                 <p className="mt-2 text-sm leading-6 text-[#687481]">
-                  Add the terms for every value of i in the specified range.
+                  In the theoretical limit, increasingly fine sums lead to the
+                  definite integral under appropriate conditions.
                 </p>
               </div>
             </div>
@@ -328,17 +427,17 @@ export default function NumericalIntegration() {
             </h2>
 
             <p className="mt-3 max-w-3xl text-base leading-7 text-[#687481]">
-              Different rules use different approximations to represent the
-              function between sampled points.
+              Numerical integration rules differ mainly in how they approximate
+              the function between sampled points.
             </p>
           </div>
 
           <div className="grid gap-5 lg:grid-cols-3">
-            {methods.map((method, index) => (
+            {methods.map((method) => (
               <article key={method.name} className="pml-card p-6">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-sm font-semibold text-[#2F5BEA]">
-                    0{index + 1}
+                    {method.number}
                   </span>
 
                   <span className="rounded-full border border-[#DEDEDB] bg-[#F8F7F4] px-3 py-1 text-xs font-medium text-[#687481]">
@@ -372,61 +471,67 @@ export default function NumericalIntegration() {
           </div>
         </section>
 
-        {/* Trapezoidal rule */}
+        {/* Trapezoidal */}
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div>
-              <div className="pml-eyebrow">Method 01 • Trapezoidal rule</div>
+              <div className="pml-eyebrow">Method 04 • Trapezoidal rule</div>
 
               <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
                 Replace rectangles with trapezoids
               </h2>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Instead of assuming the function is constant across each
-                interval, the trapezoidal rule connects neighboring points with
-                a straight line. The region under that line forms a trapezoid.
+                The trapezoidal rule assumes that the function between two
+                neighboring sample points can be approximated by a straight
+                line. The area under that line forms a trapezoid.
               </p>
 
               <div className="pml-formula mt-6 overflow-x-auto">
                 <MathRenderer>
                   {
-                    "\\int_a^b f(x)\\,dx\\approx\\frac{h}{2}\\left[f(x_0)+2\\sum_{i=1}^{n-1}f(x_i)+f(x_n)\\right]"
+                    "T_n=\\frac{h}{2}\\left[f(x_0)+2\\sum_{i=1}^{n-1}f(x_i)+f(x_n)\\right]"
                   }
                 </MathRenderer>
               </div>
+
+              <p className="mt-5 text-base leading-8 text-[#34404C]">
+                Interior points receive weight 2 because they are shared by two
+                neighboring trapezoids. The endpoints occur in only one
+                trapezoid and therefore receive weight 1.
+              </p>
             </div>
 
             <div className="pml-card p-7">
-              <div className="pml-eyebrow">Why it works</div>
+              <div className="pml-eyebrow">Error behavior</div>
 
-              <p className="mt-4 text-sm leading-7 text-[#687481]">
-                For a smooth function, the straight-line approximation between
-                neighboring points can follow the curve much more closely than a
-                constant-height rectangle.
+              <div className="pml-formula mt-5">
+                <MathRenderer>{"T_n-I=O(h^2)"}</MathRenderer>
+              </div>
+
+              <p className="mt-5 text-sm leading-7 text-[#687481]">
+                For sufficiently smooth functions, the trapezoidal rule has
+                second-order convergence. Roughly speaking, reducing the step
+                size by a factor of two reduces the leading discretization error
+                by about a factor of four.
               </p>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-4">
                   <div className="font-semibold text-[#17202A]">Simple</div>
-
                   <p className="mt-1 text-xs leading-6 text-[#687481]">
-                    Easy to implement and understand.
+                    Easy to implement and works directly with sampled data.
                   </p>
                 </div>
 
                 <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-4">
-                  <div className="font-semibold text-[#17202A]">General</div>
-
+                  <div className="font-semibold text-[#17202A]">
+                    Grid-friendly
+                  </div>
                   <p className="mt-1 text-xs leading-6 text-[#687481]">
-                    Works well for many smooth functions.
+                    Particularly convenient when measurements are equally
+                    spaced.
                   </p>
-                </div>
-              </div>
-
-              <div className="mt-6 border-t border-[#E9E9E6] pt-5">
-                <div className="pml-formula">
-                  <MathRenderer>{"\\text{error}=O(h^2)"}</MathRenderer>
                 </div>
               </div>
             </div>
@@ -442,46 +547,57 @@ export default function NumericalIntegration() {
               <div className="pml-formula mt-5 overflow-x-auto">
                 <MathRenderer>
                   {
-                    "\\int_a^b f(x)\\,dx\\approx\\frac{h}{3}\\left[f(x_0)+4\\sum_{\\substack{i=1\\\\i\\text{ odd}}}^{n-1}f(x_i)+2\\sum_{\\substack{i=2\\\\i\\text{ even}}}^{n-2}f(x_i)+f(x_n)\\right]"
+                    "S_n=\\frac{h}{3}\\left[f(x_0)+4\\sum_{i\\,\\mathrm{odd}}f(x_i)+2\\sum_{i\\,\\mathrm{even}}f(x_i)+f(x_n)\\right]"
                   }
                 </MathRenderer>
               </div>
 
               <p className="mt-5 text-sm leading-7 text-[#687481]">
-                Simpson's rule requires an even number of subintervals. The
-                alternating weights 4 and 2 arise from integrating local
-                quadratic approximations.
+                Simpson's rule combines three-point quadratic approximations.
+                Because each quadratic spans two subintervals, the total number
+                of subintervals must be even.
               </p>
 
               <div className="mt-6 rounded-lg border border-[#CFE8DA] bg-[#EEF9F3] p-4">
                 <div className="flex items-center gap-2 text-sm font-semibold text-[#18794E]">
                   <CheckCircle2 size={17} />
-                  Higher-order approximation
+                  Fourth-order convergence
                 </div>
 
                 <p className="mt-2 text-sm leading-6 text-[#34404C]">
-                  For sufficiently smooth functions, Simpson's rule has a
-                  fourth-order truncation error.
+                  For sufficiently smooth functions, the leading discretization
+                  error behaves like O(h⁴).
                 </p>
               </div>
             </div>
 
             <div className="order-1 lg:order-2">
-              <div className="pml-eyebrow">Method 02 • Simpson's rule</div>
+              <div className="pml-eyebrow">Method 05 • Simpson's rule</div>
 
               <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
                 Approximate the curve with parabolas
               </h2>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Simpson's rule improves on the straight-line approximation by
-                using quadratic polynomials across pairs of subintervals.
+                A straight line can describe a curve reasonably well over a
+                small interval, but a quadratic polynomial can capture curvature
+                more effectively. Simpson's rule uses this idea across pairs of
+                subintervals.
               </p>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
-                This additional curvature allows the numerical approximation to
-                follow many smooth functions more closely.
+                This explains why Simpson's rule can achieve much smaller
+                discretization error than first-order or second-order methods
+                when the function is sufficiently smooth.
               </p>
+
+              <div className="mt-6 border-l-2 border-[#2F5BEA] pl-5">
+                <p className="text-sm leading-7 text-[#687481]">
+                  Higher order does not automatically mean better for every
+                  problem. Discontinuities, singularities, noisy data, and
+                  numerical precision can change which method is appropriate.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -492,37 +608,42 @@ export default function NumericalIntegration() {
             <div className="pml-eyebrow">Worked example</div>
 
             <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
-              Approximate an integral using the trapezoidal rule
+              Compare numerical rules on the same integral
             </h2>
 
             <p className="mt-4 max-w-3xl text-base leading-8 text-[#34404C]">
-              Consider the integral below and divide the interval into two equal
-              subintervals.
+              Consider the integral below on the interval from 0 to 2. Using the
+              same function makes it easier to see how different numerical
+              approximations behave.
             </p>
 
             <div className="pml-formula mt-5 max-w-xl">
-              <MathRenderer>{"\\int_0^2x^2\\,dx"}</MathRenderer>
+              <MathRenderer>{"I=\\int_0^2x^2\\,dx"}</MathRenderer>
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-3">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             <article className="pml-card p-6">
               <div className="pml-eyebrow">Step 1</div>
 
               <h3 className="mt-3 font-semibold text-[#17202A]">
-                Find the step size
+                Choose the partition
               </h3>
 
               <div className="pml-formula mt-5">
-                <MathRenderer>{"h=\\frac{2-0}{2}=1"}</MathRenderer>
+                <MathRenderer>{"n=2,\\qquad h=\\frac{2-0}{2}=1"}</MathRenderer>
               </div>
+
+              <p className="mt-4 text-sm leading-6 text-[#687481]">
+                The grid points are 0, 1, and 2.
+              </p>
             </article>
 
             <article className="pml-card p-6">
               <div className="pml-eyebrow">Step 2</div>
 
               <h3 className="mt-3 font-semibold text-[#17202A]">
-                Evaluate the points
+                Evaluate the function
               </h3>
 
               <div className="pml-formula mt-5">
@@ -530,20 +651,47 @@ export default function NumericalIntegration() {
                   {"f(0)=0,\\quad f(1)=1,\\quad f(2)=4"}
                 </MathRenderer>
               </div>
+
+              <p className="mt-4 text-sm leading-6 text-[#687481]">
+                These values are enough for several basic rules.
+              </p>
             </article>
 
             <article className="pml-card p-6">
               <div className="pml-eyebrow">Step 3</div>
 
               <h3 className="mt-3 font-semibold text-[#17202A]">
-                Apply the rule
+                Trapezoidal estimate
+              </h3>
+
+              <div className="pml-formula mt-5">
+                <MathRenderer>{"T=\\frac{1}{2}[0+2(1)+4]=3"}</MathRenderer>
+              </div>
+
+              <p className="mt-4 text-sm leading-6 text-[#687481]">
+                With only two panels, the straight-line approximation is
+                noticeably above the curved graph.
+              </p>
+            </article>
+
+            <article className="pml-card p-6">
+              <div className="pml-eyebrow">Step 4</div>
+
+              <h3 className="mt-3 font-semibold text-[#17202A]">
+                Exact comparison
               </h3>
 
               <div className="pml-formula mt-5">
                 <MathRenderer>
-                  {"T=\\frac{1}{2}\\left[0+2(1)+4\\right]=3"}
+                  {
+                    "I=\\left[\\frac{x^3}{3}\\right]_0^2=\\frac{8}{3}\\approx2.6667"
+                  }
                 </MathRenderer>
               </div>
+
+              <p className="mt-4 text-sm leading-6 text-[#687481]">
+                The numerical estimate can now be compared with the exact value.
+              </p>
             </article>
           </div>
 
@@ -556,44 +704,123 @@ export default function NumericalIntegration() {
 
               <div>
                 <div className="font-semibold text-[#17202A]">
-                  Compare with the exact result
+                  What does the comparison teach us?
                 </div>
 
                 <p className="mt-2 text-sm leading-7 text-[#34404C]">
-                  The exact integral is:
+                  The exact value is approximately 2.6667, while the two-panel
+                  trapezoidal result is 3. The absolute error is approximately:
                 </p>
 
                 <div className="pml-formula mt-3">
                   <MathRenderer>
-                    {
-                      "\\int_0^2x^2\\,dx=\\left[\\frac{x^3}{3}\\right]_0^2=\\frac{8}{3}\\approx2.6667"
-                    }
+                    {"|3-\\frac{8}{3}|=\\frac{1}{3}\\approx0.3333"}
                   </MathRenderer>
                 </div>
 
                 <p className="mt-3 text-sm leading-7 text-[#34404C]">
-                  The two-panel trapezoidal approximation is <strong>3</strong>.
-                  The difference illustrates numerical approximation error.
+                  Increasing the number of panels would normally reduce the
+                  discretization error for this smooth function.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Accuracy */}
+        {/* Error order */}
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div>
+              <div className="pml-eyebrow">Accuracy and convergence</div>
+
+              <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
+                What does O(hᵖ) mean?
+              </h2>
+
+              <p className="mt-4 text-base leading-8 text-[#34404C]">
+                The notation O(hᵖ) describes how the leading discretization
+                error changes as the step size h becomes smaller. The exponent p
+                is called the order of the method.
+              </p>
+
+              <div className="pml-formula mt-6">
+                <MathRenderer>{"|E(h)|\\approx Ch^p"}</MathRenderer>
+              </div>
+
+              <p className="mt-5 text-base leading-8 text-[#34404C]">
+                Here, <strong>C</strong> depends on the function and interval,
+                while <strong>p</strong> describes the rate at which the leading
+                error decreases.
+              </p>
+
+              <p className="mt-4 text-base leading-8 text-[#34404C]">
+                For example, if a second-order method reduces h by a factor of
+                two, its leading error is expected to decrease by roughly a
+                factor of four when the asymptotic error model applies.
+              </p>
+            </div>
+
+            <div className="pml-card p-7">
+              <div className="pml-eyebrow">Convergence experiment</div>
+
+              <p className="mt-4 text-sm leading-7 text-[#687481]">
+                A practical way to test convergence is to calculate the integral
+                using increasingly fine grids.
+              </p>
+
+              <div className="mt-6 space-y-4">
+                <div className="flex items-center justify-between border border-[#E9E9E6] bg-[#F8F7F4] p-4">
+                  <span className="font-mono text-sm text-[#17324D]">
+                    n = 10
+                  </span>
+                  <span className="text-sm text-[#687481]">
+                    coarse approximation
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between border border-[#E9E9E6] bg-[#F8F7F4] p-4">
+                  <span className="font-mono text-sm text-[#17324D]">
+                    n = 20
+                  </span>
+                  <span className="text-sm text-[#687481]">
+                    finer approximation
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between border border-[#E9E9E6] bg-[#F8F7F4] p-4">
+                  <span className="font-mono text-sm text-[#17324D]">
+                    n = 40
+                  </span>
+                  <span className="text-sm text-[#687481]">
+                    check stabilization
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-6 border-t border-[#E9E9E6] pt-5">
+                <p className="text-sm leading-7 text-[#687481]">
+                  If successive results become closer together, that provides
+                  numerical evidence of convergence.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Method comparison */}
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="mb-8">
-            <div className="pml-eyebrow">Accuracy and convergence</div>
+            <div className="pml-eyebrow">Method comparison</div>
 
             <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
-              More intervals usually improve the result
+              Choosing a numerical integration rule
             </h2>
 
             <p className="mt-4 max-w-4xl text-base leading-8 text-[#34404C]">
-              When a numerical method converges, increasing the number of
-              subintervals generally causes the approximation to approach the
-              exact integral. However, the rate at which the error decreases
-              depends on the method and the smoothness of the function.
+              There is no single rule that is best for every numerical problem.
+              The right choice depends on the smoothness of the function, the
+              available data, the required accuracy, and the cost of evaluating
+              the function.
             </p>
           </div>
 
@@ -603,58 +830,129 @@ export default function NumericalIntegration() {
                 <tr>
                   <th>Method</th>
                   <th>Approximation</th>
-                  <th>Typical error</th>
-                  <th>Important condition</th>
+                  <th>Typical order</th>
+                  <th>Important consideration</th>
                 </tr>
               </thead>
 
               <tbody>
-                <tr>
-                  <td>Left Riemann sum</td>
-                  <td>Rectangles</td>
-                  <td>O(h)</td>
-                  <td>Depends on endpoint/sample-point choice</td>
-                </tr>
-
-                <tr>
-                  <td>Trapezoidal rule</td>
-                  <td>Linear segments</td>
-                  <td>O(h²)</td>
-                  <td>Works well for sufficiently smooth functions</td>
-                </tr>
-
-                <tr>
-                  <td>Simpson's rule</td>
-                  <td>Quadratic segments</td>
-                  <td>O(h⁴)</td>
-                  <td>Requires an even number of subintervals</td>
-                </tr>
+                {comparisonRows.map((row) => (
+                  <tr key={row.method}>
+                    <td>{row.method}</td>
+                    <td>{row.approximation}</td>
+                    <td>{row.order}</td>
+                    <td>{row.condition}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </section>
 
-        {/* Error */}
+        {/* Numerical data */}
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="grid gap-8 lg:grid-cols-[0.85fr_1fr] lg:items-center">
+            <div>
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                <Database size={22} />
+              </div>
+
+              <div className="pml-eyebrow mt-5">
+                Integration from measured data
+              </div>
+
+              <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
+                What if there is no formula for f(x)?
+              </h2>
+
+              <p className="mt-4 text-base leading-8 text-[#34404C]">
+                In experimental science and engineering, the available
+                information may be a table of measurements rather than a
+                symbolic function.
+              </p>
+
+              <p className="mt-4 text-base leading-8 text-[#34404C]">
+                If the measurements are equally spaced, the trapezoidal rule is
+                particularly convenient because it can operate directly on the
+                sampled values.
+              </p>
+            </div>
+
+            <div className="pml-card p-7">
+              <div className="pml-eyebrow">Example data structure</div>
+
+              <div className="mt-5 overflow-x-auto">
+                <table className="pml-table">
+                  <thead>
+                    <tr>
+                      <th>x</th>
+                      <th>f(x)</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <td>0</td>
+                      <td>0.00</td>
+                    </tr>
+                    <tr>
+                      <td>0.5</td>
+                      <td>0.25</td>
+                    </tr>
+                    <tr>
+                      <td>1.0</td>
+                      <td>1.00</td>
+                    </tr>
+                    <tr>
+                      <td>1.5</td>
+                      <td>2.25</td>
+                    </tr>
+                    <tr>
+                      <td>2.0</td>
+                      <td>4.00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="pml-formula mt-5">
+                <MathRenderer>
+                  {
+                    "T\\approx\\frac{h}{2}\\left[f(x_0)+2f(x_1)+\\cdots+2f(x_{n-1})+f(x_n)\\right]"
+                  }
+                </MathRenderer>
+              </div>
+
+              <p className="mt-4 text-sm leading-7 text-[#687481]">
+                No symbolic antiderivative is required. The quality of the
+                result depends on the measurement spacing, measurement noise,
+                and behavior of the underlying quantity.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Error sources */}
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="grid gap-8 lg:grid-cols-2">
             <div>
               <div className="pml-eyebrow">Error analysis</div>
 
               <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
-                Why can a numerical integral be wrong?
+                Why can a numerical integral be inaccurate?
               </h2>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Numerical integration replaces a continuous curve with a finite
-                approximation. The gap between the approximation and the exact
-                integral is numerical error.
+                A numerical method replaces a continuous mathematical object
+                with a finite computation. Several different sources of error
+                can therefore affect the final result.
               </p>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Increasing the number of subintervals can reduce truncation
-                error, but practical implementations must also consider
-                floating-point arithmetic and the cost of evaluating the
-                function many times.
+                Increasing the number of subintervals usually reduces
+                discretization error for a convergent method, but making the
+                grid indefinitely fine is not always the best computational
+                strategy.
               </p>
             </div>
 
@@ -670,12 +968,11 @@ export default function NumericalIntegration() {
                     Important sources of error
                   </h3>
 
-                  <div className="mt-5 space-y-4">
+                  <div className="mt-5 space-y-5">
                     <div>
-                      <div className="font-semibold text-sm text-[#17324D]">
+                      <div className="text-sm font-semibold text-[#17324D]">
                         Truncation error
                       </div>
-
                       <p className="mt-1 text-sm leading-6 text-[#687481]">
                         Comes from replacing the exact integral with a finite
                         approximation.
@@ -683,28 +980,96 @@ export default function NumericalIntegration() {
                     </div>
 
                     <div>
-                      <div className="font-semibold text-sm text-[#17324D]">
+                      <div className="text-sm font-semibold text-[#17324D]">
                         Round-off error
                       </div>
-
                       <p className="mt-1 text-sm leading-6 text-[#687481]">
-                        Comes from finite-precision computer arithmetic.
+                        Comes from representing numbers with finite precision in
+                        a computer.
                       </p>
                     </div>
 
                     <div>
-                      <div className="font-semibold text-sm text-[#17324D]">
+                      <div className="text-sm font-semibold text-[#17324D]">
+                        Data error
+                      </div>
+                      <p className="mt-1 text-sm leading-6 text-[#687481]">
+                        Measured values may contain noise or uncertainty that
+                        numerical integration cannot remove automatically.
+                      </p>
+                    </div>
+
+                    <div>
+                      <div className="text-sm font-semibold text-[#17324D]">
                         Function behavior
                       </div>
-
                       <p className="mt-1 text-sm leading-6 text-[#687481]">
-                        Rapid changes, discontinuities, singularities, or sharp
-                        features may require special treatment.
+                        Discontinuities, singularities, sharp peaks, or rapid
+                        oscillations may require smaller intervals or a more
+                        specialized approach.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Step size */}
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="pml-card p-7 sm:p-9">
+            <div className="flex items-start gap-4">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                <Lightbulb size={22} />
+              </div>
+
+              <div>
+                <div className="pml-eyebrow">Choosing the step size</div>
+
+                <h2 className="mt-2 text-2xl font-semibold text-[#17202A]">
+                  Smaller is useful, but not infinitely better
+                </h2>
+              </div>
+            </div>
+
+            <div className="mt-8 grid gap-5 md:grid-cols-3">
+              <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
+                <h3 className="font-semibold text-[#17202A]">Coarse grid</h3>
+
+                <p className="mt-2 text-sm leading-7 text-[#687481]">
+                  A large h means fewer function evaluations but usually more
+                  discretization error.
+                </p>
+              </div>
+
+              <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
+                <h3 className="font-semibold text-[#17202A]">Fine grid</h3>
+
+                <p className="mt-2 text-sm leading-7 text-[#687481]">
+                  A smaller h generally improves the approximation when the
+                  method is operating in its expected convergence regime.
+                </p>
+              </div>
+
+              <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
+                <h3 className="font-semibold text-[#17202A]">
+                  Extremely fine grid
+                </h3>
+
+                <p className="mt-2 text-sm leading-7 text-[#687481]">
+                  Very many evaluations increase computational cost and can make
+                  floating-point effects more relevant.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-7 border-t border-[#E9E9E6] pt-6">
+              <p className="text-sm leading-7 text-[#687481]">
+                A practical numerical program therefore balances accuracy,
+                stability, evaluation cost, and the characteristics of the
+                problem instead of simply choosing the smallest possible step.
+              </p>
             </div>
           </div>
         </section>
@@ -724,23 +1089,32 @@ export default function NumericalIntegration() {
               </h2>
 
               <p className="mt-4 text-base leading-8 text-[#34404C]">
-                A numerical integration program needs to divide the interval,
-                evaluate the function at the required points, apply the
-                appropriate weights, and combine the results.
+                A numerical integration program follows the mathematical rule
+                almost directly. It creates a grid, evaluates the function,
+                applies weights, and accumulates the result.
+              </p>
+
+              <p className="mt-4 text-base leading-8 text-[#34404C]">
+                The same structure can be adapted to symbolic functions,
+                experimental data, simulations, and scientific computing
+                workflows.
               </p>
             </div>
 
             <div className="pml-card p-7">
-              <div className="pml-eyebrow">Conceptual workflow</div>
+              <div className="pml-eyebrow">Conceptual algorithm</div>
 
               <ol className="mt-5 space-y-4">
                 {[
                   "Choose the integration interval [a,b].",
-                  "Select the number of subintervals n.",
-                  "Calculate the step size h.",
-                  "Evaluate f(x) at the required sample points.",
-                  "Apply the method's weights and sum the results.",
-                  "Check convergence or compare against a known result.",
+                  "Select the numerical method.",
+                  "Choose the number of subintervals n.",
+                  "Compute the step size h=(b-a)/n.",
+                  "Generate the required sample points.",
+                  "Evaluate f(x) at those points.",
+                  "Apply the method-specific weights.",
+                  "Add the weighted values and multiply by the required factor.",
+                  "Repeat with a finer grid when convergence needs to be checked.",
                 ].map((item, index) => (
                   <li key={item} className="flex gap-3">
                     <span className="font-mono text-sm font-semibold text-[#2F5BEA]">
@@ -754,6 +1128,66 @@ export default function NumericalIntegration() {
                 ))}
               </ol>
             </div>
+          </div>
+        </section>
+
+        {/* Complexity */}
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="mb-8">
+            <div className="pml-eyebrow">Computational cost</div>
+
+            <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
+              Accuracy also has a computational price
+            </h2>
+
+            <p className="mt-4 max-w-4xl text-base leading-8 text-[#34404C]">
+              A numerical method needs function evaluations. If evaluating the
+              function is expensive—for example, because it involves a
+              simulation—then the number of required evaluations can become an
+              important part of the algorithm design.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            <article className="pml-card p-6">
+              <div className="pml-eyebrow">Low cost</div>
+
+              <h3 className="mt-3 font-semibold text-[#17202A]">
+                Simple rules
+              </h3>
+
+              <p className="mt-2 text-sm leading-7 text-[#687481]">
+                Rectangle and trapezoidal methods are straightforward and often
+                work well when many evaluations are inexpensive.
+              </p>
+            </article>
+
+            <article className="pml-card p-6">
+              <div className="pml-eyebrow">Higher accuracy</div>
+
+              <h3 className="mt-3 font-semibold text-[#17202A]">
+                Higher-order rules
+              </h3>
+
+              <p className="mt-2 text-sm leading-7 text-[#687481]">
+                Simpson's rule can reach high accuracy efficiently when its
+                smoothness assumptions are appropriate.
+              </p>
+            </article>
+
+            <article className="pml-card p-6">
+              <div className="pml-eyebrow">Adaptive methods</div>
+
+              <h3 className="mt-3 font-semibold text-[#17202A]">
+                Spend work where needed
+              </h3>
+
+              <p className="mt-2 text-sm leading-7 text-[#687481]">
+                Adaptive integration can refine regions where the function is
+                difficult while avoiding unnecessary evaluations in easy
+                regions.
+              </p>
+            </article>
           </div>
         </section>
 
@@ -787,34 +1221,36 @@ export default function NumericalIntegration() {
                 <tr>
                   <td>Input</td>
                   <td>Usually a symbolic expression</td>
-                  <td>Function evaluations or numerical data</td>
+                  <td>A function, numerical samples, or measured data</td>
                 </tr>
 
                 <tr>
                   <td>Output</td>
-                  <td>Exact expression when available</td>
-                  <td>Approximate numerical value</td>
+                  <td>An exact expression when available</td>
+                  <td>An approximate numerical value</td>
                 </tr>
 
                 <tr>
                   <td>Strength</td>
                   <td>Preserves mathematical structure</td>
                   <td>
-                    Handles many functions without elementary antiderivatives
+                    Works even when elementary antiderivatives are unavailable
                   </td>
                 </tr>
 
                 <tr>
                   <td>Main concern</td>
-                  <td>Finding a closed-form expression</td>
-                  <td>Accuracy, convergence, and computational cost</td>
+                  <td>Finding a useful closed-form representation</td>
+                  <td>
+                    Accuracy, convergence, stability, and computational cost
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </section>
 
-        {/* Practical considerations */}
+        {/* Practical checklist */}
         <section className="border-t border-[#DEDEDB] py-12 md:py-16">
           <div className="pml-card p-7 sm:p-9">
             <div className="flex items-start gap-4">
@@ -823,7 +1259,7 @@ export default function NumericalIntegration() {
               </div>
 
               <div>
-                <div className="pml-eyebrow">Practical considerations</div>
+                <div className="pml-eyebrow">Practical checklist</div>
 
                 <h2 className="mt-2 text-2xl font-semibold text-[#17202A]">
                   Before trusting a numerical integral
@@ -834,49 +1270,83 @@ export default function NumericalIntegration() {
             <div className="mt-8 grid gap-5 md:grid-cols-2">
               <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
                 <h3 className="font-semibold text-[#17202A]">
-                  Is the function smooth?
+                  Check the domain
                 </h3>
 
                 <p className="mt-2 text-sm leading-7 text-[#687481]">
-                  Sharp changes or discontinuities can make basic rules less
-                  effective and may require smaller intervals or specialized
-                  methods.
+                  Make sure the function is defined where the numerical rule is
+                  evaluating it. Singularities can invalidate a straightforward
+                  application of a basic rule.
                 </p>
               </div>
 
               <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
                 <h3 className="font-semibold text-[#17202A]">
-                  How many evaluations are needed?
+                  Check smoothness
                 </h3>
 
                 <p className="mt-2 text-sm leading-7 text-[#687481]">
-                  Higher accuracy often requires more function evaluations,
-                  which matters when each evaluation is computationally
-                  expensive.
+                  Sharp changes, discontinuities, and rapid oscillations can
+                  require a finer grid or a specialized method.
                 </p>
               </div>
 
               <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
                 <h3 className="font-semibold text-[#17202A]">
-                  Does the method converge?
+                  Test convergence
                 </h3>
 
                 <p className="mt-2 text-sm leading-7 text-[#687481]">
-                  Compare results with increasing numbers of subintervals to see
-                  whether the approximation stabilizes.
+                  Repeat the calculation with more subintervals and check
+                  whether the reported value stabilizes.
                 </p>
               </div>
 
               <div className="border border-[#E9E9E6] bg-[#F8F7F4] p-5">
                 <h3 className="font-semibold text-[#17202A]">
-                  Can the result be validated?
+                  Validate the result
                 </h3>
 
                 <p className="mt-2 text-sm leading-7 text-[#687481]">
-                  When possible, compare the numerical result with an exact
-                  solution, another method, or a known reference value.
+                  When possible, compare against an exact solution, an
+                  independent numerical method, or a trusted reference value.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Important idea */}
+        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
+          <div className="grid gap-8 lg:grid-cols-[0.9fr_1fr] lg:items-center">
+            <div>
+              <div className="pml-eyebrow">Important idea</div>
+
+              <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
+                Numerical integration is approximation with structure
+              </h2>
+            </div>
+
+            <div className="pml-card p-7">
+              <p className="text-base leading-8 text-[#34404C]">
+                A numerical integral is not simply a guess. Each method encodes
+                a mathematical approximation—rectangles, straight lines, or
+                quadratic curves—and its error behavior can be analyzed
+                systematically.
+              </p>
+
+              <div className="pml-formula mt-6">
+                <MathRenderer>
+                  {
+                    "\\text{integral}\\;\\longrightarrow\\;\\text{local approximation}\\;\\longrightarrow\\;\\text{weighted sum}"
+                  }
+                </MathRenderer>
+              </div>
+
+              <p className="mt-5 text-sm leading-7 text-[#687481]">
+                Understanding that chain makes numerical integration much easier
+                to implement, analyze, and debug.
+              </p>
             </div>
           </div>
         </section>
@@ -945,19 +1415,21 @@ export default function NumericalIntegration() {
         {/* Final CTA */}
         <section className="border-t border-[#DEDEDB] pt-12">
           <div className="bg-[#17324D] p-8 text-white sm:p-10">
-            <h2 className="text-2xl font-semibold">From area to algorithm</h2>
+            <h2 className="text-2xl font-semibold">
+              From integral to algorithm
+            </h2>
 
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-200">
               Numerical integration connects the geometric meaning of an
               integral with practical computation. Continue with numerical
-              methods to see how similar ideas are used for equations and
-              iterative algorithms.
+              methods to see how approximation, iteration, and convergence are
+              used throughout computational mathematics.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 to="/implementation/numerical-methods"
-                className="inline-flex items-center rounded-md bg-white/30 px-4 py-2.5 text-sm font-semibold text-[#17324D] transition hover:bg-white/30"
+                className="inline-flex items-center gap-2 bg-white px-5 py-3 text-sm font-semibold text-[#17324D] transition-colors hover:bg-slate-100"
               >
                 Numerical methods
               </Link>

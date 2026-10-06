@@ -1,68 +1,147 @@
+// src/pages/implementation/NumericalMethods.jsx
+
 import {
-  Code2,
   AlertTriangle,
+  ArrowRight,
   CheckCircle2,
+  Code2,
   Cpu,
   GitBranch,
   Lightbulb,
+  Link as LinkIcon,
   Settings2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import SEO from "../../components/SEO";
-import PageHeader from "../../components/PageHeader";
-import MathRenderer from "../../components/MathRenderer";
+import SEO from "../../components/SEO.jsx";
+import PageHeader from "../../components/PageHeader.jsx";
+import MathRenderer from "../../components/MathRenderer.jsx";
 
 const principles = [
   {
-    number: "01",
     title: "Accuracy",
+    description:
+      "A numerical result should be close to the mathematical quantity it is intended to approximate.",
     icon: CheckCircle2,
-    description:
-      "Accuracy describes how close a computed result is to the mathematical quantity we want to approximate.",
   },
   {
-    number: "02",
-    title: "Stability",
-    icon: Settings2,
-    description:
-      "A stable method should not allow small input or rounding errors to grow uncontrollably during computation.",
-  },
-  {
-    number: "03",
     title: "Convergence",
-    icon: GitBranch,
     description:
-      "A convergent method approaches the desired solution as its approximation is progressively refined.",
+      "A reliable method should approach the correct solution as the approximation is refined under appropriate conditions.",
+    icon: GitBranch,
+  },
+  {
+    title: "Stability",
+    description:
+      "Small errors in data or intermediate calculations should not grow uncontrollably during the computation.",
+    icon: Settings2,
   },
 ];
 
-const methods = [
+const commonMethods = [
   {
-    title: "Finite Differences",
+    title: "Numerical differentiation",
     description:
-      "Approximate derivatives using function values at nearby points. These methods are useful when derivatives are unavailable analytically or when working with sampled data.",
-    path: "/implementation/numerical-derivative",
-    icon: GitBranch,
-    topics: ["Forward difference", "Backward difference", "Central difference"],
+      "Approximates derivatives using function values at nearby points.",
+    link: "/implementation/numerical-derivative",
+    label: "Study numerical derivatives",
   },
   {
-    title: "Numerical Integration",
+    title: "Numerical integration",
     description:
-      "Approximate definite integrals by combining sampled function values using weighted sums.",
-    path: "/implementation/numerical-integration",
-    icon: Cpu,
-    topics: ["Riemann sums", "Trapezoidal rule", "Simpson's rule"],
+      "Approximates definite integrals using sampled function values and weighted sums.",
+    link: "/implementation/numerical-integration",
+    label: "Study numerical integration",
   },
   {
-    title: "Root Finding",
-    description:
-      "Find approximate solutions of equations such as f(x) = 0 using iterative algorithms.",
-    path: "/implementation/numerical-methods",
-    icon: Settings2,
-    topics: ["Bisection", "Newton-Raphson", "Secant method"],
+    title: "Root finding",
+    description: "Finds approximate solutions of equations such as f(x) = 0.",
+    link: "/calculators/function",
+    label: "Explore function behavior",
   },
 ];
+
+const additionalMethods = [
+  {
+    title: "Interpolation",
+    description:
+      "Estimates unknown values between known data points using an approximating function.",
+  },
+  {
+    title: "Differential equations",
+    description:
+      "Approximates solutions when differential equations cannot be solved conveniently in closed form.",
+  },
+  {
+    title: "Optimization",
+    description:
+      "Searches for approximate minima or maxima of functions subject to mathematical constraints.",
+  },
+  {
+    title: "Linear systems",
+    description:
+      "Solves large systems of equations using direct or iterative computational methods.",
+  },
+  {
+    title: "Simulation",
+    description:
+      "Uses repeated numerical calculations to model physical, financial, scientific, or engineering systems.",
+  },
+  {
+    title: "Iterative algorithms",
+    description:
+      "Repeatedly improve an approximation until a chosen stopping condition is satisfied.",
+  },
+];
+
+const applications = [
+  "Engineering design",
+  "Physics and mechanics",
+  "Weather and climate modeling",
+  "Computer graphics",
+  "Scientific computing",
+  "Machine learning",
+  "Financial modeling",
+  "Control systems",
+];
+
+function SectionHeading({ eyebrow, title, children }) {
+  return (
+    <div className="max-w-3xl">
+      {eyebrow && <div className="pml-eyebrow">{eyebrow}</div>}
+
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#17202A] sm:text-4xl">
+        {title}
+      </h2>
+
+      {children && (
+        <p className="mt-4 text-base leading-8 text-[#687481] sm:text-lg">
+          {children}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function MethodCard({ title, description, link, label }) {
+  return (
+    <article className="pml-card flex h-full flex-col">
+      <h3 className="text-xl font-semibold text-[#17202A]">{title}</h3>
+
+      <p className="mt-3 text-sm leading-7 text-[#687481]">{description}</p>
+
+      <div className="mt-auto pt-6">
+        <Link
+          to={link}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-[#2F5BEA] transition-colors hover:text-[#2448C7]"
+        >
+          {label}
+          <ArrowRight size={15} />
+        </Link>
+      </div>
+    </article>
+  );
+}
 
 export default function NumericalMethods() {
   return (
@@ -79,746 +158,1124 @@ export default function NumericalMethods() {
         description="Learn how mathematical problems are transformed into algorithms that computers can execute, refine, and analyze."
       />
 
-      <main className="mx-auto max-w-[1180px] px-4 pb-20 sm:px-6 lg:px-8">
-        {/* Introduction */}
-        <section className="py-10 md:py-14">
-          <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-            <article>
-              <div className="pml-eyebrow">The computational viewpoint</div>
+      <main>
+        {/* ------------------------------------------------------------------ */}
+        {/* Introduction                                                       */}
+        {/* ------------------------------------------------------------------ */}
 
-              <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
-                What are numerical methods?
-              </h2>
+        <section className="pml-section bg-white">
+          <div className="pml-container">
+            <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+              <div>
+                <div className="pml-eyebrow">The computational viewpoint</div>
 
-              <p className="mt-5 text-base leading-8 text-[#34404C]">
-                Numerical methods are systematic algorithms for obtaining
-                approximate solutions to mathematical problems. They become
-                especially useful when an exact analytical solution is
-                unavailable, difficult to derive, or too expensive to compute
-                directly.
-              </p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#17202A] sm:text-4xl">
+                  Mathematics becomes an algorithm
+                </h2>
 
-              <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Instead of manipulating mathematical expressions indefinitely, a
-                numerical algorithm performs a finite sequence of calculations.
-                The algorithm may repeatedly improve an approximation until a
-                chosen accuracy or stopping condition is reached.
-              </p>
+                <div className="pml-prose mt-6">
+                  <p>
+                    Many mathematical problems have exact solutions on paper,
+                    but real computational problems are often more complicated.
+                    A function may be available only through measured data, an
+                    equation may have no convenient closed-form solution, or a
+                    calculation may be too large to perform symbolically.
+                  </p>
 
-              <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Numerical mathematics therefore sits between mathematical theory
-                and practical computation. Understanding the algorithm is only
-                part of the problem; understanding its error, convergence, and
-                limitations is equally important.
-              </p>
-            </article>
+                  <p>
+                    Numerical methods provide a systematic way to obtain
+                    approximate answers. Instead of manipulating expressions
+                    indefinitely, a numerical algorithm performs a sequence of
+                    calculations and produces a result whose accuracy can be
+                    studied.
+                  </p>
+                </div>
 
-            <aside className="pml-card h-fit p-6">
-              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
-                <Cpu size={22} />
+                <div className="mt-7 grid gap-3 sm:grid-cols-5">
+                  {[
+                    "Problem",
+                    "Model",
+                    "Algorithm",
+                    "Approximation",
+                    "Validation",
+                  ].map((item, index) => (
+                    <div
+                      key={item}
+                      className="relative border border-[#DEDEDB] bg-[#F8F7F4] px-4 py-4 text-center"
+                    >
+                      <div className="text-xs font-bold uppercase tracking-wider text-[#687481]">
+                        {index + 1}
+                      </div>
+
+                      <div className="mt-1 text-sm font-semibold text-[#17202A]">
+                        {item}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <h3 className="mt-5 text-lg font-semibold text-[#17202A]">
-                Mathematical problem
-              </h3>
+              <aside className="pml-card">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                  <Cpu size={22} />
+                </div>
 
-              <div className="mt-5 space-y-2 font-mono text-sm text-[#17324D]">
-                <div>problem</div>
-                <div className="text-[#687481]">↓</div>
-                <div>algorithm</div>
-                <div className="text-[#687481]">↓</div>
-                <div>approximation</div>
-                <div className="text-[#687481]">↓</div>
-                <div>error analysis</div>
-              </div>
-            </aside>
-          </div>
-        </section>
+                <h3 className="mt-5 text-xl font-semibold text-[#17202A]">
+                  What numerical methods actually do
+                </h3>
 
-        {/* Why numerical methods */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="grid gap-8 lg:grid-cols-2">
-            <div>
-              <div className="pml-eyebrow">Why approximation?</div>
+                <p className="mt-3 text-sm leading-7 text-[#687481]">
+                  A numerical method replaces a difficult mathematical operation
+                  with a sequence of simpler operations that a computer can
+                  execute.
+                </p>
 
-              <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
-                When exact mathematics is not enough
-              </h2>
-
-              <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Some equations have elegant closed-form solutions. Others do
-                not. Even when an exact solution exists, evaluating it may be
-                impractical when the problem contains a large amount of data or
-                must be solved repeatedly inside a simulation.
-              </p>
-
-              <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Numerical methods make these problems computationally manageable
-                by replacing an exact operation with a carefully designed
-                approximation.
-              </p>
-            </div>
-
-            <div className="pml-card p-7">
-              <div className="pml-eyebrow">Typical situations</div>
-
-              <div className="mt-5 space-y-4">
-                {[
-                  "The exact solution does not have an elementary closed form.",
-                  "The function is available only through measured data.",
-                  "The problem must be solved repeatedly in a simulation.",
-                  "The exact symbolic calculation is too expensive or complicated.",
-                ].map((item) => (
-                  <div key={item} className="flex items-start gap-3">
-                    <CheckCircle2
-                      size={18}
-                      className="mt-0.5 shrink-0 text-[#18794E]"
-                    />
-
-                    <p className="text-sm leading-6 text-[#34404C]">{item}</p>
+                <div className="mt-6 border-t border-[#E9E9E6] pt-5">
+                  <div className="text-xs font-bold uppercase tracking-wider text-[#687481]">
+                    Central idea
                   </div>
-                ))}
-              </div>
+
+                  <p className="mt-2 text-sm leading-7 text-[#34404C]">
+                    The important question is not only whether an algorithm
+                    produces an answer, but also how accurate, stable, and
+                    reliable that answer is.
+                  </p>
+                </div>
+              </aside>
             </div>
           </div>
         </section>
 
-        {/* Core principles */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="mb-8">
-            <div className="pml-eyebrow">Numerical analysis</div>
+        {/* ------------------------------------------------------------------ */}
+        {/* Why approximation                                                   */}
+        {/* ------------------------------------------------------------------ */}
 
-            <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
-              Three properties of a good numerical method
-            </h2>
+        <section className="pml-section bg-[#F8F7F4]">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="01 • Why approximation?"
+              title="Why do we need numerical methods?"
+            >
+              Exact symbolic mathematics is powerful, but it does not solve
+              every computational problem efficiently.
+            </SectionHeading>
 
-            <p className="mt-3 max-w-3xl text-base leading-7 text-[#687481]">
-              A useful algorithm should not merely produce a number. We also
-              need to know whether that number is accurate and whether the
-              method behaves reliably.
-            </p>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            {principles.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <article key={item.number} className="pml-card p-6">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-sm font-semibold text-[#2F5BEA]">
-                      {item.number}
-                    </span>
-
-                    <Icon size={20} className="text-[#2F5BEA]" />
-                  </div>
-
-                  <h3 className="mt-5 text-xl font-semibold text-[#17202A]">
+            <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+              {[
+                {
+                  title: "No closed form",
+                  text: "Some equations and integrals do not have convenient elementary formulas for their solutions.",
+                },
+                {
+                  title: "Discrete data",
+                  text: "Real measurements are often available only at a finite collection of points.",
+                },
+                {
+                  title: "Large systems",
+                  text: "Scientific and engineering models can involve thousands or millions of interacting quantities.",
+                },
+                {
+                  title: "Computational models",
+                  text: "A numerical simulation can be more useful than an exact symbolic expression when modeling a real system.",
+                },
+              ].map((item) => (
+                <article key={item.title} className="pml-card">
+                  <h3 className="text-lg font-semibold text-[#17202A]">
                     {item.title}
                   </h3>
 
                   <p className="mt-3 text-sm leading-7 text-[#687481]">
-                    {item.description}
+                    {item.text}
                   </p>
                 </article>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* Error */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="mb-8">
-            <div className="pml-eyebrow">Approximation and error</div>
+        {/* ------------------------------------------------------------------ */}
+        {/* Core principles                                                     */}
+        {/* ------------------------------------------------------------------ */}
 
-            <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
-              Where does numerical error come from?
-            </h2>
+        <section className="pml-section bg-white">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="02 • Core principles"
+              title="Three questions every numerical method should answer"
+            >
+              Numerical analysis is not simply about calculating a decimal
+              approximation. We also need to understand the behavior of the
+              algorithm that produced it.
+            </SectionHeading>
 
-            <p className="mt-4 max-w-4xl text-base leading-8 text-[#34404C]">
-              Numerical answers are generally approximations. The difference
-              between the computed value and the mathematical quantity being
-              approximated is called numerical error.
-            </p>
-          </div>
+            <div className="mt-10 grid gap-5 md:grid-cols-3">
+              {principles.map((item) => {
+                const Icon = item.icon;
 
-          <div className="grid gap-5 md:grid-cols-3">
-            <article className="pml-card p-6">
-              <h3 className="text-lg font-semibold text-[#17202A]">
-                Truncation error
-              </h3>
+                return (
+                  <article key={item.title} className="pml-card">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                      <Icon size={21} />
+                    </div>
 
-              <p className="mt-3 text-sm leading-7 text-[#687481]">
-                This occurs when an exact mathematical process is replaced by a
-                finite approximation.
-              </p>
+                    <h3 className="mt-5 text-xl font-semibold text-[#17202A]">
+                      {item.title}
+                    </h3>
 
-              <div className="pml-formula mt-5">
-                <MathRenderer>
-                  {
-                    "\\text{exact process}\\rightarrow\\text{finite approximation}"
-                  }
-                </MathRenderer>
-              </div>
-            </article>
-
-            <article className="pml-card p-6">
-              <h3 className="text-lg font-semibold text-[#17202A]">
-                Round-off error
-              </h3>
-
-              <p className="mt-3 text-sm leading-7 text-[#687481]">
-                Computers represent numbers with finite precision, so arithmetic
-                operations can introduce small numerical differences.
-              </p>
-            </article>
-
-            <article className="pml-card p-6">
-              <h3 className="text-lg font-semibold text-[#17202A]">
-                Input error
-              </h3>
-
-              <p className="mt-3 text-sm leading-7 text-[#687481]">
-                Measurements and initial data may already contain uncertainty. A
-                numerical method cannot automatically remove that uncertainty.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        {/* Error measurement */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="grid gap-8 lg:grid-cols-2">
-            <div>
-              <div className="pml-eyebrow">Measuring error</div>
-
-              <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
-                Absolute and relative error
-              </h2>
-
-              <p className="mt-4 text-base leading-8 text-[#34404C]">
-                If the exact value is known, numerical accuracy can be measured
-                directly. Let x be the exact value and x̃ be the approximation.
-              </p>
-
-              <div className="pml-card mt-6 p-6">
-                <div className="pml-eyebrow">Absolute error</div>
-
-                <div className="pml-formula mt-4">
-                  <MathRenderer>{"E_{abs}=|x-\\tilde{x}|"}</MathRenderer>
-                </div>
-              </div>
-
-              <div className="pml-card mt-5 p-6">
-                <div className="pml-eyebrow">Relative error</div>
-
-                <div className="pml-formula mt-4">
-                  <MathRenderer>
-                    {"E_{rel}=\\frac{|x-\\tilde{x}|}{|x|}"}
-                  </MathRenderer>
-                </div>
-              </div>
+                    <p className="mt-3 text-sm leading-7 text-[#687481]">
+                      {item.description}
+                    </p>
+                  </article>
+                );
+              })}
             </div>
 
-            <div className="pml-card h-fit p-7">
-              <div className="flex items-start gap-3">
-                <AlertTriangle
-                  size={21}
-                  className="mt-0.5 shrink-0 text-[#9A5B00]"
-                />
+            <div className="mt-8 border border-[#DEDEDB] bg-[#F8F7F4] p-6">
+              <div className="flex items-start gap-4">
+                <Lightbulb size={21} className="mt-1 shrink-0 text-[#2F5BEA]" />
 
                 <div>
                   <h3 className="font-semibold text-[#17202A]">
-                    What if the exact value is unknown?
+                    A useful distinction
                   </h3>
 
-                  <p className="mt-3 text-sm leading-7 text-[#687481]">
-                    In many real computational problems, there is no exact
-                    answer available for direct comparison. Instead, we can
-                    compare successive approximations or use theoretical error
-                    bounds to estimate reliability.
+                  <p className="mt-2 text-sm leading-7 text-[#687481]">
+                    Accuracy describes how close a computed result is to the
+                    desired mathematical value. Convergence describes what
+                    happens as the numerical approximation is refined. Stability
+                    describes how the algorithm responds to errors introduced
+                    during computation.
                   </p>
-
-                  <div className="mt-6 border-t border-[#E9E9E6] pt-5">
-                    <div className="font-mono text-sm text-[#17324D]">
-                      approximation 1
-                    </div>
-
-                    <div className="my-2 text-[#687481]">↓</div>
-
-                    <div className="font-mono text-sm text-[#17324D]">
-                      approximation 2
-                    </div>
-
-                    <div className="my-2 text-[#687481]">↓</div>
-
-                    <div className="font-mono text-sm text-[#17324D]">
-                      approximation 3
-                    </div>
-
-                    <p className="mt-4 text-sm leading-6 text-[#687481]">
-                      If successive values stabilize, this provides evidence
-                      that the algorithm may be approaching a solution.
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Convergence */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1fr] lg:items-center">
-            <div>
-              <div className="pml-eyebrow">Convergence</div>
+        {/* ------------------------------------------------------------------ */}
+        {/* Error analysis                                                       */}
+        {/* ------------------------------------------------------------------ */}
 
-              <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
-                Does refinement move toward the correct answer?
-              </h2>
+        <section className="pml-section bg-[#F8F7F4]">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="03 • Error analysis"
+              title="Understanding numerical error"
+            >
+              Every approximation contains some degree of error. Numerical
+              analysis provides tools for identifying where that error comes
+              from and how it behaves.
+            </SectionHeading>
 
-              <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Convergence describes the behavior of an algorithm as its
-                approximation is progressively refined. A method can be fast but
-                useless if it does not converge toward the desired solution.
-              </p>
+            <div className="mt-10 grid gap-8 lg:grid-cols-2">
+              <article className="pml-card">
+                <h3 className="text-xl font-semibold text-[#17202A]">
+                  Absolute and relative error
+                </h3>
 
-              <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Different algorithms converge at different rates. This is why
-                numerical analysis considers not only whether a method
-                converges, but also how quickly it does so.
-              </p>
+                <p className="mt-4 text-sm leading-7 text-[#687481]">
+                  Suppose the exact value is x and the computed approximation is
+                  x̃. The absolute error measures the size of their difference.
+                </p>
+
+                <div className="pml-formula mt-5">
+                  <MathRenderer>
+                    {String.raw`E_{\mathrm{abs}} = \left|x-\tilde{x}\right|`}
+                  </MathRenderer>
+                </div>
+
+                <p className="mt-4 text-sm leading-7 text-[#687481]">
+                  Relative error compares the error with the magnitude of the
+                  exact value.
+                </p>
+
+                <div className="pml-formula mt-4">
+                  <MathRenderer>
+                    {String.raw`E_{\mathrm{rel}} =
+                    \frac{\left|x-\tilde{x}\right|}{\left|x\right|}`}
+                  </MathRenderer>
+                </div>
+              </article>
+
+              <article className="pml-card">
+                <h3 className="text-xl font-semibold text-[#17202A]">
+                  Where errors come from
+                </h3>
+
+                <div className="mt-5 space-y-4">
+                  {[
+                    {
+                      title: "Truncation error",
+                      text: "Created when an infinite mathematical process is replaced by a finite approximation.",
+                    },
+                    {
+                      title: "Round-off error",
+                      text: "Created because computers represent numbers with finite precision.",
+                    },
+                    {
+                      title: "Data error",
+                      text: "Created when input measurements or parameters are themselves approximate.",
+                    },
+                    {
+                      title: "Model error",
+                      text: "Created when the mathematical model is only an approximation of the real system.",
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.title}
+                      className="border-l-2 border-[#2F5BEA] pl-4"
+                    >
+                      <h4 className="font-semibold text-[#17202A]">
+                        {item.title}
+                      </h4>
+
+                      <p className="mt-1 text-sm leading-6 text-[#687481]">
+                        {item.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </article>
             </div>
 
-            <div className="pml-card p-7">
-              <div className="pml-eyebrow">A simple pattern</div>
+            <div className="pml-warning mt-8">
+              <div className="flex items-start gap-3">
+                <AlertTriangle size={20} className="mt-0.5 shrink-0" />
 
-              <div className="mt-6 space-y-4">
-                {[
-                  ["n = 1", "2.5000"],
-                  ["n = 2", "2.7500"],
-                  ["n = 4", "2.6875"],
-                  ["n = 8", "2.6719"],
-                  ["n = 16", "2.6679"],
-                ].map(([iteration, value]) => (
-                  <div
-                    key={iteration}
-                    className="flex items-center justify-between border-b border-[#E9E9E6] pb-3"
-                  >
-                    <span className="font-mono text-sm text-[#687481]">
-                      {iteration}
-                    </span>
+                <div>
+                  <h3 className="font-semibold">
+                    Smaller is not always better
+                  </h3>
 
-                    <span className="font-mono text-sm font-semibold text-[#17324D]">
-                      {value}
-                    </span>
-                  </div>
-                ))}
+                  <p className="mt-1 text-sm leading-7">
+                    Reducing a numerical step size can decrease truncation
+                    error, but extremely small steps can increase round-off
+                    error and floating-point cancellation. Good numerical
+                    algorithms balance different sources of error rather than
+                    blindly choosing the smallest possible step.
+                  </p>
+                </div>
               </div>
+            </div>
+          </div>
+        </section>
 
-              <p className="mt-5 text-sm leading-6 text-[#687481]">
-                Successive approximations becoming closer to a stable value is a
-                common sign of convergence.
+        {/* ------------------------------------------------------------------ */}
+        {/* Convergence example                                                  */}
+        {/* ------------------------------------------------------------------ */}
+
+        <section className="pml-section bg-white">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="04 • Convergence"
+              title="A concrete example of numerical convergence"
+            >
+              Consider approximating a definite integral with the trapezoidal
+              rule. As the number of subintervals increases, the approximation
+              approaches the exact integral.
+            </SectionHeading>
+
+            <div className="mt-10 grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
+              <article className="pml-card">
+                <div className="text-xs font-bold uppercase tracking-wider text-[#687481]">
+                  Exact value
+                </div>
+
+                <div className="pml-formula mt-3">
+                  <MathRenderer>
+                    {String.raw`\int_0^2 x^2\,dx = \frac{8}{3}`}
+                  </MathRenderer>
+                </div>
+
+                <p className="mt-5 text-sm leading-7 text-[#687481]">
+                  The table shows how the trapezoidal approximation changes as
+                  the number of subintervals increases.
+                </p>
+              </article>
+
+              <div className="pml-table-wrap">
+                <table className="pml-table">
+                  <thead>
+                    <tr>
+                      <th>Subintervals n</th>
+                      <th>Approximation</th>
+                      <th>Absolute error</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>4.000000</td>
+                      <td>1.333333</td>
+                    </tr>
+
+                    <tr>
+                      <td>2</td>
+                      <td>3.000000</td>
+                      <td>0.333333</td>
+                    </tr>
+
+                    <tr>
+                      <td>4</td>
+                      <td>2.750000</td>
+                      <td>0.083333</td>
+                    </tr>
+
+                    <tr>
+                      <td>8</td>
+                      <td>2.687500</td>
+                      <td>0.020833</td>
+                    </tr>
+
+                    <tr>
+                      <td>16</td>
+                      <td>2.671875</td>
+                      <td>0.005208</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="mt-8 border border-[#DEDEDB] bg-[#F8F7F4] p-6">
+              <div className="flex items-start gap-4">
+                <GitBranch size={21} className="mt-1 shrink-0 text-[#2F5BEA]" />
+
+                <div>
+                  <h3 className="font-semibold text-[#17202A]">
+                    What the table demonstrates
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-7 text-[#687481]">
+                    The approximation moves toward the exact value 8/3 ≈
+                    2.666667 as n increases. This is an example of convergence:
+                    refinement of the numerical procedure produces increasingly
+                    accurate results.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------ */}
+        {/* Stability and conditioning                                           */}
+        {/* ------------------------------------------------------------------ */}
+
+        <section className="pml-section bg-[#F8F7F4]">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="05 • Stability"
+              title="Stability and conditioning"
+            >
+              Two different questions must be separated when analyzing a
+              numerical computation: how sensitive the mathematical problem is,
+              and how the algorithm behaves while solving it.
+            </SectionHeading>
+
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              <article className="pml-card">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                  <Settings2 size={21} />
+                </div>
+
+                <h3 className="mt-5 text-xl font-semibold text-[#17202A]">
+                  Conditioning
+                </h3>
+
+                <p className="mt-3 text-sm leading-7 text-[#687481]">
+                  Conditioning describes how sensitive the mathematical problem
+                  itself is to changes in its input. A poorly conditioned
+                  problem can amplify small input errors even when the algorithm
+                  is implemented correctly.
+                </p>
+              </article>
+
+              <article className="pml-card">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                  <Cpu size={21} />
+                </div>
+
+                <h3 className="mt-5 text-xl font-semibold text-[#17202A]">
+                  Stability
+                </h3>
+
+                <p className="mt-3 text-sm leading-7 text-[#687481]">
+                  Stability concerns the behavior of the numerical algorithm. A
+                  stable algorithm controls the growth of errors introduced by
+                  finite precision, approximation, or imperfect data.
+                </p>
+              </article>
+            </div>
+
+            <div className="pml-card mt-6">
+              <h3 className="text-lg font-semibold text-[#17202A]">
+                Why the distinction matters
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-[#687481]">
+                A calculation can be difficult because the underlying problem is
+                sensitive, because the algorithm is unstable, or because of
+                both. Good numerical analysis examines the problem and the
+                algorithm separately before interpreting the final answer.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Stability */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="pml-card p-7 sm:p-9">
-            <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
-                <Settings2 size={22} />
-              </div>
+        {/* ------------------------------------------------------------------ */}
+        {/* Common methods                                                       */}
+        {/* ------------------------------------------------------------------ */}
 
-              <div>
-                <div className="pml-eyebrow">Stability</div>
+        <section className="pml-section bg-white">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="06 • Core techniques"
+              title="Common numerical methods"
+            >
+              Different mathematical problems require different approximation
+              strategies. These techniques form an important part of numerical
+              calculus.
+            </SectionHeading>
 
-                <h2 className="mt-2 text-2xl font-semibold text-[#17202A]">
-                  A small input error should not automatically become a huge
-                  output error
-                </h2>
-
-                <p className="mt-4 max-w-4xl text-sm leading-7 text-[#687481]">
-                  Stability concerns how an algorithm responds to errors already
-                  present in its input or intermediate calculations. An unstable
-                  algorithm can amplify tiny numerical errors until the final
-                  result becomes unreliable.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8 grid gap-5 md:grid-cols-2">
-              <div className="border border-[#CFE8DA] bg-[#EEF9F3] p-5">
-                <h3 className="font-semibold text-[#18794E]">
-                  Stable behavior
-                </h3>
-
-                <p className="mt-2 text-sm leading-7 text-[#34404C]">
-                  Small numerical perturbations remain controlled throughout the
-                  calculation.
-                </p>
-              </div>
-
-              <div className="border border-[#E8D9B7] bg-[#FFF7E8] p-5">
-                <h3 className="font-semibold text-[#9A5B00]">
-                  Unstable behavior
-                </h3>
-
-                <p className="mt-2 text-sm leading-7 text-[#34404C]">
-                  Small errors can grow significantly and contaminate the final
-                  numerical result.
-                </p>
-              </div>
+            <div className="mt-10 grid gap-5 md:grid-cols-3">
+              {commonMethods.map((method) => (
+                <MethodCard key={method.title} {...method} />
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Common methods */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="mb-8">
-            <div className="pml-eyebrow">Common techniques</div>
+        {/* ------------------------------------------------------------------ */}
+        {/* Additional methods                                                   */}
+        {/* ------------------------------------------------------------------ */}
 
-            <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
-              Numerical methods you should know
-            </h2>
+        <section className="pml-section bg-[#F8F7F4]">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="07 • Beyond basic calculus"
+              title="Additional numerical techniques"
+            >
+              Numerical mathematics extends far beyond differentiation and
+              integration. The same ideas of approximation, iteration, error
+              control, and validation appear throughout computational science.
+            </SectionHeading>
 
-            <p className="mt-3 max-w-3xl text-base leading-7 text-[#687481]">
-              Numerical mathematics contains many specialized algorithms. These
-              are some of the most useful techniques for calculus and
-              computational mathematics.
-            </p>
-          </div>
-
-          <div className="grid gap-5 lg:grid-cols-3">
-            {methods.map((method) => {
-              const Icon = method.icon;
-
-              return (
-                <Link
-                  key={method.title}
-                  to={method.path}
-                  className="pml-card group p-6 transition hover:-translate-y-0.5"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
-                    <Icon size={21} />
-                  </div>
-
-                  <h3 className="mt-5 text-lg font-semibold text-[#17202A]">
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {additionalMethods.map((method) => (
+                <article key={method.title} className="pml-card">
+                  <h3 className="text-lg font-semibold text-[#17202A]">
                     {method.title}
                   </h3>
 
                   <p className="mt-3 text-sm leading-7 text-[#687481]">
                     {method.description}
                   </p>
-
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {method.topics.map((topic) => (
-                      <span
-                        key={topic}
-                        className="rounded-full border border-[#DEDEDB] bg-[#F8F7F4] px-3 py-1 text-xs text-[#687481]"
-                      >
-                        {topic}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mt-6 text-sm font-semibold text-[#2F5BEA]">
-                    Explore method →
-                  </div>
-                </Link>
-              );
-            })}
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* Other techniques */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="mb-8">
-            <div className="pml-eyebrow">Beyond the core topics</div>
+        {/* ------------------------------------------------------------------ */}
+        {/* Iteration and stopping criteria                                      */}
+        {/* ------------------------------------------------------------------ */}
 
-            <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
-              Other important numerical techniques
-            </h2>
-          </div>
+        <section className="pml-section bg-white">
+          <div className="pml-container">
+            <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+              <div>
+                <div className="pml-eyebrow">08 • Iterative algorithms</div>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            <article className="pml-card p-6">
-              <h3 className="font-semibold text-[#17202A]">Interpolation</h3>
+                <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#17202A] sm:text-4xl">
+                  When should an algorithm stop?
+                </h2>
 
-              <p className="mt-2 text-sm leading-7 text-[#687481]">
-                Estimate values between known data points using a mathematical
-                approximation such as polynomial interpolation.
-              </p>
-            </article>
+                <div className="pml-prose mt-6">
+                  <p>
+                    Many numerical algorithms generate a sequence of
+                    approximations rather than producing the final answer in a
+                    single calculation.
+                  </p>
 
-            <article className="pml-card p-6">
-              <h3 className="font-semibold text-[#17202A]">
-                Differential equations
-              </h3>
+                  <p>
+                    The computation therefore needs a stopping criterion. A
+                    common strategy is to stop when two successive
+                    approximations are sufficiently close.
+                  </p>
+                </div>
+              </div>
 
-              <p className="mt-2 text-sm leading-7 text-[#687481]">
-                Approximate solutions to differential equations when closed-form
-                solutions are unavailable or impractical.
-              </p>
-            </article>
+              <article className="pml-card">
+                <div className="text-xs font-bold uppercase tracking-wider text-[#687481]">
+                  Example stopping criterion
+                </div>
 
-            <article className="pml-card p-6">
-              <h3 className="font-semibold text-[#17202A]">Optimization</h3>
+                <div className="pml-formula mt-4">
+                  <MathRenderer>
+                    {String.raw`\left|x_{n+1}-x_n\right| < \varepsilon`}
+                  </MathRenderer>
+                </div>
 
-              <p className="mt-2 text-sm leading-7 text-[#687481]">
-                Search computationally for minima or maxima of functions subject
-                to specified constraints.
-              </p>
-            </article>
+                <p className="mt-5 text-sm leading-7 text-[#687481]">
+                  Here, ε represents the desired tolerance. If the change
+                  between successive approximations becomes smaller than this
+                  tolerance, the algorithm may consider the result sufficiently
+                  converged.
+                </p>
 
-            <article className="pml-card p-6">
-              <h3 className="font-semibold text-[#17202A]">Linear systems</h3>
+                <div className="mt-5 border-t border-[#E9E9E6] pt-5">
+                  <h3 className="font-semibold text-[#17202A]">
+                    Important caution
+                  </h3>
 
-              <p className="mt-2 text-sm leading-7 text-[#687481]">
-                Solve large systems of equations using direct or iterative
-                computational techniques.
-              </p>
-            </article>
-
-            <article className="pml-card p-6">
-              <h3 className="font-semibold text-[#17202A]">
-                Numerical simulation
-              </h3>
-
-              <p className="mt-2 text-sm leading-7 text-[#687481]">
-                Combine numerical algorithms to model changing physical,
-                scientific, or engineering systems.
-              </p>
-            </article>
-
-            <article className="pml-card p-6">
-              <h3 className="font-semibold text-[#17202A]">
-                Iterative algorithms
-              </h3>
-
-              <p className="mt-2 text-sm leading-7 text-[#687481]">
-                Repeatedly improve an estimate until an error tolerance or
-                stopping condition is satisfied.
-              </p>
-            </article>
+                  <p className="mt-2 text-sm leading-7 text-[#687481]">
+                    A stopping criterion does not automatically prove that the
+                    approximation is correct. The algorithm should also be
+                    checked for convergence, stability, domain restrictions, and
+                    other problem-specific conditions.
+                  </p>
+                </div>
+              </article>
+            </div>
           </div>
         </section>
 
-        {/* Computational workflow */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="mb-8">
-            <div className="pml-eyebrow">Practical workflow</div>
+        {/* ------------------------------------------------------------------ */}
+        {/* Newton iteration                                                    */}
+        {/* ------------------------------------------------------------------ */}
 
-            <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
-              How to approach a numerical problem
-            </h2>
-          </div>
+        <section className="pml-section bg-[#F8F7F4]">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="09 • Example algorithm"
+              title="Newton's method"
+            >
+              Newton's method illustrates how an iterative numerical algorithm
+              can repeatedly improve an approximation to a root.
+            </SectionHeading>
 
-          <div className="grid gap-5 md:grid-cols-4">
-            {[
-              {
-                number: "01",
-                title: "Define",
-                text: "Translate the mathematical problem into a precise computational task.",
-              },
-              {
-                number: "02",
-                title: "Choose",
-                text: "Select a numerical method appropriate for the problem and data.",
-              },
-              {
-                number: "03",
-                title: "Compute",
-                text: "Run the algorithm using suitable tolerances, step sizes, and stopping conditions.",
-              },
-              {
-                number: "04",
-                title: "Validate",
-                text: "Check convergence, error estimates, or an independent reference result.",
-              },
-            ].map((item) => (
-              <article key={item.number} className="pml-card p-5">
-                <span className="font-mono text-sm font-semibold text-[#2F5BEA]">
-                  {item.number}
-                </span>
-
-                <h3 className="mt-3 font-semibold text-[#17202A]">
-                  {item.title}
+            <div className="mt-10 grid gap-8 lg:grid-cols-2">
+              <article className="pml-card">
+                <h3 className="text-xl font-semibold text-[#17202A]">
+                  Iteration formula
                 </h3>
 
-                <p className="mt-2 text-sm leading-6 text-[#687481]">
-                  {item.text}
+                <div className="pml-formula mt-5">
+                  <MathRenderer>
+                    {String.raw`x_{n+1}
+                    =
+                    x_n-\frac{f(x_n)}{f'(x_n)}`}
+                  </MathRenderer>
+                </div>
+
+                <p className="mt-5 text-sm leading-7 text-[#687481]">
+                  Starting from an initial estimate x₀, the formula generates a
+                  new estimate. Repeating the process can move the sequence
+                  toward a solution of f(x) = 0.
                 </p>
               </article>
-            ))}
+
+              <article className="pml-card">
+                <h3 className="text-xl font-semibold text-[#17202A]">
+                  What can go wrong?
+                </h3>
+
+                <ul className="mt-5 space-y-4">
+                  {[
+                    "The derivative may be zero or extremely small.",
+                    "The initial estimate may be poorly chosen.",
+                    "The iteration may diverge instead of converging.",
+                    "The function may have multiple roots.",
+                    "Floating-point errors can affect the final result.",
+                  ].map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-sm leading-7 text-[#687481]"
+                    >
+                      <AlertTriangle
+                        size={17}
+                        className="mt-1 shrink-0 text-[#9A5B00]"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            </div>
           </div>
         </section>
 
-        {/* Applications */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="grid gap-8 lg:grid-cols-2">
-            <div>
-              <div className="pml-eyebrow">Applications</div>
+        {/* ------------------------------------------------------------------ */}
+        {/* Implementation workflow                                             */}
+        {/* ------------------------------------------------------------------ */}
 
-              <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
-                Why numerical methods matter
-              </h2>
+        <section className="pml-section bg-white">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="10 • Implementation workflow"
+              title="A practical workflow for numerical computation"
+            >
+              A numerical solution becomes much more reliable when the algorithm
+              is designed and validated systematically.
+            </SectionHeading>
 
-              <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Modern scientific and engineering software relies heavily on
-                numerical algorithms. Many systems are too complicated to solve
-                entirely by hand or symbolically.
-              </p>
+            <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+              {[
+                {
+                  number: "01",
+                  title: "Define",
+                  text: "Identify the mathematical problem, inputs, domain, desired output, and required tolerance.",
+                },
+                {
+                  number: "02",
+                  title: "Choose",
+                  text: "Select an appropriate numerical method based on accuracy, cost, stability, and the structure of the problem.",
+                },
+                {
+                  number: "03",
+                  title: "Compute",
+                  text: "Implement the algorithm carefully and monitor intermediate values, convergence, and numerical errors.",
+                },
+                {
+                  number: "04",
+                  title: "Validate",
+                  text: "Compare with known solutions, alternative methods, theoretical bounds, or independent calculations when possible.",
+                },
+              ].map((step) => (
+                <article key={step.number} className="pml-card">
+                  <div className="text-xs font-bold tracking-widest text-[#2F5BEA]">
+                    {step.number}
+                  </div>
 
-              <p className="mt-4 text-base leading-8 text-[#34404C]">
-                Numerical methods allow mathematical models to be evaluated,
-                simulated, optimized, and repeatedly solved using computers.
-              </p>
+                  <h3 className="mt-4 text-xl font-semibold text-[#17202A]">
+                    {step.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-7 text-[#687481]">
+                    {step.text}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------ */}
+        {/* Pseudocode                                                           */}
+        {/* ------------------------------------------------------------------ */}
+
+        <section className="pml-section bg-[#F8F7F4]">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="11 • Algorithm design"
+              title="From mathematical formula to computer procedure"
+            >
+              A numerical formula must eventually become a sequence of explicit
+              computational steps.
+            </SectionHeading>
+
+            <div className="mt-10 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+              <article className="pml-card">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                  <Code2 size={21} />
+                </div>
+
+                <h3 className="mt-5 text-xl font-semibold text-[#17202A]">
+                  General algorithm pattern
+                </h3>
+
+                <ol className="mt-5 space-y-4">
+                  {[
+                    "Choose input values and parameters.",
+                    "Initialize the approximation.",
+                    "Perform the numerical update.",
+                    "Measure the change or error.",
+                    "Check the stopping criterion.",
+                    "Repeat until the result is sufficiently converged.",
+                    "Validate the final approximation.",
+                  ].map((item, index) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-sm leading-7 text-[#687481]"
+                    >
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#17324D] text-xs font-semibold text-white">
+                        {index + 1}
+                      </span>
+
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ol>
+              </article>
+
+              <article className="overflow-hidden border border-[#DEDEDB] bg-white">
+                <div className="border-b border-[#DEDEDB] px-5 py-4">
+                  <div className="text-xs font-bold uppercase tracking-wider text-[#687481]">
+                    Conceptual pseudocode
+                  </div>
+                </div>
+
+                <pre className="overflow-x-auto p-6 text-sm leading-8 text-[#34404C]">
+                  <code>{`choose initial approximation x
+choose tolerance epsilon
+
+repeat:
+    compute next approximation
+    measure the change
+    update x
+
+until change < epsilon
+
+validate the result
+return approximation`}</code>
+                </pre>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------ */}
+        {/* Numerical differentiation/integration connection                    */}
+        {/* ------------------------------------------------------------------ */}
+
+        <section className="pml-section bg-white">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="12 • Numerical calculus"
+              title="How numerical calculus fits together"
+            >
+              Differentiation and integration are closely connected to the
+              broader ideas of approximation and error control.
+            </SectionHeading>
+
+            <div className="mt-10 grid gap-5 md:grid-cols-2">
+              <MethodCard
+                title="Numerical differentiation"
+                description="Estimate a derivative from nearby function values using finite differences. Study forward, backward, and central difference formulas."
+                link="/implementation/numerical-derivative"
+                label="Open numerical differentiation"
+              />
+
+              <MethodCard
+                title="Numerical integration"
+                description="Approximate a definite integral using Riemann sums, the trapezoidal rule, or Simpson's rule."
+                link="/implementation/numerical-integration"
+                label="Open numerical integration"
+              />
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                "Engineering simulation",
-                "Physics",
-                "Weather modeling",
-                "Computer graphics",
-                "Machine learning",
-                "Financial modeling",
-                "Scientific computing",
-                "Control systems",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-3 border border-[#E9E9E6] bg-white p-4"
-                >
-                  <CheckCircle2 size={17} className="shrink-0 text-[#18794E]" />
+            <div className="mt-8 border border-[#DEDEDB] bg-[#F8F7F4] p-6">
+              <div className="flex items-start gap-4">
+                <LinkIcon size={21} className="mt-1 shrink-0 text-[#2F5BEA]" />
 
-                  <span className="text-sm font-medium text-[#34404C]">
-                    {item}
-                  </span>
+                <div>
+                  <h3 className="font-semibold text-[#17202A]">
+                    Symbolic mathematics and numerical mathematics work together
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-7 text-[#687481]">
+                    An exact symbolic formula can provide theory, while a
+                    numerical method can provide a practical approximation.
+                    Comparing the two is often one of the best ways to study
+                    numerical accuracy.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------ */}
+        {/* Practical considerations                                             */}
+        {/* ------------------------------------------------------------------ */}
+
+        <section className="pml-section bg-[#F8F7F4]">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="13 • Practical considerations"
+              title="What should you check before trusting a numerical result?"
+            >
+              A numerical answer is meaningful only when the computation and its
+              assumptions have been examined.
+            </SectionHeading>
+
+            <div className="mt-10 grid gap-5 md:grid-cols-2">
+              {[
+                {
+                  title: "Check the domain",
+                  text: "Make sure the function and algorithm are valid at the points where they are evaluated.",
+                },
+                {
+                  title: "Check convergence",
+                  text: "Determine whether increasing iterations or resolution actually moves the approximation toward a stable value.",
+                },
+                {
+                  title: "Check step size",
+                  text: "Choose a resolution appropriate for the smoothness of the function and the numerical method.",
+                },
+                {
+                  title: "Check precision",
+                  text: "Remember that floating-point arithmetic introduces finite-precision effects.",
+                },
+                {
+                  title: "Compare methods",
+                  text: "When possible, compare results from independent numerical methods or with an exact solution.",
+                },
+                {
+                  title: "Report limitations",
+                  text: "A responsible numerical result should include relevant assumptions, tolerance, approximation method, or error information.",
+                },
+              ].map((item) => (
+                <article
+                  key={item.title}
+                  className="border border-[#DEDEDB] bg-white p-6"
+                >
+                  <div className="flex items-start gap-4">
+                    <CheckCircle2
+                      size={19}
+                      className="mt-1 shrink-0 text-[#18794E]"
+                    />
+
+                    <div>
+                      <h3 className="font-semibold text-[#17202A]">
+                        {item.title}
+                      </h3>
+
+                      <p className="mt-2 text-sm leading-7 text-[#687481]">
+                        {item.text}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------ */}
+        {/* Applications                                                         */}
+        {/* ------------------------------------------------------------------ */}
+
+        <section className="pml-section bg-white">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="14 • Applications"
+              title="Where numerical methods are used"
+            >
+              Numerical algorithms are fundamental whenever mathematical models
+              must be evaluated using real data and finite computing resources.
+            </SectionHeading>
+
+            <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {applications.map((application) => (
+                <div
+                  key={application}
+                  className="border border-[#DEDEDB] bg-[#F8F7F4] px-4 py-5 text-center text-sm font-semibold text-[#34404C]"
+                >
+                  {application}
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Key takeaway */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="pml-card p-7 sm:p-9">
-            <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
-                <Lightbulb size={22} />
-              </div>
+        {/* ------------------------------------------------------------------ */}
+        {/* Important idea                                                       */}
+        {/* ------------------------------------------------------------------ */}
 
-              <div>
-                <div className="pml-eyebrow">Key takeaway</div>
+        <section className="pml-section bg-[#F8F7F4]">
+          <div className="pml-container">
+            <div className="border border-[#DEDEDB] bg-white p-7 sm:p-9">
+              <div className="flex items-start gap-5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#EEF3FF] text-[#2F5BEA]">
+                  <Lightbulb size={22} />
+                </div>
 
-                <h2 className="mt-2 text-2xl font-semibold text-[#17202A]">
-                  Numerical computation is more than getting a number
-                </h2>
+                <div>
+                  <div className="pml-eyebrow">Important idea</div>
 
-                <p className="mt-4 max-w-4xl text-sm leading-7 text-[#34404C]">
-                  A reliable numerical solution requires three questions:
-                  <strong> What method was used?</strong>
-                  <strong> How accurate is the result?</strong>
-                  <strong> Why should the result be trusted?</strong>
-                  Understanding these questions is what turns a calculation into
-                  numerical analysis.
-                </p>
+                  <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
+                    An approximation should come with an explanation
+                  </h2>
+
+                  <p className="mt-4 max-w-3xl text-sm leading-7 text-[#687481] sm:text-base">
+                    Numerical computation is not simply the process of producing
+                    a decimal number. A useful numerical solution identifies the
+                    method used, explains the approximation, considers error and
+                    convergence, and provides enough information to judge
+                    whether the result is trustworthy.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Related resources */}
-        <section className="border-t border-[#DEDEDB] py-12 md:py-16">
-          <div className="mb-8">
-            <div className="pml-eyebrow">Continue learning</div>
+        {/* ------------------------------------------------------------------ */}
+        {/* Summary                                                             */}
+        {/* ------------------------------------------------------------------ */}
 
-            <h2 className="mt-3 text-2xl font-semibold text-[#17202A]">
-              Related resources
-            </h2>
-          </div>
+        <section className="pml-section bg-white">
+          <div className="pml-container">
+            <SectionHeading
+              eyebrow="15 • Summary"
+              title="The essential ideas"
+            />
 
-          <div className="grid gap-5 md:grid-cols-3">
-            <Link
-              to="/implementation/numerical-derivative"
-              className="pml-card p-6 transition hover:-translate-y-0.5"
-            >
-              <GitBranch size={21} className="text-[#2F5BEA]" />
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              {[
+                "Numerical methods turn mathematical problems into computational algorithms.",
+                "Approximation is often necessary when exact symbolic solutions are unavailable or impractical.",
+                "Accuracy, convergence, and stability are central concepts in numerical analysis.",
+                "Truncation, round-off, measurement, and model errors can all affect a result.",
+                "Reducing step size does not always improve a computation because floating-point effects can become important.",
+                "Iterative methods require sensible stopping criteria and validation.",
+                "A numerical result should be interpreted together with its assumptions and limitations.",
+                "Numerical calculus connects naturally to differentiation, integration, optimization, differential equations, and scientific computing.",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="flex items-start gap-3 border-b border-[#E9E9E6] pb-4"
+                >
+                  <CheckCircle2
+                    size={18}
+                    className="mt-1 shrink-0 text-[#18794E]"
+                  />
 
-              <h3 className="mt-4 font-semibold text-[#17202A]">
-                Numerical Derivatives
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-[#687481]">
-                Learn finite-difference methods and the relationship between
-                step size and derivative accuracy.
-              </p>
-            </Link>
-
-            <Link
-              to="/implementation/numerical-integration"
-              className="pml-card p-6 transition hover:-translate-y-0.5"
-            >
-              <Cpu size={21} className="text-[#2F5BEA]" />
-
-              <h3 className="mt-4 font-semibold text-[#17202A]">
-                Numerical Integration
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-[#687481]">
-                Explore Riemann sums, the trapezoidal rule, Simpson's rule, and
-                numerical integration error.
-              </p>
-            </Link>
-
-            <Link
-              to="/implementation"
-              className="pml-card p-6 transition hover:-translate-y-0.5"
-            >
-              <Code2 size={21} className="text-[#2F5BEA]" />
-
-              <h3 className="mt-4 font-semibold text-[#17202A]">
-                Implementation Overview
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-[#687481]">
-                Return to the broader computational calculus section.
-              </p>
-            </Link>
+                  <p className="text-sm leading-7 text-[#34404C]">{item}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* Final CTA */}
-        <section className="border-t border-[#DEDEDB] pt-12">
-          <div className="bg-[#17324D] p-8 text-white sm:p-10">
-            <h2 className="text-2xl font-semibold">
-              Put numerical mathematics into practice
-            </h2>
+        {/* ------------------------------------------------------------------ */}
+        {/* Related resources                                                    */}
+        {/* ------------------------------------------------------------------ */}
 
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-200">
-              Start with a specific numerical operation, understand the
-              algorithm behind it, and then study how accuracy and convergence
-              affect the result.
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
+        <section className="border-t border-[#DEDEDB] bg-[#F8F7F4]">
+          <div className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 lg:px-8">
+            <div className="grid gap-5 md:grid-cols-3">
               <Link
                 to="/implementation/numerical-derivative"
-                className="inline-flex items-center rounded-md bg-white/30 px-4 py-2.5 text-sm font-semibold text-[#17324D] transition hover:bg-white/30"
+                className="group border border-[#DEDEDB] bg-white p-6 transition-colors hover:border-[#2F5BEA]"
               >
-                Numerical derivatives
+                <div className="text-xs font-bold uppercase tracking-wider text-[#687481]">
+                  Related
+                </div>
+
+                <h3 className="mt-3 text-lg font-semibold text-[#17202A]">
+                  Numerical Derivatives
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-[#687481]">
+                  Learn finite differences, step size, truncation error, and
+                  numerical derivative accuracy.
+                </p>
+
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#2F5BEA]">
+                  Continue
+                  <ArrowRight size={15} />
+                </span>
               </Link>
 
               <Link
                 to="/implementation/numerical-integration"
-                className="inline-flex items-center rounded-md border border-white/30 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="group border border-[#DEDEDB] bg-white p-6 transition-colors hover:border-[#2F5BEA]"
               >
-                Numerical integration
+                <div className="text-xs font-bold uppercase tracking-wider text-[#687481]">
+                  Related
+                </div>
+
+                <h3 className="mt-3 text-lg font-semibold text-[#17202A]">
+                  Numerical Integration
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-[#687481]">
+                  Study Riemann sums, trapezoidal integration, Simpson's rule,
+                  and numerical accuracy.
+                </p>
+
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#2F5BEA]">
+                  Continue
+                  <ArrowRight size={15} />
+                </span>
               </Link>
+
+              <Link
+                to="/calculators/optimization"
+                className="group border border-[#DEDEDB] bg-white p-6 transition-colors hover:border-[#2F5BEA]"
+              >
+                <div className="text-xs font-bold uppercase tracking-wider text-[#687481]">
+                  Related
+                </div>
+
+                <h3 className="mt-3 text-lg font-semibold text-[#17202A]">
+                  Optimization Calculator
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-[#687481]">
+                  Explore numerical search and approximation for minimum and
+                  maximum values.
+                </p>
+
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#2F5BEA]">
+                  Open calculator
+                  <ArrowRight size={15} />
+                </span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------ */}
+        {/* Final CTA                                                           */}
+        {/* ------------------------------------------------------------------ */}
+
+        <section className="bg-[#10283F]">
+          <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 lg:px-8">
+            <div className="max-w-3xl">
+              <div className="text-xs font-bold uppercase tracking-[0.18em] text-slate-300">
+                Continue learning
+              </div>
+
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                Connect numerical methods with calculus
+              </h2>
+
+              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
+                See how numerical approximation is used to compute derivatives,
+                integrals, and other quantities when exact symbolic methods are
+                inconvenient or unavailable.
+              </p>
+
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link
+                  to="/implementation/numerical-derivative"
+                  className="inline-flex items-center gap-2 bg-white px-5 py-3 text-sm font-semibold text-[#17324D] transition-colors hover:bg-slate-100"
+                >
+                  Numerical derivatives
+                  <ArrowRight size={16} />
+                </Link>
+
+                <Link
+                  to="/implementation/numerical-integration"
+                  className="pml-dark-cta-link inline-flex items-center gap-2 border border-white/40 px-5 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
+                >
+                  Numerical integration
+                  <ArrowRight size={16} />
+                </Link>
+
+                <Link
+                  to="/learn"
+                  className="pml-dark-cta-link inline-flex items-center gap-2 border border-white/40 px-5 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
+                >
+                  Explore calculus
+                  <ArrowRight size={16} />
+                </Link>
+              </div>
             </div>
           </div>
         </section>

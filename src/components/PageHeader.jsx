@@ -10,14 +10,24 @@ export default function PageHeader({
   children,
 }) {
   return (
-    <section className="border-b border-slate-200 bg-white">
-      <div className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+    <section className="border-b border-[#DEDEDB] bg-white">
+      <div className="pml-container py-12 md:py-16">
         {backTo && (
           <Link
             to={backTo}
-            className="mb-7 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
+            className="
+              mb-7
+              inline-flex
+              items-center
+              gap-2
+              text-sm
+              font-medium
+              !text-[#687481]
+              transition-colors
+              hover:!text-[#17324D]
+            "
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={16} strokeWidth={1.8} />
             {backLabel}
           </Link>
         )}
@@ -28,7 +38,9 @@ export default function PageHeader({
           {title}
         </h1>
 
-        {description && <p className="pml-lead mt-5">{description}</p>}
+        {description && (
+          <p className="pml-lead mt-5 max-w-3xl">{description}</p>
+        )}
 
         {children && <div className="mt-7">{children}</div>}
       </div>

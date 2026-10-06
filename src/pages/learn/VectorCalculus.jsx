@@ -19,14 +19,14 @@ export default function VectorCalculus() {
     <>
       <SEO
         title="Vector Calculus | Gradient, Divergence, Curl & Integral Theorems"
-        description="Learn vector calculus through vector fields, gradients, line integrals, surface integrals, divergence, curl, Green's theorem, Stokes' theorem, and the Divergence theorem."
+        description="Learn vector calculus through vector fields, gradients, directional derivatives, line integrals, surface integrals, divergence, curl, Green's theorem, Stokes' theorem, and the Divergence theorem."
         canonical="/learn/vector-calculus"
       />
 
       <PageHeader
         eyebrow="Learn • Advanced"
         title="Vector Calculus"
-        description="Learn how derivatives and integrals extend to vector fields, and how local properties such as divergence and curl connect to global quantities along curves, surfaces, and volumes."
+        description="Learn how calculus extends to vector fields, curves, and surfaces, and how gradient, divergence, curl, line integrals, and surface integrals describe physical and geometric behavior."
       />
 
       <main className="pml-container pml-section">
@@ -40,18 +40,18 @@ export default function VectorCalculus() {
             </h2>
 
             <p className="pml-prose mt-5">
-              Single-variable calculus studies functions along a line.
-              Multivariable calculus extends those ideas to functions of several
-              variables. Vector calculus goes a step further by studying
-              quantities that have both magnitude and direction and how those
-              quantities vary throughout space.
+              Single-variable calculus studies functions whose inputs and
+              outputs can be represented along a line. Multivariable calculus
+              extends these ideas to functions of several variables. Vector
+              calculus builds further by studying vector-valued quantities and
+              fields that vary throughout space.
             </p>
 
             <p className="pml-prose mt-4">
-              The subject provides mathematical tools for describing fluid
-              motion, electromagnetic fields, gravitational fields, heat flow,
-              and many other systems in which a quantity varies from point to
-              point.
+              This provides a unified mathematical language for describing fluid
+              velocity, electric and magnetic fields, gravitational fields, heat
+              flow, circulation, flux, and many other systems in which both
+              magnitude and direction matter.
             </p>
 
             <div className="pml-card mt-8">
@@ -66,9 +66,9 @@ export default function VectorCalculus() {
                   </h3>
 
                   <p className="mt-2 text-sm leading-7 text-[#687481]">
-                    Vector calculus connects local behavior—such as the
-                    direction a field changes—with global quantities such as
-                    circulation, flux, and total accumulation.
+                    Vector calculus connects local properties of fields—such as
+                    how they change, spread, or rotate—with global quantities
+                    such as circulation, flux, and total accumulation.
                   </p>
                 </div>
               </div>
@@ -83,35 +83,34 @@ export default function VectorCalculus() {
 
             <p className="pml-prose mt-5">
               A vector field assigns a vector to every point in a region of
-              space. A vector can represent both a magnitude and a direction,
-              making vector fields useful for describing quantities such as
-              velocity and force.
+              space. Each vector has both a magnitude and a direction, allowing
+              the field to describe quantities that vary from location to
+              location.
             </p>
 
-            <MathRenderer block>
-              F(x,y,z) = ⟨P(x,y,z), Q(x,y,z), R(x,y,z)⟩
+            <MathRenderer>
+              {"\\mathbf{F}(x,y,z)=\\langle P(x,y,z),Q(x,y,z),R(x,y,z)\\rangle"}
             </MathRenderer>
 
             <p className="pml-prose mt-5">
-              For example, a velocity field for a moving fluid can assign a
-              velocity vector to every point in the fluid. At each location, the
-              vector tells us how quickly the fluid is moving and in which
-              direction.
+              For example, a velocity field can assign a velocity vector to
+              every point in a moving fluid. At each location, the vector tells
+              us how fast the fluid is moving and in which direction.
             </p>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {[
                 {
                   title: "Velocity",
-                  text: "Describes the direction and speed of a moving fluid or object.",
+                  text: "Describes the speed and direction of a moving fluid or object.",
                 },
                 {
                   title: "Force",
-                  text: "Represents forces that vary from one location to another.",
+                  text: "Represents forces whose magnitude or direction varies throughout space.",
                 },
                 {
                   title: "Electric field",
-                  text: "Describes the force per unit charge throughout space.",
+                  text: "Describes the electric force per unit charge at different locations.",
                 },
               ].map((item) => (
                 <div key={item.title} className="pml-card">
@@ -138,17 +137,21 @@ export default function VectorCalculus() {
               field. For a function of three variables:
             </p>
 
-            <MathRenderer block>∇f = ⟨∂f/∂x, ∂f/∂y, ∂f/∂z⟩</MathRenderer>
+            <MathRenderer>
+              {
+                "\\nabla f=\\left\\langle\\frac{\\partial f}{\\partial x},\\frac{\\partial f}{\\partial y},\\frac{\\partial f}{\\partial z}\\right\\rangle"
+              }
+            </MathRenderer>
 
             <p className="pml-prose mt-5">
-              The gradient points in the direction in which the function
-              increases most rapidly. Its magnitude tells us the maximum
+              The gradient points in the direction in which the scalar field
+              increases most rapidly. Its magnitude represents the maximum
               instantaneous rate of increase.
             </p>
 
             <div className="pml-card mt-8">
               <div className="flex items-start gap-4">
-                <Move3D className="mt-1 text-[#2F5BEA]" size={22} />
+                <Move3D className="mt-1 shrink-0 text-[#2F5BEA]" size={22} />
 
                 <div>
                   <h3 className="font-semibold text-[#17202A]">
@@ -157,23 +160,78 @@ export default function VectorCalculus() {
 
                   <p className="mt-2 text-sm leading-7 text-[#687481]">
                     Imagine a landscape whose elevation is represented by
-                    f(x,y). The gradient points in the direction of steepest
-                    uphill increase.
+                    <strong> f(x,y)</strong>. The gradient points toward the
+                    direction of steepest uphill increase.
                   </p>
                 </div>
               </div>
             </div>
 
             <p className="pml-prose mt-6">
-              This makes the gradient particularly important in optimization,
-              physics, and machine learning, where determining a direction of
-              greatest increase or decrease is useful.
+              The gradient is therefore important in optimization, physics,
+              engineering, numerical methods, and machine learning, where the
+              direction of greatest increase or decrease is often useful.
             </p>
+          </section>
+
+          {/* Directional derivative */}
+          <section className="mt-16">
+            <div className="pml-eyebrow">03 • Directional derivatives</div>
+
+            <h2 className="pml-section-title mt-3">
+              Measuring change in a chosen direction
+            </h2>
+
+            <p className="pml-prose mt-5">
+              Partial derivatives describe change along coordinate directions.
+              But in many applications, we need to know how a scalar field
+              changes while moving in an arbitrary direction.
+            </p>
+
+            <p className="pml-prose mt-4">
+              If <strong>u</strong> is a unit vector, the directional derivative
+              is:
+            </p>
+
+            <MathRenderer>
+              {"D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}"}
+            </MathRenderer>
+
+            <p className="pml-prose mt-5">
+              The dot product determines how much of the gradient lies in the
+              chosen direction. When the direction agrees with the gradient, the
+              rate of increase is greatest.
+            </p>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {[
+                {
+                  title: "Gradient",
+                  text: "Points toward the direction of greatest increase.",
+                },
+                {
+                  title: "Unit vector",
+                  text: "Specifies the direction in which movement occurs.",
+                },
+                {
+                  title: "Directional derivative",
+                  text: "Measures the rate of change along that direction.",
+                },
+              ].map((item) => (
+                <div key={item.title} className="pml-card">
+                  <h3 className="font-semibold text-[#17202A]">{item.title}</h3>
+
+                  <p className="mt-2 text-sm leading-6 text-[#687481]">
+                    {item.text}
+                  </p>
+                </div>
+              ))}
+            </div>
           </section>
 
           {/* Line integrals */}
           <section className="mt-16">
-            <div className="pml-eyebrow">03 • Line integrals</div>
+            <div className="pml-eyebrow">04 • Line integrals</div>
 
             <h2 className="pml-section-title mt-3">
               Integrating along a curve
@@ -181,21 +239,23 @@ export default function VectorCalculus() {
 
             <p className="pml-prose mt-5">
               A line integral accumulates a quantity along a curve rather than
-              across an interval. For a scalar field, a common form is:
+              across a straight interval. For a scalar field, a common form is:
             </p>
 
-            <MathRenderer block>∫ᶜ f ds</MathRenderer>
+            <MathRenderer>{"\\int_C f\\,ds"}</MathRenderer>
 
             <p className="pml-prose mt-5">
-              Line integrals of vector fields have another important form:
+              For a vector field, an important line integral is:
             </p>
 
-            <MathRenderer block>∫ᶜ F · dr</MathRenderer>
+            <MathRenderer>
+              {"\\int_C \\mathbf{F}\\cdot d\\mathbf{r}"}
+            </MathRenderer>
 
             <p className="pml-prose mt-5">
-              This expression measures how strongly the vector field acts in the
-              direction of motion along the curve. In physics, it is closely
-              connected to the work done by a force.
+              This measures how strongly the vector field acts in the direction
+              of travel along the curve. In mechanics, the line integral of a
+              force field is closely related to the work done by that force.
             </p>
 
             <div className="pml-success mt-8">
@@ -204,8 +264,8 @@ export default function VectorCalculus() {
 
                 <div>
                   <strong>Key idea:</strong> A line integral accumulates
-                  information along a path. The path itself matters, especially
-                  for vector fields.
+                  information along a path. For a vector field, the direction of
+                  the path relative to the field matters.
                 </div>
               </div>
             </div>
@@ -213,37 +273,42 @@ export default function VectorCalculus() {
 
           {/* Divergence */}
           <section className="mt-16">
-            <div className="pml-eyebrow">04 • Divergence</div>
+            <div className="pml-eyebrow">05 • Divergence</div>
 
-            <h2 className="pml-section-title mt-3">Measuring outward flow</h2>
+            <h2 className="pml-section-title mt-3">
+              Measuring local expansion and contraction
+            </h2>
 
             <p className="pml-prose mt-5">
-              Divergence measures the local tendency of a vector field to spread
+              Divergence measures the net tendency of a vector field to spread
               outward from a point or converge toward it.
             </p>
 
-            <MathRenderer block>∇ · F = ∂P/∂x + ∂Q/∂y + ∂R/∂z</MathRenderer>
+            <MathRenderer>
+              {
+                "\\nabla\\cdot\\mathbf{F}=\\frac{\\partial P}{\\partial x}+\\frac{\\partial Q}{\\partial y}+\\frac{\\partial R}{\\partial z}"
+              }
+            </MathRenderer>
 
             <p className="pml-prose mt-5">
-              If the divergence is positive at a point, the field behaves
-              locally like a source. Negative divergence indicates a tendency
-              toward inward flow, while zero divergence indicates no net local
-              expansion or contraction.
+              Positive divergence indicates local net outward behavior, while
+              negative divergence indicates local net inward behavior. A zero
+              divergence means there is no net local expansion or contraction.
             </p>
 
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {[
                 {
                   title: "Positive",
-                  text: "Local net outward behavior.",
+                  text: "The field behaves locally like a source, with net outward flow.",
                 },
                 {
                   title: "Negative",
-                  text: "Local net inward behavior.",
+                  text: "The field behaves locally like a sink, with net inward flow.",
                 },
                 {
                   title: "Zero",
-                  text: "No net local expansion or contraction.",
+                  text: "There is no net local expansion or contraction.",
                 },
               ].map((item) => (
                 <div key={item.title} className="pml-card">
@@ -259,30 +324,32 @@ export default function VectorCalculus() {
 
           {/* Curl */}
           <section className="mt-16">
-            <div className="pml-eyebrow">05 • Curl</div>
+            <div className="pml-eyebrow">06 • Curl</div>
 
             <h2 className="pml-section-title mt-3">Measuring local rotation</h2>
 
             <p className="pml-prose mt-5">
-              Curl measures the tendency of a vector field to produce local
-              rotation around a point.
+              Curl measures the local tendency of a vector field to produce
+              rotational behavior around a point.
             </p>
 
-            <MathRenderer block>∇ × F</MathRenderer>
+            <MathRenderer>{"\\nabla\\times\\mathbf{F}"}</MathRenderer>
 
             <p className="pml-prose mt-5">For:</p>
 
-            <MathRenderer block>F = ⟨P,Q,R⟩</MathRenderer>
+            <MathRenderer>{"\\mathbf{F}=\\langle P,Q,R\\rangle"}</MathRenderer>
 
-            <p className="pml-prose mt-5">the curl can be written as:</p>
+            <p className="pml-prose mt-5">the curl is:</p>
 
-            <MathRenderer block>
-              ∇ × F = ⟨Rᵧ - Q_z, P_z - R_x, Q_x - P_y⟩
+            <MathRenderer>
+              {
+                "\\nabla\\times\\mathbf{F}=\\left\\langle\\frac{\\partial R}{\\partial y}-\\frac{\\partial Q}{\\partial z},\\frac{\\partial P}{\\partial z}-\\frac{\\partial R}{\\partial x},\\frac{\\partial Q}{\\partial x}-\\frac{\\partial P}{\\partial y}\\right\\rangle"
+              }
             </MathRenderer>
 
             <div className="pml-card mt-8">
               <div className="flex items-start gap-4">
-                <Waves className="mt-1 text-[#2F5BEA]" size={22} />
+                <Waves className="mt-1 shrink-0 text-[#2F5BEA]" size={22} />
 
                 <div>
                   <h3 className="font-semibold text-[#17202A]">
@@ -291,8 +358,8 @@ export default function VectorCalculus() {
 
                   <p className="mt-2 text-sm leading-7 text-[#687481]">
                     Imagine placing a tiny paddle wheel inside a flowing fluid.
-                    Curl describes the field's tendency to make that wheel
-                    rotate locally.
+                    Curl describes the field's local tendency to make that wheel
+                    rotate.
                   </p>
                 </div>
               </div>
@@ -301,7 +368,7 @@ export default function VectorCalculus() {
 
           {/* Surface integrals */}
           <section className="mt-16">
-            <div className="pml-eyebrow">06 • Surface integrals</div>
+            <div className="pml-eyebrow">07 • Surface integrals</div>
 
             <h2 className="pml-section-title mt-3">
               Integrating across surfaces
@@ -309,82 +376,103 @@ export default function VectorCalculus() {
 
             <p className="pml-prose mt-5">
               Surface integrals extend integration from curves and planar
-              regions to surfaces in three-dimensional space.
+              regions to surfaces embedded in three-dimensional space.
             </p>
 
             <p className="pml-prose mt-4">
               A scalar surface integral has the form:
             </p>
 
-            <MathRenderer block>∬ₛ f dS</MathRenderer>
+            <MathRenderer>{"\\iint_S f\\,dS"}</MathRenderer>
 
             <p className="pml-prose mt-5">
-              A vector surface integral is commonly used to calculate flux
+              A vector surface integral can measure the flux of a vector field
               through a surface:
             </p>
 
-            <MathRenderer block>∬ₛ F · n dS</MathRenderer>
+            <MathRenderer>
+              {"\\iint_S \\mathbf{F}\\cdot\\mathbf{n}\\,dS"}
+            </MathRenderer>
 
             <p className="pml-prose mt-5">
-              Here, <strong>n</strong> represents a chosen unit normal
-              direction. Flux measures how much of the vector field passes
-              through the surface.
+              Here, <strong>n</strong> is a chosen unit normal vector. The dot
+              product selects the component of the field passing through the
+              surface.
             </p>
+
+            <div className="pml-card mt-8">
+              <h3 className="font-semibold text-[#17202A]">
+                Flux interpretation
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-[#687481]">
+                Flux measures how much of a vector field passes through a
+                surface. The orientation of the surface matters because the
+                normal direction determines which side is considered positive.
+              </p>
+            </div>
           </section>
 
-          {/* Green */}
+          {/* Green's theorem */}
           <section className="mt-16">
-            <div className="pml-eyebrow">07 • Green's theorem</div>
+            <div className="pml-eyebrow">08 • Green's theorem</div>
 
             <h2 className="pml-section-title mt-3">
               Connecting a region to its boundary
             </h2>
 
             <p className="pml-prose mt-5">
-              Green's theorem connects a line integral around a closed curve
-              with a double integral over the region enclosed by that curve.
+              Green's theorem connects a line integral around a positively
+              oriented closed curve with a double integral over the planar
+              region enclosed by that curve.
             </p>
 
-            <MathRenderer block>
-              ∮ᶜ P dx + Q dy = ∬ᴿ (∂Q/∂x - ∂P/∂y) dA
+            <MathRenderer>
+              {
+                "\\oint_C P\\,dx+Q\\,dy=\\iint_R\\left(\\frac{\\partial Q}{\\partial x}-\\frac{\\partial P}{\\partial y}\\right)dA"
+              }
             </MathRenderer>
 
             <p className="pml-prose mt-5">
-              The theorem is useful because it allows a problem involving the
-              boundary of a region to be converted into a problem involving the
-              entire region, or vice versa.
+              The theorem provides two ways to approach the same mathematical
+              quantity: integrate around the boundary or integrate across the
+              region.
             </p>
 
             <div className="pml-card mt-8">
-              <h3 className="font-semibold text-[#17202A]">
-                A broader pattern
-              </h3>
+              <h3 className="font-semibold text-[#17202A]">Why this matters</h3>
 
               <p className="mt-3 text-sm leading-7 text-[#687481]">
-                Green's theorem is part of a larger family of results in vector
-                calculus that connect local derivatives with integrals over
-                boundaries and regions.
+                A difficult line integral can sometimes be converted into a
+                simpler double integral, while a complicated region integral may
+                sometimes be replaced by an easier boundary calculation.
               </p>
             </div>
           </section>
 
           {/* Stokes */}
           <section className="mt-16">
-            <div className="pml-eyebrow">08 • Stokes' theorem</div>
+            <div className="pml-eyebrow">09 • Stokes' theorem</div>
 
-            <h2 className="pml-section-title mt-3">Curl and circulation</h2>
+            <h2 className="pml-section-title mt-3">
+              Connecting curl and circulation
+            </h2>
 
             <p className="pml-prose mt-5">
-              Stokes' theorem generalizes the idea behind Green's theorem to
-              surfaces in three-dimensional space.
+              Stokes' theorem generalizes the central idea of Green's theorem to
+              oriented surfaces in three-dimensional space.
             </p>
 
-            <MathRenderer block>∮ᶜ F · dr = ∬ₛ (∇ × F) · n dS</MathRenderer>
+            <MathRenderer>
+              {
+                "\\oint_C \\mathbf{F}\\cdot d\\mathbf{r}=\\iint_S(\\nabla\\times\\mathbf{F})\\cdot\\mathbf{n}\\,dS"
+              }
+            </MathRenderer>
 
             <p className="pml-prose mt-5">
-              The theorem says that the circulation of a vector field around the
-              boundary of a surface is related to the flux of its curl through
-              that surface.
+              The circulation of a vector field around the boundary of a surface
+              equals the flux of its curl through that surface, provided the
+              orientations are consistent.
             </p>
 
             <div className="pml-success mt-8">
@@ -392,9 +480,9 @@ export default function VectorCalculus() {
                 <CheckCircle2 className="mt-0.5 shrink-0" size={20} />
 
                 <div>
-                  <strong>Connection:</strong> Stokes' theorem turns information
-                  about local rotation, represented by curl, into a global
-                  circulation along a boundary.
+                  <strong>Connection:</strong> Stokes' theorem turns local
+                  rotational information, represented by curl, into a global
+                  circulation measured around a boundary.
                 </div>
               </div>
             </div>
@@ -402,7 +490,7 @@ export default function VectorCalculus() {
 
           {/* Divergence theorem */}
           <section className="mt-16">
-            <div className="pml-eyebrow">09 • Divergence theorem</div>
+            <div className="pml-eyebrow">10 • Divergence theorem</div>
 
             <h2 className="pml-section-title mt-3">
               Connecting volume and surface flux
@@ -410,30 +498,52 @@ export default function VectorCalculus() {
 
             <p className="pml-prose mt-5">
               The Divergence theorem relates the total outward flux through a
-              closed surface to the divergence throughout the volume enclosed by
-              that surface.
+              closed surface to the integral of divergence throughout the volume
+              enclosed by that surface.
             </p>
 
-            <MathRenderer block>∬ₛ F · n dS = ∭ᵥ (∇ · F) dV</MathRenderer>
+            <MathRenderer>
+              {
+                "\\iint_S \\mathbf{F}\\cdot\\mathbf{n}\\,dS=\\iiint_V(\\nabla\\cdot\\mathbf{F})\\,dV"
+              }
+            </MathRenderer>
 
             <p className="pml-prose mt-5">
-              This is especially useful when calculating flux directly across a
-              complicated surface would be difficult, but the divergence inside
-              the volume is easier to integrate.
+              This can be especially useful when calculating flux directly
+              across a complicated closed surface is difficult, but the
+              divergence inside the enclosed volume is easier to integrate.
             </p>
+
+            <div className="pml-card mt-8">
+              <div className="flex items-start gap-4">
+                <Sigma className="mt-1 shrink-0 text-[#2F5BEA]" size={22} />
+
+                <div>
+                  <h3 className="font-semibold text-[#17202A]">
+                    The key relationship
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-7 text-[#687481]">
+                    Local divergence throughout a volume determines the total
+                    outward flux across its closed boundary.
+                  </p>
+                </div>
+              </div>
+            </div>
           </section>
 
-          {/* The three operators */}
+          {/* Three operators */}
           <section className="mt-16">
-            <div className="pml-eyebrow">10 • The core operators</div>
+            <div className="pml-eyebrow">11 • Core operators</div>
 
             <h2 className="pml-section-title mt-3">
               Gradient, divergence, and curl
             </h2>
 
             <p className="pml-prose mt-5">
-              These three operators form a central part of vector calculus. They
-              act on fields in different ways and answer different questions.
+              Gradient, divergence, and curl are three fundamental differential
+              operators in vector calculus. They operate on fields in different
+              ways and answer different questions.
             </p>
 
             <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -441,19 +551,19 @@ export default function VectorCalculus() {
                 {
                   icon: Compass,
                   title: "Gradient",
-                  formula: "∇f",
+                  formula: "\\nabla f",
                   text: "Takes a scalar field and produces a vector field showing the direction of greatest increase.",
                 },
                 {
                   icon: GitBranch,
                   title: "Divergence",
-                  formula: "∇ · F",
-                  text: "Produces a scalar measuring local net outward or inward behavior of a vector field.",
+                  formula: "\\nabla\\cdot\\mathbf{F}",
+                  text: "Produces a scalar measuring the local net outward or inward behavior of a vector field.",
                 },
                 {
                   icon: Waves,
                   title: "Curl",
-                  formula: "∇ × F",
+                  formula: "\\nabla\\times\\mathbf{F}",
                   text: "Produces a vector describing the local rotational tendency of a vector field.",
                 },
               ].map(({ icon: Icon, title, formula, text }) => (
@@ -462,8 +572,8 @@ export default function VectorCalculus() {
 
                   <h3 className="mt-4 font-semibold text-[#17202A]">{title}</h3>
 
-                  <div className="mt-3 rounded-md bg-[#F8F7F4] px-3 py-2 font-mono text-sm text-[#17324D]">
-                    {formula}
+                  <div className="mt-3 rounded-md bg-[#F8F7F4] px-3 py-2">
+                    <MathRenderer inline>{formula}</MathRenderer>
                   </div>
 
                   <p className="mt-3 text-sm leading-6 text-[#687481]">
@@ -476,42 +586,42 @@ export default function VectorCalculus() {
 
           {/* Applications */}
           <section className="mt-16">
-            <div className="pml-eyebrow">11 • Applications</div>
+            <div className="pml-eyebrow">12 • Applications</div>
 
             <h2 className="pml-section-title mt-3">
               Where vector calculus is used
             </h2>
 
             <p className="pml-prose mt-5">
-              Vector calculus is particularly useful for systems where
-              quantities vary throughout space and have directional behavior.
+              Vector calculus is particularly valuable when quantities vary
+              throughout space and have directional behavior.
             </p>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {[
                 [
                   "Fluid dynamics",
-                  "Describe velocity fields, circulation, flow, and sources or sinks.",
+                  "Describe velocity fields, circulation, flow, sources, sinks, and conservation laws.",
                 ],
                 [
                   "Electromagnetism",
-                  "Model electric and magnetic fields and their spatial behavior.",
+                  "Model electric and magnetic fields and their spatial relationships.",
                 ],
                 [
                   "Gravitation",
-                  "Represent gravitational fields and calculate their effects.",
+                  "Represent gravitational fields and analyze forces throughout space.",
                 ],
                 [
                   "Heat transfer",
-                  "Analyze temperature fields and heat flow through materials.",
+                  "Study temperature fields and the movement of thermal energy.",
                 ],
                 [
                   "Engineering",
-                  "Study fields, stresses, fluxes, and spatially varying systems.",
+                  "Analyze spatially varying forces, fields, fluxes, and physical systems.",
                 ],
                 [
                   "Physics",
-                  "Express fundamental laws involving fields, forces, and conservation.",
+                  "Express laws involving fields, forces, conservation, and continuous systems.",
                 ],
               ].map(([title, text]) => (
                 <div
@@ -528,6 +638,94 @@ export default function VectorCalculus() {
             </div>
           </section>
 
+          {/* Practical workflow */}
+          <section className="mt-16">
+            <div className="pml-eyebrow">Problem-solving workflow</div>
+
+            <h2 className="pml-section-title mt-3">
+              A practical way to approach vector calculus problems
+            </h2>
+
+            <p className="pml-prose mt-5">
+              Vector calculus problems can look complicated because they combine
+              geometry, differentiation, integration, and orientation. A
+              structured workflow makes them easier to analyze.
+            </p>
+
+            <div className="mt-8 space-y-3">
+              {[
+                [
+                  "1",
+                  "Identify the mathematical object.",
+                  "Determine whether the problem involves a scalar field, vector field, curve, surface, or volume.",
+                ],
+                [
+                  "2",
+                  "Identify what is being measured.",
+                  "Decide whether the goal is a rate of change, circulation, flux, accumulation, or another quantity.",
+                ],
+                [
+                  "3",
+                  "Choose the appropriate operator or integral.",
+                  "Use gradient, divergence, curl, line integrals, surface integrals, or volume integrals as appropriate.",
+                ],
+                [
+                  "4",
+                  "Check orientation and domain.",
+                  "Pay attention to curve direction, surface normals, boundaries, and the region over which the calculation is performed.",
+                ],
+                [
+                  "5",
+                  "Simplify before calculating.",
+                  "Use theorems or coordinate changes when they turn a difficult calculation into a simpler equivalent one.",
+                ],
+              ].map(([number, title, text]) => (
+                <div
+                  key={number}
+                  className="flex gap-4 border-b border-[#E9E9E6] py-5"
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#EEF3FF] text-sm font-semibold text-[#2F5BEA]">
+                    {number}
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold text-[#17202A]">{title}</h3>
+
+                    <p className="mt-1 text-sm leading-6 text-[#687481]">
+                      {text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Important idea */}
+          <section className="mt-16">
+            <div className="pml-card bg-[#F8F7F4]">
+              <div className="flex items-start gap-4">
+                <Lightbulb className="mt-1 shrink-0 text-[#2F5BEA]" size={22} />
+
+                <div>
+                  <div className="pml-eyebrow">Important idea</div>
+
+                  <h2 className="mt-3 text-xl font-semibold text-[#17202A]">
+                    Local information can determine global behavior
+                  </h2>
+
+                  <p className="mt-3 text-sm leading-7 text-[#687481]">
+                    One of the deepest ideas in vector calculus is the
+                    relationship between local derivatives and global integrals.
+                    Divergence describes local expansion, curl describes local
+                    rotation, and the major integral theorems connect these
+                    local properties with quantities measured along boundaries,
+                    across surfaces, or throughout volumes.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Core concepts */}
           <section className="mt-16">
             <div className="pml-eyebrow">Core concepts</div>
@@ -537,7 +735,8 @@ export default function VectorCalculus() {
             <div className="mt-8 space-y-3">
               {[
                 "A vector field assigns a vector to every point in a region.",
-                "The gradient points in the direction of greatest local increase of a scalar field.",
+                "The gradient of a scalar field points in the direction of greatest local increase.",
+                "A directional derivative measures change in a specified direction.",
                 "Divergence measures the local tendency of a vector field to spread outward or converge.",
                 "Curl measures local rotational behavior.",
                 "Line integrals accumulate quantities along curves.",
@@ -545,6 +744,7 @@ export default function VectorCalculus() {
                 "Green's theorem connects a closed line integral with a double integral over a planar region.",
                 "Stokes' theorem connects circulation around a boundary with the surface integral of curl.",
                 "The Divergence theorem connects outward flux through a closed surface with divergence throughout the enclosed volume.",
+                "Orientation, boundaries, and normal directions are essential when evaluating vector-calculus integrals.",
               ].map((item) => (
                 <div
                   key={item}
@@ -566,21 +766,28 @@ export default function VectorCalculus() {
             <div className="pml-eyebrow">Summary</div>
 
             <h2 className="pml-section-title mt-3">
-              From local derivatives to global behavior
+              From local fields to global quantities
             </h2>
 
             <p className="pml-prose mt-5">
-              Vector calculus provides a unified language for understanding
-              quantities that vary throughout space. Gradients describe the
+              Vector calculus provides a unified framework for studying
+              quantities that vary throughout space. The gradient describes the
               direction of greatest increase, divergence measures local
               expansion or contraction, and curl describes local rotation.
             </p>
 
             <p className="pml-prose mt-4">
               Line and surface integrals extend accumulation to curves and
-              surfaces, while Green's theorem, Stokes' theorem, and the
-              Divergence theorem reveal deep connections between derivatives and
-              integrals.
+              surfaces. Green's theorem, Stokes' theorem, and the Divergence
+              theorem then connect local derivatives with global quantities
+              measured along boundaries, across surfaces, and throughout
+              volumes.
+            </p>
+
+            <p className="pml-prose mt-4">
+              Together, these ideas form an important mathematical foundation
+              for physics, engineering, fluid mechanics, electromagnetism,
+              numerical modeling, and many other fields.
             </p>
           </section>
 
@@ -624,7 +831,7 @@ export default function VectorCalculus() {
                 <h3 className="mt-4 font-semibold text-[#17202A]">Integrals</h3>
 
                 <p className="mt-2 text-sm leading-6 text-[#687481]">
-                  Review the foundations of accumulation before working with
+                  Review accumulation and definite integrals before working with
                   line and surface integrals.
                 </p>
 

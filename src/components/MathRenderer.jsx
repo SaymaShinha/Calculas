@@ -10,26 +10,28 @@ export default function MathRenderer({
   const ref = useRef(null);
 
   useEffect(() => {
-    if (!ref.current) return;
+    const element = ref.current;
+
+    if (!element) return;
 
     const formula = String(children ?? "").trim();
 
     if (!formula) {
-      ref.current.innerHTML = "";
+      element.textContent = "";
       return;
     }
 
     try {
-      katex.render(formula, ref.current, {
+      katex.render(formula, element, {
         displayMode: !inline,
         throwOnError: false,
         strict: false,
         trust: false,
+        output: "htmlAndMathml",
       });
     } catch (error) {
       console.error("KaTeX rendering error:", error);
-
-      ref.current.textContent = formula;
+      element.textContent = formula;
     }
   }, [children, inline]);
 
