@@ -154,6 +154,31 @@ svg {
   }
 }
 
+/* ===================
+Math render
+===================== */
+.pml-math-renderer {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+}
+
+.pml-math-renderer .katex-display {
+  margin: 0.5rem 0;
+  font-size: 1.15rem;
+}
+
+.pml-math-renderer .katex {
+  font-size: 1.15em;
+}
+
+@media (min-width: 768px) {
+  .pml-math-renderer .katex-display {
+    font-size: 1.3rem;
+  }
+}
+
 /* =========================================================
    Subtle mathematical grid
    ========================================================= */

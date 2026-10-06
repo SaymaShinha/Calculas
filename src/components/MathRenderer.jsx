@@ -1,23 +1,53 @@
+import { useEffect, useRef } from "react";
+import katex from "katex";
+import "katex/dist/katex.min.css";
+
 export default function MathRenderer({
   children,
-  block = false,
+  inline = false,
   className = "",
 }) {
-  if (block) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const formula = String(children ?? "").trim();
+
+    if (!formula) {
+      ref.current.innerHTML = "";
+      return;
+    }
+
+    try {
+      katex.render(formula, ref.current, {
+        displayMode: !inline,
+        throwOnError: false,
+        strict: false,
+        trust: false,
+      });
+    } catch (error) {
+      console.error("KaTeX rendering error:", error);
+
+      ref.current.textContent = formula;
+    }
+  }, [children, inline]);
+
+  if (inline) {
     return (
-      <div
-        className={`my-6 overflow-x-auto rounded-2xl border border-base-300 bg-base-200/60 px-5 py-7 text-center ${className}`}
-      >
-        <div className="min-w-max font-serif text-xl leading-relaxed tracking-wide sm:text-2xl">
-          {children}
-        </div>
-      </div>
+      <span
+        ref={ref}
+        className={`pml-math-inline ${className}`}
+        aria-label="Mathematical expression"
+      />
     );
   }
 
   return (
-    <span className={`font-serif text-lg tracking-wide ${className}`}>
-      {children}
-    </span>
+    <div
+      ref={ref}
+      className={`pml-math-renderer overflow-x-auto ${className}`}
+      aria-label="Mathematical formula"
+    />
   );
 }
