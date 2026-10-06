@@ -18,71 +18,45 @@ export default function TopicCard({
         h-full
         min-w-0
         flex-col
-        rounded-2xl
+        rounded-xl
         border
-        border-base-300
-        bg-base-100
+        border-slate-200
+        bg-white
         p-6
         shadow-sm
         transition-all
-        duration-300
-        hover:-translate-y-1
-        hover:border-primary/30
-        hover:shadow-xl
-        hover:shadow-primary/5
-        focus:outline-none
-        focus-visible:ring-2
-        focus-visible:ring-primary
-        focus-visible:ring-offset-2
+        duration-200
+        hover:-translate-y-0.5
+        hover:border-slate-300
+        hover:shadow-md
       "
     >
-      {/* Header */}
       <div className="flex items-start justify-between gap-4">
-        <div
-          className="
-            flex
-            h-12
-            w-12
-            shrink-0
-            items-center
-            justify-center
-            rounded-xl
-            bg-primary/10
-            text-primary
-            transition-colors
-            duration-300
-            group-hover:bg-primary
-            group-hover:text-primary-content
-          "
-        >
-          <Icon size={23} strokeWidth={2} />
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-[#17324d]">
+          <Icon size={20} strokeWidth={1.8} />
         </div>
 
         {level && (
-          <span className="shrink-0 rounded-full bg-base-200 px-2.5 py-1 text-xs font-semibold text-base-content/60">
+          <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-500">
             {level}
           </span>
         )}
       </div>
 
-      {/* Content */}
-      <div className="min-w-0">
-        <h3 className="mt-6 text-xl font-bold tracking-tight">{title}</h3>
+      <h3 className="mt-6 text-lg font-bold tracking-tight text-slate-900">
+        {title}
+      </h3>
 
-        {description && (
-          <p className="mt-3 text-sm leading-7 text-base-content/60">
-            {description}
-          </p>
-        )}
-      </div>
+      {description && (
+        <p className="mt-3 text-sm leading-6 text-slate-500">{description}</p>
+      )}
 
-      {/* Topics */}
       {topics.length > 0 && (
         <div className="mt-5 flex flex-wrap gap-2">
           {topics.slice(0, 4).map((topic) => (
             <span
               key={topic}
-              className="rounded-lg bg-base-200 px-2.5 py-1 text-xs font-medium text-base-content/60"
+              className="rounded-md bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-500"
             >
               {topic}
             </span>
@@ -90,14 +64,13 @@ export default function TopicCard({
         </div>
       )}
 
-      {/* CTA */}
       <div className="mt-auto pt-6">
-        <div className="flex items-center gap-2 text-sm font-semibold text-primary">
-          <span>Start learning</span>
+        <div className="flex items-center gap-2 text-sm font-semibold text-blue-700">
+          <span>Explore topic</span>
 
           <ArrowRight
-            size={16}
-            className="transition-transform duration-300 group-hover:translate-x-1"
+            size={15}
+            className="transition-transform duration-200 group-hover:translate-x-1"
           />
         </div>
       </div>

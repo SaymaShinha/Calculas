@@ -1,14 +1,15 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/Navbar.jsx";
+
 import Footer from "./components/Footer.jsx";
+import Navbar from "./components/Navbar.jsx";
 import ScrollRestoration from "./components/ScrollRestoration.jsx";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#070A12] text-slate-100">
+    <div className="pml-page">
       <Navbar />
 
-      <main className="min-h-[70vh]">
+      <main>
         <Outlet />
       </main>
 

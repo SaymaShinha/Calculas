@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 
-const SITE_URL = "https://practical-math-lab.vercel.app";
+const SITE_URL = "https://calculaslab.vercel.app";
 
 const DEFAULT_DESCRIPTION =
   "Practical Math Lab helps you learn calculus through clear explanations, formulas, rules, interactive calculators, examples, applications, visualization, and numerical methods.";

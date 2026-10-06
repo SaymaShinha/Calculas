@@ -1,49 +1,36 @@
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function PageHeader({
   eyebrow,
   title,
   description,
-  icon: Icon,
+  backTo,
+  backLabel = "Back",
   children,
-  centered = false,
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-base-300 bg-base-200/30">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -right-32 -top-32 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -bottom-40 -left-20 h-80 w-80 rounded-full bg-secondary/10 blur-3xl" />
-      </div>
+    <section className="border-b border-slate-200 bg-white">
+      <div className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        {backTo && (
+          <Link
+            to={backTo}
+            className="mb-7 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
+          >
+            <ArrowLeft size={16} />
+            {backLabel}
+          </Link>
+        )}
 
-      <div
-        className={`relative mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8 lg:py-20 ${
-          centered ? "text-center" : ""
-        }`}
-      >
-        <div
-          className={`flex flex-col gap-5 ${
-            centered ? "items-center" : "max-w-4xl"
-          }`}
-        >
-          {eyebrow && (
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
-              {Icon ? <Icon size={14} /> : <Sparkles size={14} />}
-              {eyebrow}
-            </div>
-          )}
+        {eyebrow && <div className="pml-eyebrow">{eyebrow}</div>}
 
-          <h1 className="text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
-            {title}
-          </h1>
+        <h1 className="pml-title mt-4 max-w-4xl text-4xl sm:text-5xl">
+          {title}
+        </h1>
 
-          {description && (
-            <p className="max-w-3xl text-base leading-8 text-base-content/65 sm:text-lg">
-              {description}
-            </p>
-          )}
+        {description && <p className="pml-lead mt-5">{description}</p>}
 
-          {children}
-        </div>
+        {children && <div className="mt-7">{children}</div>}
       </div>
     </section>
   );

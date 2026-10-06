@@ -3,204 +3,131 @@ import {
   BookOpen,
   Calculator,
   ChevronDown,
+  Code2,
+  FileText,
   FlaskConical,
-  FunctionSquare,
   GraduationCap,
+  Library,
   Menu,
-  Sigma,
   X,
 } from "lucide-react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 
-const navGroups = [
+const groups = [
   {
     label: "Learn",
     icon: BookOpen,
     items: [
-      {
-        label: "Learning Hub",
-        path: "/learn",
-        description: "Explore calculus topics",
-      },
-      {
-        label: "Foundations",
-        path: "/learn/foundations",
-        description: "Core mathematical ideas",
-      },
-      {
-        label: "Limits",
-        path: "/learn/limits",
-        description: "Understand limits",
-      },
-      {
-        label: "Derivatives",
-        path: "/learn/derivatives",
-        description: "Rates of change",
-      },
-      {
-        label: "Integrals",
-        path: "/learn/integrals",
-        description: "Accumulation and area",
-      },
-      {
-        label: "Series",
-        path: "/learn/series",
-        description: "Infinite sequences and series",
-      },
-      {
-        label: "Multivariable Calculus",
-        path: "/learn/multivariable-calculus",
-        description: "Functions of several variables",
-      },
-      {
-        label: "Vector Calculus",
-        path: "/learn/vector-calculus",
-        description: "Fields, gradients and integrals",
-      },
-      {
-        label: "Differential Equations",
-        path: "/learn/differential-equations",
-        description: "Model change with equations",
-      },
+      ["Learning Hub", "/learn", "Explore calculus topics"],
+      [
+        "Foundations",
+        "/learn/foundations",
+        "Functions and mathematical foundations",
+      ],
+      ["Limits", "/learn/limits", "Understand limits and continuity"],
+      [
+        "Derivatives",
+        "/learn/derivatives",
+        "Rates of change and differentiation",
+      ],
+      ["Integrals", "/learn/integrals", "Accumulation and integration"],
+      ["Series", "/learn/series", "Sequences and infinite series"],
+      [
+        "Multivariable Calculus",
+        "/learn/multivariable-calculus",
+        "Functions of several variables",
+      ],
+      [
+        "Vector Calculus",
+        "/learn/vector-calculus",
+        "Vector fields and line integrals",
+      ],
+      [
+        "Differential Equations",
+        "/learn/differential-equations",
+        "Equations involving derivatives",
+      ],
     ],
   },
-
   {
     label: "Calculators",
     icon: Calculator,
     items: [
-      {
-        label: "All Calculators",
-        path: "/calculators",
-        description: "Browse every calculator",
-      },
-      {
-        label: "Function Grapher",
-        path: "/calculators/function",
-        description: "Visualize functions",
-      },
-      {
-        label: "Limit Calculator",
-        path: "/calculators/limit",
-        description: "Estimate limits numerically",
-      },
-      {
-        label: "Derivative Calculator",
-        path: "/calculators/derivative",
-        description: "Estimate derivatives",
-      },
-      {
-        label: "Integral Calculator",
-        path: "/calculators/integral",
-        description: "Calculate numerical integrals",
-      },
-      {
-        label: "Series Calculator",
-        path: "/calculators/series",
-        description: "Explore numerical series",
-      },
-      {
-        label: "Optimization",
-        path: "/calculators/optimization",
-        description: "Find approximate extrema",
-      },
+      ["All Calculators", "/calculators", "Browse the calculator collection"],
+      [
+        "Function Grapher",
+        "/calculators/function",
+        "Explore functions visually",
+      ],
+      ["Limit Calculator", "/calculators/limit", "Evaluate limits numerically"],
+      [
+        "Derivative Calculator",
+        "/calculators/derivative",
+        "Calculate derivatives",
+      ],
+      [
+        "Integral Calculator",
+        "/calculators/integral",
+        "Calculate definite integrals",
+      ],
+      ["Series Calculator", "/calculators/series", "Explore numerical series"],
+      ["Optimization Calculator", "/calculators/optimization", "Find extrema"],
     ],
   },
-
   {
     label: "Reference",
-    icon: Sigma,
+    icon: Library,
     items: [
-      {
-        label: "Formulas",
-        path: "/formulas",
-        description: "Essential calculus formulas",
-      },
-      {
-        label: "Rules",
-        path: "/rules",
-        description: "Derivative and integration rules",
-      },
-      {
-        label: "Reference",
-        path: "/reference",
-        description: "Quick mathematical reference",
-      },
+      ["Formulas", "/formulas", "Essential calculus formulas"],
+      ["Rules", "/rules", "Derivative and integration rules"],
+      ["Reference", "/reference", "Quick mathematical reference"],
     ],
   },
-
   {
     label: "Applications",
-    icon: FunctionSquare,
-    items: [
-      {
-        label: "Applications Hub",
-        path: "/applications",
-        description: "Calculus in the real world",
-      },
-      {
-        label: "Motion",
-        path: "/applications/motion",
-        description: "Position, velocity and acceleration",
-      },
-      {
-        label: "Optimization",
-        path: "/applications/optimization",
-        description: "Optimization problems",
-      },
-      {
-        label: "Area",
-        path: "/applications/area",
-        description: "Area under curves",
-      },
-      {
-        label: "Volume",
-        path: "/applications/volume",
-        description: "Volumes of solids",
-      },
-      {
-        label: "Work",
-        path: "/applications/work",
-        description: "Work using integration",
-      },
-    ],
-  },
-
-  {
-    label: "Implementation",
     icon: FlaskConical,
     items: [
-      {
-        label: "Implementation Hub",
-        path: "/implementation",
-        description: "Numerical mathematics in code",
-      },
-      {
-        label: "Numerical Derivative",
-        path: "/implementation/numerical-derivative",
-        description: "Finite difference methods",
-      },
-      {
-        label: "Numerical Integration",
-        path: "/implementation/numerical-integration",
-        description: "Approximate integrals",
-      },
-      {
-        label: "Numerical Methods",
-        path: "/implementation/numerical-methods",
-        description: "Algorithms for calculus",
-      },
+      ["Applications", "/applications", "Calculus in the real world"],
+      [
+        "Motion",
+        "/applications/motion",
+        "Position, velocity, and acceleration",
+      ],
+      [
+        "Optimization",
+        "/applications/optimization",
+        "Solve optimization problems",
+      ],
+      ["Area", "/applications/area", "Area under curves"],
+      ["Volume", "/applications/volume", "Volumes using integration"],
+      ["Work", "/applications/work", "Work and accumulation"],
+    ],
+  },
+  {
+    label: "Implementation",
+    icon: Code2,
+    items: [
+      ["Implementation", "/implementation", "Numerical methods in code"],
+      [
+        "Numerical Derivative",
+        "/implementation/numerical-derivative",
+        "Approximate derivatives",
+      ],
+      [
+        "Numerical Integration",
+        "/implementation/numerical-integration",
+        "Approximate integrals",
+      ],
+      [
+        "Numerical Methods",
+        "/implementation/numerical-methods",
+        "Root finding and numerical techniques",
+      ],
     ],
   },
 ];
 
-function isGroupActive(items, pathname) {
-  return items.some(
-    (item) => pathname === item.path || pathname.startsWith(`${item.path}/`),
-  );
-}
-
-function DesktopDropdown({ group, isOpen, onToggle }) {
+function DesktopGroup({ group, open, onToggle }) {
   const Icon = group.icon;
 
   return (
@@ -208,48 +135,54 @@ function DesktopDropdown({ group, isOpen, onToggle }) {
       <button
         type="button"
         onClick={onToggle}
-        aria-expanded={isOpen}
-        className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition ${
-          isOpen ? "bg-primary/10 text-primary" : "hover:bg-base-200"
-        }`}
+        className={[
+          "flex items-center gap-1.5 rounded-md px-3 py-2",
+          "text-[13px] font-medium text-slate-600",
+          "transition-colors duration-150",
+          "hover:bg-slate-100 hover:text-slate-900",
+          open ? "bg-slate-100 text-slate-900" : "",
+        ].join(" ")}
+        aria-expanded={open}
       >
-        <Icon size={16} />
-
+        <Icon size={15} strokeWidth={1.8} />
         <span>{group.label}</span>
-
         <ChevronDown
-          size={15}
-          className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+          size={14}
+          className={[
+            "transition-transform duration-150",
+            open ? "rotate-180" : "",
+          ].join(" ")}
         />
       </button>
 
-      {isOpen && (
-        <div className="absolute left-1/2 top-full z-50 mt-2 w-[360px] -translate-x-1/2 overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-2xl">
-          <div className="max-h-[70vh] overflow-y-auto p-2">
-            {group.items.map((item) => (
+      {open && (
+        <div className="absolute left-0 top-full z-50 mt-2 w-[320px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-900/8">
+          <div className="border-b border-slate-100 px-4 py-3">
+            <p className="text-sm font-bold text-slate-900">{group.label}</p>
+            <p className="mt-0.5 text-xs text-slate-500">
+              Explore Practical Math Lab
+            </p>
+          </div>
+
+          <div className="max-h-[420px] overflow-y-auto p-2">
+            {group.items.map(([label, path, description]) => (
               <NavLink
-                key={item.path}
-                to={item.path}
+                key={path}
+                to={path}
                 className={({ isActive }) =>
-                  `group flex items-start gap-3 rounded-xl p-3 transition ${
+                  [
+                    "block rounded-lg px-3 py-2.5",
+                    "transition-colors duration-150",
                     isActive
-                      ? "bg-primary/10 text-primary"
-                      : "hover:bg-base-200"
-                  }`
+                      ? "bg-blue-50 text-blue-800"
+                      : "text-slate-700 hover:bg-slate-50",
+                  ].join(" ")
                 }
               >
-                <div className="mt-0.5">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-base-200 text-base-content/70 group-hover:bg-primary/10 group-hover:text-primary">
-                    <ChevronDown size={14} className="-rotate-90" />
-                  </div>
-                </div>
+                <div className="text-sm font-semibold">{label}</div>
 
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold">{item.label}</p>
-
-                  <p className="mt-0.5 text-xs leading-5 text-base-content/55">
-                    {item.description}
-                  </p>
+                <div className="mt-0.5 text-xs leading-5 text-slate-500">
+                  {description}
                 </div>
               </NavLink>
             ))}
@@ -260,46 +193,47 @@ function DesktopDropdown({ group, isOpen, onToggle }) {
   );
 }
 
-function MobileGroup({ group, openGroup, setOpenGroup, onNavigate }) {
+function MobileGroup({ group, open, onToggle, onNavigate }) {
   const Icon = group.icon;
-  const isOpen = openGroup === group.label;
 
   return (
-    <div className="border-b border-base-300/70 last:border-b-0">
+    <div className="border-b border-slate-100">
       <button
         type="button"
-        onClick={() => setOpenGroup(isOpen ? null : group.label)}
-        className="flex w-full items-center justify-between px-3 py-3 text-left"
+        onClick={onToggle}
+        className="flex w-full items-center justify-between px-4 py-3.5 text-left"
       >
-        <span className="flex items-center gap-3 font-semibold">
-          <Icon size={18} className="text-primary" />
+        <span className="flex items-center gap-3 text-sm font-semibold text-slate-800">
+          <Icon size={17} className="text-slate-500" />
           {group.label}
         </span>
 
         <ChevronDown
-          size={18}
-          className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+          size={17}
+          className={[
+            "text-slate-400 transition-transform",
+            open ? "rotate-180" : "",
+          ].join(" ")}
         />
       </button>
 
-      {isOpen && (
-        <div className="mb-2 space-y-1 rounded-xl bg-base-200/60 p-2">
-          {group.items.map((item) => (
+      {open && (
+        <div className="space-y-1 bg-slate-50 px-3 pb-3">
+          {group.items.map(([label, path]) => (
             <NavLink
-              key={item.path}
-              to={item.path}
+              key={path}
+              to={path}
               onClick={onNavigate}
               className={({ isActive }) =>
-                `block rounded-lg px-3 py-2.5 transition ${
-                  isActive ? "bg-primary/10 text-primary" : "hover:bg-base-300"
-                }`
+                [
+                  "block rounded-lg px-3 py-2.5 text-sm",
+                  isActive
+                    ? "bg-white font-semibold text-blue-700 shadow-sm"
+                    : "text-slate-600",
+                ].join(" ")
               }
             >
-              <p className="text-sm font-medium">{item.label}</p>
-
-              <p className="mt-0.5 text-xs text-base-content/55">
-                {item.description}
-              </p>
+              {label}
             </NavLink>
           ))}
         </div>
@@ -309,21 +243,23 @@ function MobileGroup({ group, openGroup, setOpenGroup, onNavigate }) {
 }
 
 export default function Navbar() {
-  const location = useLocation();
-
+  const [desktopOpen, setDesktopOpen] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
   const [mobileGroup, setMobileGroup] = useState(null);
 
   const navRef = useRef(null);
+  const location = useLocation();
 
-  /*
-   * Close desktop dropdown when clicking outside
-   */
+  useEffect(() => {
+    setDesktopOpen(null);
+    setMobileOpen(false);
+    setMobileGroup(null);
+  }, [location.pathname]);
+
   useEffect(() => {
     function handleOutsideClick(event) {
       if (navRef.current && !navRef.current.contains(event.target)) {
-        setOpenDropdown(null);
+        setDesktopOpen(null);
       }
     }
 
@@ -334,24 +270,8 @@ export default function Navbar() {
     };
   }, []);
 
-  /*
-   * Close menus whenever the route changes.
-   */
   useEffect(() => {
-    setOpenDropdown(null);
-    setMobileOpen(false);
-    setMobileGroup(null);
-  }, [location.pathname]);
-
-  /*
-   * Prevent background scrolling when mobile menu is open.
-   */
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
 
     return () => {
       document.body.style.overflow = "";
@@ -361,155 +281,121 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className="sticky top-0 z-50 border-b border-base-300/80 bg-base-100/95 backdrop-blur-xl"
+      className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur"
     >
-      <div className="mx-auto max-w-7xl px-4">
-        <div className="flex h-16 items-center justify-between gap-4">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="group flex min-w-0 items-center gap-3"
-            aria-label="Practical Math Lab home"
+      <div className="mx-auto flex h-[68px] max-w-[1180px] items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Brand */}
+        <Link to="/" className="group flex min-w-0 items-center gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#17324d] text-white">
+            <GraduationCap size={20} strokeWidth={1.8} />
+          </div>
+
+          <div className="min-w-0">
+            <div className="truncate text-[15px] font-bold tracking-tight text-slate-900">
+              Practical Math Lab
+            </div>
+
+            <div className="hidden text-[10px] font-medium tracking-[0.08em] text-slate-400 sm:block">
+              CALCULUS · THEORY · APPLICATION
+            </div>
+          </div>
+        </Link>
+
+        {/* Desktop */}
+        <div className="hidden items-center gap-1 xl:flex">
+          {groups.map((group, index) => (
+            <DesktopGroup
+              key={group.label}
+              group={group}
+              open={desktopOpen === index}
+              onToggle={() =>
+                setDesktopOpen(desktopOpen === index ? null : index)
+              }
+            />
+          ))}
+
+          <div className="mx-2 h-6 w-px bg-slate-200" />
+
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              [
+                "rounded-md px-3 py-2 text-[13px] font-medium",
+                isActive
+                  ? "text-blue-700"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
+              ].join(" ")
+            }
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-content shadow-sm transition-transform group-hover:scale-105">
-              <GraduationCap size={22} />
-            </div>
+            About
+          </NavLink>
 
-            <div className="hidden min-[420px]:block">
-              <p className="text-sm font-extrabold leading-tight tracking-tight sm:text-base">
-                Practical Math Lab
-              </p>
+          <NavLink
+            to="/contact"
+            style={{ color: "#ffffff" }}
+            className="ml-1 rounded-md bg-[#17324d] px-3.5 py-2 text-[13px] font-semibold transition-colors hover:bg-[#10283f]"
+          >
+            Contact
+          </NavLink>
+        </div>
 
-              <p className="hidden text-[10px] leading-tight text-base-content/50 sm:block">
-                Learn · Calculate · Understand
-              </p>
-            </div>
-          </Link>
+        {/* Mobile button */}
+        <button
+          type="button"
+          onClick={() => setMobileOpen((value) => !value)}
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 xl:hidden"
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+        >
+          {mobileOpen ? <X size={21} /> : <Menu size={21} />}
+        </button>
+      </div>
 
-          {/* Desktop navigation */}
-          <nav className="hidden items-center gap-0.5 lg:flex">
-            {navGroups.map((group) => (
-              <DesktopDropdown
-                key={group.label}
-                group={group}
-                isOpen={openDropdown === group.label}
-                onToggle={() =>
-                  setOpenDropdown(
-                    openDropdown === group.label ? null : group.label,
-                  )
-                }
-              />
-            ))}
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="max-h-[calc(100vh-68px)] overflow-y-auto border-t border-slate-200 bg-white xl:hidden">
+          <div className="border-b border-slate-100 px-4 py-4">
+            <Link
+              to="/"
+              onClick={() => setMobileOpen(false)}
+              className="text-sm font-semibold text-slate-900"
+            >
+              Practical Math Lab
+            </Link>
 
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              Calculus from first principles to practical applications.
+            </p>
+          </div>
+
+          {groups.map((group, index) => (
+            <MobileGroup
+              key={group.label}
+              group={group}
+              open={mobileGroup === index}
+              onToggle={() =>
+                setMobileGroup(mobileGroup === index ? null : index)
+              }
+              onNavigate={() => setMobileOpen(false)}
+            />
+          ))}
+
+          <div className="grid grid-cols-2 gap-2 p-4">
             <NavLink
               to="/about"
-              className={({ isActive }) =>
-                `rounded-lg px-3 py-2 text-sm font-medium transition ${
-                  isActive ? "bg-primary/10 text-primary" : "hover:bg-base-200"
-                }`
-              }
+              onClick={() => setMobileOpen(false)}
+              className="rounded-lg border border-slate-200 px-4 py-3 text-center text-sm font-semibold text-slate-700"
             >
               About
             </NavLink>
-          </nav>
 
-          {/* Desktop right side */}
-          <div className="hidden items-center gap-2 lg:flex">
-            <Link to="/calculators" className="btn btn-primary btn-sm gap-2">
-              <Calculator size={16} />
-              Try a Calculator
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen((value) => !value)}
-            className="btn btn-square btn-ghost lg:hidden"
-            aria-label={
-              mobileOpen ? "Close navigation menu" : "Open navigation menu"
-            }
-            aria-expanded={mobileOpen}
-          >
-            {mobileOpen ? <X size={23} /> : <Menu size={23} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile navigation */}
-      {mobileOpen && (
-        <div className="border-t border-base-300 bg-base-100 lg:hidden">
-          <div className="mx-auto max-h-[calc(100vh-4rem)] max-w-2xl overflow-y-auto px-4 py-4">
-            {/* Mobile quick action */}
-            <Link
-              to="/calculators"
+            <NavLink
+              to="/contact"
               onClick={() => setMobileOpen(false)}
-              className="mb-4 flex items-center justify-between rounded-2xl bg-primary p-4 text-primary-content shadow-md"
+              className="rounded-lg bg-[#17324d] px-4 py-3 text-center text-sm font-semibold text-white"
             >
-              <div className="flex items-center gap-3">
-                <Calculator size={21} />
-
-                <div>
-                  <p className="font-bold">Explore Calculators</p>
-
-                  <p className="text-xs opacity-80">
-                    Calculate and visualize mathematics
-                  </p>
-                </div>
-              </div>
-
-              <ChevronDown size={18} className="-rotate-90" />
-            </Link>
-
-            {/* Mobile groups */}
-            <div className="overflow-hidden rounded-2xl border border-base-300 bg-base-100">
-              {navGroups.map((group) => (
-                <MobileGroup
-                  key={group.label}
-                  group={group}
-                  openGroup={mobileGroup}
-                  setOpenGroup={setMobileGroup}
-                  onNavigate={() => setMobileOpen(false)}
-                />
-              ))}
-            </div>
-
-            {/* Mobile static links */}
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <NavLink
-                to="/about"
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) =>
-                  `rounded-xl border p-3 text-center text-sm font-semibold ${
-                    isActive
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-base-300 hover:bg-base-200"
-                  }`
-                }
-              >
-                About
-              </NavLink>
-
-              <NavLink
-                to="/contact"
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) =>
-                  `rounded-xl border p-3 text-center text-sm font-semibold ${
-                    isActive
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-base-300 hover:bg-base-200"
-                  }`
-                }
-              >
-                Contact
-              </NavLink>
-            </div>
-
-            {/* Mobile footer hint */}
-            <div className="mt-5 flex items-center justify-center gap-2 pb-2 text-xs text-base-content/45">
-              <Sigma size={14} />
-              <span>Practical Math Lab · Calculus made practical</span>
-            </div>
+              Contact
+            </NavLink>
           </div>
         </div>
       )}

@@ -2,54 +2,64 @@ import {
   ArrowRight,
   BookOpen,
   Calculator,
-  CheckCircle2,
-  FlaskConical,
-  GraduationCap,
+  Code2,
+  FunctionSquare,
+  Infinity,
+  LineChart,
   Sigma,
-  Sparkles,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import SEO from "../components/SEO";
-import TopicCard from "../components/TopicCard";
-import CalculatorCard from "../components/CalculatorCard";
+import SEO from "../components/SEO.jsx";
+import TopicCard from "../components/TopicCard.jsx";
+import CalculatorCard from "../components/CalculatorCard.jsx";
 
 const topics = [
   {
-    title: "Calculus Foundations",
+    title: "Foundations",
     description:
-      "Build the mathematical foundation needed to understand functions, graphs, rates of change, limits, continuity, and the central ideas of calculus.",
+      "Build the mathematical foundation needed to understand functions, graphs, notation, and change.",
     path: "/learn/foundations",
-    icon: GraduationCap,
+    icon: BookOpen,
     level: "Beginner",
-    topics: ["Functions", "Graphs", "Rates", "Continuity"],
+    topics: ["Functions", "Graphs", "Notation", "Algebra"],
   },
   {
     title: "Limits",
     description:
-      "Understand the language of limits and how limits provide the foundation for derivatives, continuity, and integration.",
+      "Understand the central idea behind calculus: what happens as a quantity approaches a value.",
     path: "/learn/limits",
-    icon: Sigma,
+    icon: Infinity,
     level: "Beginner",
-    topics: ["Limits", "Continuity", "One-sided Limits", "Infinity"],
+    topics: [
+      "Continuity",
+      "One-sided limits",
+      "Infinite limits",
+      "Squeeze theorem",
+    ],
   },
   {
     title: "Derivatives",
     description:
-      "Learn derivatives from first principles, derivative rules, implicit differentiation, higher derivatives, and applications.",
+      "Learn how derivatives describe instantaneous change, slopes, motion, and optimization.",
     path: "/learn/derivatives",
-    icon: FlaskConical,
-    level: "Intermediate",
-    topics: ["Rules", "Chain Rule", "Implicit", "Optimization"],
+    icon: LineChart,
+    level: "Core",
+    topics: [
+      "Product rule",
+      "Chain rule",
+      "Implicit differentiation",
+      "Applications",
+    ],
   },
   {
     title: "Integrals",
     description:
-      "Explore indefinite and definite integrals, the Fundamental Theorem of Calculus, substitution, and practical applications.",
+      "Study accumulation, area, the Fundamental Theorem of Calculus, and practical integration methods.",
     path: "/learn/integrals",
-    icon: BookOpen,
-    level: "Intermediate",
-    topics: ["Antiderivatives", "Area", "FTC", "Substitution"],
+    icon: Sigma,
+    level: "Core",
+    topics: ["Antiderivatives", "Definite integrals", "FTC", "Applications"],
   },
 ];
 
@@ -57,103 +67,226 @@ const calculators = [
   {
     title: "Function Grapher",
     description:
-      "Explore functions visually and develop intuition about curves, intercepts, growth, and mathematical behavior.",
+      "Plot mathematical functions and explore their behavior visually.",
     path: "/calculators/function",
-    icon: Sigma,
-    category: "Visualization",
-    difficulty: "All levels",
-    featured: true,
+    icon: FunctionSquare,
+    category: "Graphing",
   },
   {
     title: "Derivative Calculator",
     description:
-      "Calculate derivatives and study how the rate of change of a function behaves.",
+      "Calculate and understand numerical derivatives at selected points.",
     path: "/calculators/derivative",
-    icon: FlaskConical,
-    category: "Differentiation",
-    difficulty: "Intermediate",
+    icon: LineChart,
+    category: "Derivatives",
   },
   {
     title: "Integral Calculator",
     description:
-      "Evaluate integrals and connect antiderivatives with area, accumulation, and numerical methods.",
+      "Evaluate definite integrals and explore numerical integration.",
     path: "/calculators/integral",
-    icon: Calculator,
-    category: "Integration",
-    difficulty: "Intermediate",
+    icon: Sigma,
+    category: "Integrals",
   },
 ];
 
-const benefits = [
-  "Concept-first explanations",
-  "Interactive calculations",
-  "Real-world applications",
+const principles = [
+  {
+    number: "01",
+    title: "Understand the idea",
+    description:
+      "Start with what a mathematical concept means before relying on a formula.",
+  },
+  {
+    number: "02",
+    title: "See the mathematics",
+    description:
+      "Use formulas, graphs, examples, and visual explanations to connect the ideas.",
+  },
+  {
+    number: "03",
+    title: "Apply the method",
+    description:
+      "Work through practical problems and see where calculus is useful.",
+  },
 ];
 
 export default function Home() {
   return (
     <>
       <SEO
-        title="Practical Math Lab | Learn Calculus"
-        description="Learn calculus through clear explanations, formulas, rules, interactive calculators, examples, applications, visualization, and numerical methods."
-        canonical="/"
+        title="Practical Math Lab | Learn Calculus Clearly"
+        description="Learn calculus from first principles with clear explanations, formulas, examples, applications, and interactive calculators."
       />
 
-      {/* ================================================================
+      {/* =====================================================
           HERO
-      ================================================================ */}
-      <section className="relative overflow-hidden border-b border-base-300/60">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10" />
+          ===================================================== */}
 
-        <div className="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
+      <section className="relative overflow-hidden border-b border-slate-200 bg-white">
+        <div className="absolute inset-0 pml-math-grid opacity-60" />
 
-        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-secondary/10 blur-3xl" />
-
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+        <div className="relative mx-auto max-w-[1180px] px-4 py-16 sm:px-6 md:py-24 lg:px-8">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-              <Sparkles size={16} />
-              Calculus from first principles to applications
-            </div>
+            <div className="pml-eyebrow">Calculus · Theory · Application</div>
 
-            <h1 className="mt-6 text-4xl font-black tracking-tight sm:text-5xl lg:text-7xl">
-              Understand calculus.
-              <span className="block text-primary">
-                Don't just memorize it.
-              </span>
+            <h1 className="mt-6 max-w-4xl text-5xl font-extrabold leading-[0.98] tracking-[-0.055em] text-slate-900 sm:text-6xl lg:text-7xl">
+              Calculus explained
+              <span className="block text-[#17324d]">clearly.</span>
             </h1>
 
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-base-content/65 sm:text-xl">
-              Practical Math Lab brings together explanations, formulas,
-              calculations, visualizations, applications, and numerical methods
-              into one structured calculus learning resource.
+            <p className="mt-7 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+              Learn the ideas behind calculus, understand the formulas, work
+              through examples, and apply the mathematics with practical tools.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                to="/learn"
-                className="btn btn-primary btn-lg shadow-lg shadow-primary/20"
-              >
-                <BookOpen size={19} />
-                Start Learning
-                <ArrowRight size={18} />
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link to="/learn" className="pml-btn-primary">
+                Start learning
+                <ArrowRight size={17} />
               </Link>
 
-              <Link to="/calculators" className="btn btn-outline btn-lg">
-                <Calculator size={19} />
-                Explore Calculators
+              <Link to="/calculators" className="pml-btn-secondary">
+                Browse calculators
+                <Calculator size={17} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Small mathematical statement */}
+          <div className="mt-16 max-w-3xl border-l-2 border-blue-600 pl-5">
+            <p className="font-serif text-xl leading-relaxed text-slate-700 sm:text-2xl">
+              Calculus is the mathematics of change, accumulation, and the
+              relationship between the two.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          LEARNING PATH
+          ===================================================== */}
+
+      <section className="pml-section">
+        <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+            <div>
+              <div className="pml-eyebrow">Learning path</div>
+
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Build your understanding step by step
+              </h2>
+
+              <p className="mt-3 max-w-2xl text-slate-500 leading-7">
+                Start with the foundations and gradually move toward the central
+                ideas of calculus.
+              </p>
+            </div>
+
+            <Link
+              to="/learn"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800"
+            >
+              View all topics
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
+            {topics.map((topic) => (
+              <TopicCard key={topic.path} {...topic} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          CALCULATORS
+          ===================================================== */}
+
+      <section className="border-y border-slate-200 bg-white">
+        <div className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+            <div>
+              <div className="pml-eyebrow">Interactive tools</div>
+
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Calculate and explore
+              </h2>
+
+              <p className="mt-3 max-w-2xl text-slate-500 leading-7">
+                Use interactive tools to test ideas, check calculations, and
+                explore mathematical behavior.
+              </p>
+            </div>
+
+            <Link
+              to="/calculators"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800"
+            >
+              All calculators
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {calculators.map((calculator) => (
+              <CalculatorCard key={calculator.path} {...calculator} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          PHILOSOPHY
+          ===================================================== */}
+
+      <section className="pml-section">
+        <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+            <div>
+              <div className="pml-eyebrow">Our approach</div>
+
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Learn the mathematics,
+                <span className="block text-[#17324d]">
+                  not just the procedure.
+                </span>
+              </h2>
+
+              <p className="mt-5 max-w-lg leading-7 text-slate-600">
+                A good calculus resource should help you understand why a method
+                works, when to use it, and what the result actually means.
+              </p>
+
+              <Link
+                to="/about"
+                className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-blue-700"
+              >
+                Learn more about Practical Math Lab
+                <ArrowRight size={16} />
               </Link>
             </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {benefits.map((benefit) => (
+            <div className="divide-y divide-slate-200 border-y border-slate-200">
+              {principles.map((principle) => (
                 <div
-                  key={benefit}
-                  className="flex items-center gap-2 text-sm text-base-content/65"
+                  key={principle.number}
+                  className="grid gap-4 py-7 sm:grid-cols-[64px_1fr]"
                 >
-                  <CheckCircle2 size={17} className="shrink-0 text-success" />
+                  <div className="font-mono text-sm font-semibold text-blue-700">
+                    {principle.number}
+                  </div>
 
-                  <span>{benefit}</span>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900">
+                      {principle.title}
+                    </h3>
+
+                    <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+                      {principle.description}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -161,127 +294,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================================================================
-          LEARNING PATH
-      ================================================================ */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="max-w-3xl">
-          <p className="text-sm font-bold uppercase tracking-widest text-primary">
-            A structured path
-          </p>
+      {/* =====================================================
+          FINAL CTA
+          ===================================================== */}
 
-          <h2 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
-            Learn calculus in the right order
-          </h2>
-
-          <p className="mt-4 text-base leading-8 text-base-content/60">
-            Calculus becomes easier when its ideas are connected. Start with
-            foundations, understand limits, then build toward derivatives,
-            integrals, series, multivariable calculus, and differential
-            equations.
-          </p>
-        </div>
-
-        {/* IMPORTANT: explicit grid */}
-        <div className="mt-10 grid w-full grid-cols-1 gap-6 md:grid-cols-2">
-          {topics.map((topic) => (
-            <div key={topic.path} className="min-w-0">
-              <TopicCard {...topic} />
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-10 text-center">
-          <Link to="/learn" className="btn btn-outline">
-            Explore the complete curriculum
-            <ArrowRight size={17} />
-          </Link>
-        </div>
-      </section>
-
-      {/* ================================================================
-          CALCULATORS
-      ================================================================ */}
-      <section className="border-y border-base-300/60 bg-base-200/40">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-3xl">
-              <p className="text-sm font-bold uppercase tracking-widest text-primary">
-                Learn by doing
+      <section className="border-t border-slate-200 bg-[#17324d]">
+        <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 md:py-16 lg:px-8">
+          <div className="flex flex-col justify-between gap-7 md:flex-row md:items-center">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-blue-200">
+                Ready to begin?
               </p>
 
-              <h2 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
-                Interactive calculus tools
+              <h2 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                Start with the mathematics that interests you.
               </h2>
 
-              <p className="mt-4 text-base leading-8 text-base-content/60">
-                Experiment with mathematical ideas using interactive tools. Each
-                calculator is designed to support understanding rather than
-                replace it.
+              <p className="mt-3 max-w-xl text-sm leading-6 text-slate-300">
+                Explore a topic, work through an example, or use a calculator to
+                investigate an idea.
               </p>
             </div>
 
-            <Link to="/calculators" className="btn btn-outline shrink-0">
-              All calculators
-              <ArrowRight size={17} />
+            <Link
+              to="/learn"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-[#17324d] transition-colors hover:bg-slate-100"
+            >
+              Explore calculus
+              <ArrowRight size={16} />
             </Link>
-          </div>
-
-          {/* IMPORTANT: explicit 3-column grid */}
-          <div className="mt-10 grid w-full grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {calculators.map((calculator) => (
-              <div key={calculator.path} className="min-w-0">
-                <CalculatorCard {...calculator} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================================================================
-          PHILOSOPHY
-      ================================================================ */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-3xl border border-base-300 bg-base-200/40">
-          <div className="grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr]">
-            {/* Left */}
-            <div className="p-8 sm:p-12">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-content shadow-lg">
-                <Sigma size={28} />
-              </div>
-
-              <h2 className="mt-6 text-3xl font-black tracking-tight">
-                The Practical Math Lab approach
-              </h2>
-
-              <p className="mt-4 text-base leading-7 text-base-content/55">
-                Learn the meaning behind the mathematics, not just the
-                procedure.
-              </p>
-            </div>
-
-            {/* Right */}
-            <div className="border-t border-base-300/70 p-8 sm:p-12 lg:border-l lg:border-t-0">
-              <div className="space-y-6 text-base leading-8 text-base-content/65">
-                <p>
-                  Calculus is not a collection of unrelated formulas. Limits
-                  explain instantaneous change, derivatives describe that
-                  change, and integrals describe accumulation.
-                </p>
-
-                <p>
-                  Our goal is to connect those ideas. When you encounter a
-                  formula, you should understand what it means, when it applies,
-                  how it is derived, and how it can be used.
-                </p>
-
-                <p>
-                  From introductory calculus to numerical implementation,
-                  Practical Math Lab is designed to be a reference you can
-                  return to whenever a concept needs clarification.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </section>

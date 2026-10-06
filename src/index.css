@@ -5,10 +5,34 @@
 
 /* =========================================================
    PRACTICAL MATH LAB
-   Academic / Editorial Design System
+   Visual System
+   Academic • Editorial • Mathematical
    ========================================================= */
 
 :root {
+  --pml-paper: #f8f7f4;
+  --pml-white: #ffffff;
+
+  --pml-ink: #17202a;
+  --pml-ink-soft: #34404c;
+  --pml-muted: #687481;
+
+  --pml-navy: #17324d;
+  --pml-navy-dark: #10283f;
+
+  --pml-blue: #2f5bea;
+  --pml-blue-dark: #2448c7;
+  --pml-blue-soft: #eef3ff;
+
+  --pml-border: #dededb;
+  --pml-border-light: #e9e9e6;
+
+  --pml-green: #18794e;
+  --pml-green-soft: #eef9f3;
+
+  --pml-orange: #9a5b00;
+  --pml-orange-soft: #fff7e8;
+
   font-family:
     "Inter",
     system-ui,
@@ -17,8 +41,8 @@
     "Segoe UI",
     sans-serif;
 
-  color: #172033;
-  background: #fafaf9;
+  color: var(--pml-ink);
+  background: var(--pml-paper);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,12 +50,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* =========================================================
-   Base
-   ========================================================= */
+* {
+  box-sizing: border-box;
+}
 
 html {
-  background: #fafaf9;
+  min-width: 320px;
+  background: var(--pml-paper);
   scroll-behavior: smooth;
 }
 
@@ -40,12 +65,8 @@ body {
   min-height: 100vh;
   margin: 0;
 
-  background: #fafaf9;
-  color: #172033;
-}
-
-* {
-  box-sizing: border-box;
+  background: var(--pml-paper);
+  color: var(--pml-ink);
 }
 
 button,
@@ -60,7 +81,12 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+button {
+  cursor: pointer;
+}
+
 a {
+  color: inherit;
   text-decoration: none;
 }
 
@@ -70,8 +96,8 @@ svg {
 }
 
 ::selection {
-  background: #dbeafe;
-  color: #172033;
+  background: #d9e2ff;
+  color: var(--pml-ink);
 }
 
 /* =========================================================
@@ -83,19 +109,21 @@ svg {
 }
 
 .font-serif {
-  font-family:
-    "Source Serif 4",
-    Georgia,
-    serif;
+  font-family: "Source Serif 4", Georgia, serif;
 }
 
 /* =========================================================
-   Main container
+   Site shell
    ========================================================= */
+
+.pml-page {
+  min-height: 100vh;
+  background: var(--pml-paper);
+}
 
 .pml-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1180px;
   margin-inline: auto;
   padding-inline: 1rem;
 }
@@ -113,7 +141,7 @@ svg {
 }
 
 /* =========================================================
-   Page sections
+   Sections
    ========================================================= */
 
 .pml-section {
@@ -122,43 +150,41 @@ svg {
 
 @media (min-width: 768px) {
   .pml-section {
-    padding-block: 5rem;
+    padding-block: 5.5rem;
   }
 }
 
 /* =========================================================
-   Academic grid
-   Very subtle — almost invisible
+   Subtle mathematical grid
    ========================================================= */
 
-.math-grid {
+.pml-math-grid {
   background-image:
     linear-gradient(
-      #e5e7eb 1px,
+      rgba(23, 50, 77, 0.045) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      #e5e7eb 1px,
+      rgba(23, 50, 77, 0.045) 1px,
       transparent 1px
     );
 
-  background-size: 40px 40px;
-  opacity: 0.45;
+  background-size: 36px 36px;
 }
 
 /* =========================================================
-   Cards
+   Global card
    ========================================================= */
 
 .pml-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border: 1px solid var(--pml-border);
+  border-radius: 14px;
 
-  background: #ffffff;
+  background: var(--pml-white);
 
   box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.03);
+    0 1px 2px rgba(23, 32, 42, 0.025);
 
   transition:
     border-color 180ms ease,
@@ -167,12 +193,12 @@ svg {
 }
 
 .pml-card:hover {
-  border-color: #cbd5e1;
+  border-color: #c8cbd0;
 
   box-shadow:
-    0 8px 24px rgba(15, 23, 42, 0.06);
+    0 8px 24px rgba(23, 32, 42, 0.06);
 
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 /* =========================================================
@@ -181,7 +207,7 @@ svg {
 
 .pml-grid {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .pml-grid-2,
@@ -217,92 +243,111 @@ svg {
 }
 
 /* =========================================================
-   Headings
+   Eyebrow
    ========================================================= */
 
-.pml-title {
-  color: #172033;
-  font-weight: 800;
-  letter-spacing: -0.035em;
-}
-
-.pml-subtitle {
-  color: #475569;
-  line-height: 1.75;
-}
-
 .pml-eyebrow {
-  color: #2563eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 
-  font-size: 0.75rem;
+  color: var(--pml-blue);
+
+  font-size: 0.72rem;
   font-weight: 700;
-
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
   text-transform: uppercase;
 }
 
-/* =========================================================
-   Links
-   ========================================================= */
-
-.pml-link {
-  color: #1e40af;
-  font-weight: 600;
-
-  transition: color 150ms ease;
-}
-
-.pml-link:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.pml-eyebrow::before {
+  width: 22px;
+  height: 1px;
+  background: currentColor;
+  content: "";
 }
 
 /* =========================================================
-   Formula
+   Page title
    ========================================================= */
 
-.formula-box {
-  border: 1px solid #dbeafe;
-  border-left: 3px solid #2563eb;
+.pml-title {
+  color: var(--pml-ink);
 
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.pml-lead {
+  max-width: 700px;
+
+  color: var(--pml-muted);
+
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+
+.pml-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  min-height: 44px;
+
+  border: 1px solid var(--pml-navy);
   border-radius: 8px;
 
-  background: #f8fbff;
+  background: var(--pml-navy);
+  color: #ffffff;
 
-  padding: 1.25rem;
+  padding: 0.65rem 1rem;
 
-  color: #1e3a5f;
-}
-
-.formula-box .formula {
-  color: #172033;
-
-  font-family:
-    "JetBrains Mono",
-    monospace;
-
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
+
+  transition:
+    background 150ms ease,
+    border-color 150ms ease;
 }
 
-/* =========================================================
-   Code
-   ========================================================= */
-
-.code-block {
-  overflow-x: auto;
-
-  border: 1px solid #1e293b;
-  border-radius: 10px;
-
-  background: #111827;
-  color: #e5e7eb;
+.pml-btn-primary:hover {
+  border-color: var(--pml-navy-dark);
+  background: var(--pml-navy-dark);
 }
 
-.code-block code {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.875rem;
+.pml-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  min-height: 44px;
+
+  border: 1px solid #cfd3d8;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: var(--pml-ink-soft);
+
+  padding: 0.65rem 1rem;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  transition:
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.pml-btn-secondary:hover {
+  border-color: #aeb5bd;
+  background: #f5f6f7;
 }
 
 /* =========================================================
@@ -312,13 +357,15 @@ svg {
 .pml-input {
   width: 100%;
 
-  border: 1px solid #cbd5e1;
+  min-height: 44px;
+
+  border: 1px solid #cfd3d8;
   border-radius: 8px;
 
   background: #ffffff;
-  color: #172033;
+  color: var(--pml-ink);
 
-  padding: 0.7rem 0.8rem;
+  padding: 0.65rem 0.8rem;
 
   outline: none;
 
@@ -328,106 +375,41 @@ svg {
 }
 
 .pml-input::placeholder {
-  color: #94a3b8;
+  color: #98a1aa;
 }
 
 .pml-input:hover {
-  border-color: #94a3b8;
+  border-color: #aeb5bd;
 }
 
 .pml-input:focus {
-  border-color: #2563eb;
+  border-color: var(--pml-blue);
 
   box-shadow:
-    0 0 0 3px rgba(37, 99, 235, 0.1);
+    0 0 0 3px rgba(47, 91, 234, 0.1);
 }
 
 /* =========================================================
-   Primary button
+   Formula
    ========================================================= */
 
-.pml-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+.pml-formula {
+  border: 1px solid #dbe4ff;
+  border-left: 3px solid var(--pml-blue);
 
-  border: 1px solid #1e3a5f;
-  border-radius: 8px;
+  border-radius: 10px;
 
-  background: #1e3a5f;
-  color: #ffffff;
+  background: var(--pml-blue-soft);
 
-  padding: 0.7rem 1rem;
+  padding: 1rem 1.15rem;
 
+  color: var(--pml-navy);
+}
+
+.pml-formula code,
+.pml-formula .formula {
+  font-family: "JetBrains Mono", monospace;
   font-weight: 600;
-
-  transition:
-    background 150ms ease,
-    border-color 150ms ease;
-}
-
-.pml-btn-primary:hover {
-  border-color: #172f4d;
-  background: #172f4d;
-}
-
-/* =========================================================
-   Secondary button
-   ========================================================= */
-
-.pml-btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-
-  background: #ffffff;
-  color: #334155;
-
-  padding: 0.7rem 1rem;
-
-  font-weight: 600;
-
-  transition:
-    background 150ms ease,
-    border-color 150ms ease;
-}
-
-.pml-btn-secondary:hover {
-  border-color: #94a3b8;
-  background: #f8fafc;
-}
-
-/* =========================================================
-   Information
-   ========================================================= */
-
-.pml-info {
-  border: 1px solid #bfdbfe;
-  border-radius: 8px;
-
-  background: #eff6ff;
-  color: #1e3a8a;
-}
-
-.pml-success {
-  border: 1px solid #bbf7d0;
-  border-radius: 8px;
-
-  background: #f0fdf4;
-  color: #166534;
-}
-
-.pml-warning {
-  border: 1px solid #fde68a;
-  border-radius: 8px;
-
-  background: #fffbeb;
-  color: #92400e;
 }
 
 /* =========================================================
@@ -437,7 +419,7 @@ svg {
 .pml-prose {
   max-width: 760px;
 
-  color: #475569;
+  color: var(--pml-ink-soft);
 
   font-size: 1rem;
   line-height: 1.85;
@@ -446,7 +428,7 @@ svg {
 .pml-prose h2,
 .pml-prose h3,
 .pml-prose h4 {
-  color: #172033;
+  color: var(--pml-ink);
   font-weight: 700;
   letter-spacing: -0.025em;
 }
@@ -454,14 +436,12 @@ svg {
 .pml-prose h2 {
   margin-top: 3rem;
   margin-bottom: 1rem;
-
-  font-size: 1.6rem;
+  font-size: 1.55rem;
 }
 
 .pml-prose h3 {
   margin-top: 2rem;
   margin-bottom: 0.75rem;
-
   font-size: 1.25rem;
 }
 
@@ -480,42 +460,57 @@ svg {
 }
 
 .pml-prose strong {
-  color: #172033;
+  color: var(--pml-ink);
+}
+
+.pml-prose a {
+  color: var(--pml-blue);
+  font-weight: 600;
+}
+
+.pml-prose a:hover {
+  color: var(--pml-blue-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .pml-prose code {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--pml-border-light);
   border-radius: 5px;
 
-  background: #f1f5f9;
+  background: #f1f2f3;
 
   padding: 0.15rem 0.35rem;
 
-  color: #1e40af;
+  color: var(--pml-navy);
 
   font-family: "JetBrains Mono", monospace;
+  font-size: 0.9em;
 }
 
 /* =========================================================
    Tables
    ========================================================= */
 
-.pml-table {
-  width: 100%;
+.pml-table-wrap {
+  overflow-x: auto;
 
-  overflow: hidden;
-
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--pml-border);
   border-radius: 10px;
 
   background: #ffffff;
 }
 
-.pml-table th {
-  background: #f8fafc;
-  color: #334155;
+.pml-table {
+  width: 100%;
+  border-collapse: collapse;
+}
 
-  font-size: 0.875rem;
+.pml-table th {
+  background: #f5f6f7;
+  color: var(--pml-ink-soft);
+
+  font-size: 0.82rem;
   font-weight: 700;
 
   text-align: left;
@@ -523,12 +518,53 @@ svg {
 
 .pml-table th,
 .pml-table td {
-  border-bottom: 1px solid #e2e8f0;
-  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--pml-border-light);
+  padding: 0.8rem 1rem;
 }
 
 .pml-table tr:last-child td {
   border-bottom: 0;
+}
+
+/* =========================================================
+   Code
+   ========================================================= */
+
+.pml-code {
+  overflow-x: auto;
+
+  border: 1px solid #263342;
+  border-radius: 10px;
+
+  background: #18222d;
+  color: #e8edf2;
+
+  padding: 1rem;
+}
+
+.pml-code code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.875rem;
+}
+
+/* =========================================================
+   Status
+   ========================================================= */
+
+.pml-success {
+  border: 1px solid #b9e4ce;
+  border-radius: 9px;
+
+  background: var(--pml-green-soft);
+  color: var(--pml-green);
+}
+
+.pml-warning {
+  border: 1px solid #f1d7a3;
+  border-radius: 9px;
+
+  background: var(--pml-orange-soft);
+  color: var(--pml-orange);
 }
 
 /* =========================================================
@@ -537,7 +573,16 @@ svg {
 
 .pml-divider {
   height: 1px;
-  background: #e5e7eb;
+  background: var(--pml-border);
+}
+
+/* =========================================================
+   Focus
+   ========================================================= */
+
+:focus-visible {
+  outline: 2px solid var(--pml-blue);
+  outline-offset: 2px;
 }
 
 /* =========================================================
@@ -549,23 +594,14 @@ svg {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #efefed;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: #cbd5e1;
+  background: #c8cbd0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* =========================================================
-   Accessibility
-   ========================================================= */
-
-:focus-visible {
-  outline: 2px solid #2563eb;
-  outline-offset: 2px;
+  background: #aeb4bb;
 }

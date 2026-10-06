@@ -1,4 +1,4 @@
-import { ArrowRight, Calculator, Sparkles } from "lucide-react";
+import { ArrowRight, Calculator } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function CalculatorCard({
@@ -7,55 +7,58 @@ export default function CalculatorCard({
   path,
   icon: Icon = Calculator,
   category,
-  difficulty = "All levels",
-  featured = false,
 }) {
   return (
     <Link
       to={path}
-      className={`group relative block overflow-hidden rounded-2xl border bg-base-100 p-6 transition-all duration-300 ${
-        featured
-          ? "border-primary/30 shadow-lg shadow-primary/5"
-          : "border-base-300 shadow-sm"
-      } hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl`}
+      className="
+        group
+        flex
+        h-full
+        min-w-0
+        flex-col
+        rounded-xl
+        border
+        border-slate-200
+        bg-white
+        p-6
+        shadow-sm
+        transition-all
+        duration-200
+        hover:-translate-y-0.5
+        hover:border-slate-300
+        hover:shadow-md
+      "
     >
-      {featured && (
-        <div className="absolute right-4 top-4">
-          <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
-            <Sparkles size={12} />
-            Featured
-          </span>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+          <Icon size={20} strokeWidth={1.8} />
         </div>
-      )}
 
-      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all group-hover:bg-primary group-hover:text-primary-content">
-        <Icon size={23} />
+        {category && (
+          <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-500">
+            {category}
+          </span>
+        )}
       </div>
 
-      {category && (
-        <div className="mt-5 text-xs font-semibold uppercase tracking-wider text-primary">
-          {category}
-        </div>
+      <h3 className="mt-6 text-lg font-bold tracking-tight text-slate-900">
+        {title}
+      </h3>
+
+      {description && (
+        <p className="mt-3 text-sm leading-6 text-slate-500">{description}</p>
       )}
 
-      <h3 className="mt-2 text-xl font-bold tracking-tight">{title}</h3>
+      <div className="mt-auto pt-6">
+        <div className="flex items-center gap-2 text-sm font-semibold text-blue-700">
+          <span>Open calculator</span>
 
-      <p className="mt-3 text-sm leading-7 text-base-content/60">
-        {description}
-      </p>
-
-      <div className="mt-5 flex items-center justify-between gap-3">
-        <span className="rounded-lg bg-base-200 px-2.5 py-1 text-xs font-medium text-base-content/55">
-          {difficulty}
-        </span>
-
-        <span className="flex items-center gap-1.5 text-sm font-semibold text-primary">
-          Open calculator
           <ArrowRight
-            size={16}
-            className="transition-transform group-hover:translate-x-1"
+            size={15}
+            className="transition-transform duration-200 group-hover:translate-x-1"
           />
-        </span>
+        </div>
       </div>
     </Link>
   );
