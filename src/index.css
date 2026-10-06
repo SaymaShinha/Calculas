@@ -1,0 +1,571 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap");
+
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* =========================================================
+   PRACTICAL MATH LAB
+   Academic / Editorial Design System
+   ========================================================= */
+
+:root {
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  color: #172033;
+  background: #fafaf9;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+
+html {
+  background: #fafaf9;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+
+  background: #fafaf9;
+  color: #172033;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  text-decoration: none;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+::selection {
+  background: #dbeafe;
+  color: #172033;
+}
+
+/* =========================================================
+   Typography
+   ========================================================= */
+
+.font-mono {
+  font-family: "JetBrains Mono", monospace;
+}
+
+.font-serif {
+  font-family:
+    "Source Serif 4",
+    Georgia,
+    serif;
+}
+
+/* =========================================================
+   Main container
+   ========================================================= */
+
+.pml-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .pml-container {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pml-container {
+    padding-inline: 2rem;
+  }
+}
+
+/* =========================================================
+   Page sections
+   ========================================================= */
+
+.pml-section {
+  padding-block: 4rem;
+}
+
+@media (min-width: 768px) {
+  .pml-section {
+    padding-block: 5rem;
+  }
+}
+
+/* =========================================================
+   Academic grid
+   Very subtle — almost invisible
+   ========================================================= */
+
+.math-grid {
+  background-image:
+    linear-gradient(
+      #e5e7eb 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      #e5e7eb 1px,
+      transparent 1px
+    );
+
+  background-size: 40px 40px;
+  opacity: 0.45;
+}
+
+/* =========================================================
+   Cards
+   ========================================================= */
+
+.pml-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.03);
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.pml-card:hover {
+  border-color: #cbd5e1;
+
+  box-shadow:
+    0 8px 24px rgba(15, 23, 42, 0.06);
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   Grid helpers
+   ========================================================= */
+
+.pml-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.pml-grid-2,
+.pml-grid-3,
+.pml-grid-4 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .pml-grid-2,
+  .pml-grid-3,
+  .pml-grid-4 {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .pml-grid-2 {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .pml-grid-3 {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .pml-grid-4 {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   Headings
+   ========================================================= */
+
+.pml-title {
+  color: #172033;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.pml-subtitle {
+  color: #475569;
+  line-height: 1.75;
+}
+
+.pml-eyebrow {
+  color: #2563eb;
+
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   Links
+   ========================================================= */
+
+.pml-link {
+  color: #1e40af;
+  font-weight: 600;
+
+  transition: color 150ms ease;
+}
+
+.pml-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* =========================================================
+   Formula
+   ========================================================= */
+
+.formula-box {
+  border: 1px solid #dbeafe;
+  border-left: 3px solid #2563eb;
+
+  border-radius: 8px;
+
+  background: #f8fbff;
+
+  padding: 1.25rem;
+
+  color: #1e3a5f;
+}
+
+.formula-box .formula {
+  color: #172033;
+
+  font-family:
+    "JetBrains Mono",
+    monospace;
+
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* =========================================================
+   Code
+   ========================================================= */
+
+.code-block {
+  overflow-x: auto;
+
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+
+  background: #111827;
+  color: #e5e7eb;
+}
+
+.code-block code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.875rem;
+}
+
+/* =========================================================
+   Inputs
+   ========================================================= */
+
+.pml-input {
+  width: 100%;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #172033;
+
+  padding: 0.7rem 0.8rem;
+
+  outline: none;
+
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.pml-input::placeholder {
+  color: #94a3b8;
+}
+
+.pml-input:hover {
+  border-color: #94a3b8;
+}
+
+.pml-input:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* =========================================================
+   Primary button
+   ========================================================= */
+
+.pml-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  border: 1px solid #1e3a5f;
+  border-radius: 8px;
+
+  background: #1e3a5f;
+  color: #ffffff;
+
+  padding: 0.7rem 1rem;
+
+  font-weight: 600;
+
+  transition:
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.pml-btn-primary:hover {
+  border-color: #172f4d;
+  background: #172f4d;
+}
+
+/* =========================================================
+   Secondary button
+   ========================================================= */
+
+.pml-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #334155;
+
+  padding: 0.7rem 1rem;
+
+  font-weight: 600;
+
+  transition:
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.pml-btn-secondary:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+/* =========================================================
+   Information
+   ========================================================= */
+
+.pml-info {
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+
+  background: #eff6ff;
+  color: #1e3a8a;
+}
+
+.pml-success {
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.pml-warning {
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+
+  background: #fffbeb;
+  color: #92400e;
+}
+
+/* =========================================================
+   Article content
+   ========================================================= */
+
+.pml-prose {
+  max-width: 760px;
+
+  color: #475569;
+
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+.pml-prose h2,
+.pml-prose h3,
+.pml-prose h4 {
+  color: #172033;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.pml-prose h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+
+  font-size: 1.6rem;
+}
+
+.pml-prose h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+
+  font-size: 1.25rem;
+}
+
+.pml-prose p {
+  margin-block: 1rem;
+}
+
+.pml-prose ul,
+.pml-prose ol {
+  margin-block: 1rem;
+  padding-left: 1.5rem;
+}
+
+.pml-prose li {
+  margin-block: 0.45rem;
+}
+
+.pml-prose strong {
+  color: #172033;
+}
+
+.pml-prose code {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+
+  background: #f1f5f9;
+
+  padding: 0.15rem 0.35rem;
+
+  color: #1e40af;
+
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* =========================================================
+   Tables
+   ========================================================= */
+
+.pml-table {
+  width: 100%;
+
+  overflow: hidden;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+
+  background: #ffffff;
+}
+
+.pml-table th {
+  background: #f8fafc;
+  color: #334155;
+
+  font-size: 0.875rem;
+  font-weight: 700;
+
+  text-align: left;
+}
+
+.pml-table th,
+.pml-table td {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.75rem 1rem;
+}
+
+.pml-table tr:last-child td {
+  border-bottom: 0;
+}
+
+/* =========================================================
+   Divider
+   ========================================================= */
+
+.pml-divider {
+  height: 1px;
+  background: #e5e7eb;
+}
+
+/* =========================================================
+   Scrollbar
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #cbd5e1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* =========================================================
+   Accessibility
+   ========================================================= */
+
+:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
