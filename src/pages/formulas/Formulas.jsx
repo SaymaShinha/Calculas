@@ -17,9 +17,35 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import React from "react";
 import SEO from "../../components/SEO.jsx";
 import PageHeader from "../../components/PageHeader.jsx";
-import MathRenderer from "../../components/MathRenderer.jsx";
+
+import katex from "katex";
+import "katex/dist/katex.min.css";
+
+
+function MathFormula({ math, displayMode = true }) {
+  const html = React.useMemo(() => {
+    try {
+      return katex.renderToString(math, {
+        displayMode,
+        throwOnError: false,
+        strict: "ignore",
+      });
+    } catch {
+      return math;
+    }
+  }, [math, displayMode]);
+
+  return (
+    <span
+      className={displayMode ? "math-display" : "math-inline"}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
+
 
 const formulaCategories = [
   {
@@ -39,6 +65,7 @@ const formulaCategories = [
         use: "Useful for factoring expressions and simplifying limits.",
         example:
           "x^2-9=(x-3)(x+3). This is especially useful when evaluating limits that initially produce 0/0.",
+        exampleType: "text",
         note: "Recognizing algebraic structure can turn a difficult-looking limit into a simple substitution.",
       },
       {
@@ -50,6 +77,7 @@ const formulaCategories = [
         variables: "a and b represent algebraic quantities.",
         use: "Useful for factoring, completing the square, and simplifying functions.",
         example: "x^2+6x+9=(x+3)^2.",
+        exampleType: "math",
         note: "The middle term must be exactly ±2ab.",
       },
       {
@@ -60,6 +88,7 @@ const formulaCategories = [
         variables: "a, b, and c are coefficients of the quadratic equation.",
         use: "Useful when a quadratic cannot be factored easily.",
         example: "For x^2-5x+6=0, x=(5±√1)/2, giving x=2 or x=3.",
+        exampleType: "text",
         note: "The discriminant b²−4ac determines whether the roots are real, repeated, or complex.",
       },
       {
@@ -70,6 +99,7 @@ const formulaCategories = [
         variables: "C(n,k)=n!/[k!(n−k)!] is the binomial coefficient.",
         use: "Useful for algebraic expansion, approximations, and Taylor-related calculations.",
         example: "(x+1)^2=x^2+2x+1.",
+        exampleType: "math",
         note: "The binomial theorem becomes especially useful when working with polynomial approximations.",
       },
     ],
@@ -90,6 +120,7 @@ const formulaCategories = [
         variables: "x is an angle measured in radians or degrees.",
         use: "Useful for simplifying trigonometric expressions and integration.",
         example: "If sin x=3/5, then cos²x=1−9/25=16/25.",
+        exampleType: "text",
         note: "Remember that cos x may be positive or negative depending on the quadrant.",
       },
       {
@@ -100,6 +131,7 @@ const formulaCategories = [
         variables: "x is an angle.",
         use: "Useful when converting between trigonometric functions.",
         example: "If sin x=3/5 and cos x=4/5, then tan x=3/4.",
+        exampleType: "text",
         note: "Tangent is undefined whenever cos x=0.",
       },
       {
@@ -109,7 +141,8 @@ const formulaCategories = [
         conditions: "Valid wherever the functions are defined.",
         variables: "x is an angle.",
         use: "Common in differentiation and integration.",
-        example: "\\sec^2x-\\tan^2x=1.",
+        example: "sec²x − tan²x = 1.",
+        exampleType: "math",
         note: "This identity follows from dividing sin²x+cos²x=1 by cos²x.",
       },
       {
@@ -120,6 +153,7 @@ const formulaCategories = [
         variables: "x is an angle.",
         use: "Useful in trigonometric integration and simplification.",
         example: "\\csc^2x-\\cot^2x=1.",
+        exampleType: "math",
         note: "It follows by dividing the fundamental identity by sin²x.",
       },
       {
@@ -131,6 +165,7 @@ const formulaCategories = [
         variables: "a and b are angles.",
         use: "Useful for trigonometric manipulation and deriving other identities.",
         example: "\\sin(x+\\pi/2)=\\cos x.",
+        exampleType: "math",
         note: "Do not confuse the signs with the cosine addition formula.",
       },
       {
@@ -142,6 +177,7 @@ const formulaCategories = [
         variables: "a and b are angles.",
         use: "Useful for deriving double-angle identities.",
         example: "\\cos(2x)=\\cos^2x-\\sin^2x.",
+        exampleType: "math",
         note: "The minus sign between the two products is essential.",
       },
       {
@@ -152,6 +188,7 @@ const formulaCategories = [
         variables: "x is an angle.",
         use: "Useful in integration and trigonometric simplification.",
         example: "2\\sin x\\cos x=\\sin(2x).",
+        exampleType: "math",
         note: "This identity converts products into a single trigonometric function.",
       },
       {
@@ -162,6 +199,7 @@ const formulaCategories = [
         variables: "x is an angle.",
         use: "Useful for trigonometric simplification and integration.",
         example: "\\cos(2x)=1-2\\sin^2x=2\\cos^2x-1.",
+        exampleType: "math",
         note: "There are three commonly useful equivalent forms.",
       },
       {
@@ -173,6 +211,7 @@ const formulaCategories = [
         variables: "x is an angle.",
         use: "Especially useful when integrating powers of sine.",
         example: "\\sin^2x=\\frac{1-\\cos(2x)}{2}.",
+        exampleType: "math",
         note: "This identity is also called a power-reduction formula.",
       },
       {
@@ -184,6 +223,7 @@ const formulaCategories = [
         variables: "x is an angle.",
         use: "Useful for integration and trigonometric simplification.",
         example: "\\cos^2x=\\frac{1+\\cos(2x)}{2}.",
+        exampleType: "math",
         note: "For the unsquared half-angle formula, the sign depends on the quadrant.",
       },
     ],
@@ -205,6 +245,7 @@ const formulaCategories = [
         variables: "L=lim f(x) and M=lim g(x) as x approaches a.",
         use: "Useful for breaking complicated limits into simpler parts.",
         example: "If lim f(x)=3 and lim g(x)=5, then lim[f(x)+g(x)]=8.",
+        exampleType: "text",
         note: "Similar laws apply to differences, products, and constant multiples.",
       },
       {
@@ -215,6 +256,7 @@ const formulaCategories = [
         variables: "L and M are the respective limits.",
         use: "Useful for polynomial and composite expressions.",
         example: "\\lim_{x\\to2}x(x+1)=2(3)=6.",
+        exampleType: "math",
         note: "Direct substitution works for many continuous functions.",
       },
       {
@@ -226,6 +268,7 @@ const formulaCategories = [
         variables: "L and M are the respective limits.",
         use: "Useful for rational functions and many algebraic limits.",
         example: "\\lim_{x\\to2}\\frac{x+1}{x}=\\frac32.",
+        exampleType: "math",
         note: "If the denominator approaches zero, another method may be required.",
       },
       {
@@ -238,6 +281,7 @@ const formulaCategories = [
         variables: "a is the point at which continuity is being tested.",
         use: "Useful for identifying discontinuities and applying important theorems.",
         example: "For f(x)=x², limₓ→2 f(x)=4=f(2).",
+        exampleType: "text",
         note: "A function can fail continuity because of a missing value, jump, or unbounded behavior.",
       },
       {
@@ -252,6 +296,7 @@ const formulaCategories = [
         use: "Useful for difficult trigonometric and oscillating limits.",
         example:
           "-|x|\\le x\\sin(1/x)\\le|x|, and both bounds approach 0, so the limit is 0.",
+        exampleType: "text",
         note: "The theorem is especially useful when direct substitution does not reveal the answer.",
       },
       {
@@ -263,6 +308,7 @@ const formulaCategories = [
         variables: "x approaches zero.",
         use: "Essential in proving derivatives of sine and cosine.",
         example: "\\lim_{x\\to0}\\frac{\\sin(5x)}{5x}=1.",
+        exampleType: "math",
         note: "The radians condition is important.",
       },
       {
@@ -274,6 +320,7 @@ const formulaCategories = [
         variables: "x is the variable approaching zero.",
         use: "Useful in deriving the derivative of eˣ.",
         example: "\\lim_{x\\to0}\\frac{e^x-1}{x}=1.",
+        exampleType: "math",
         note: "This is one reason e is especially important in calculus.",
       },
       {
@@ -284,6 +331,7 @@ const formulaCategories = [
         variables: "x is the variable.",
         use: "Useful in logarithmic differentiation and derivative proofs.",
         example: "\\lim_{x\\to0}\\frac{\\ln(1+x)}{x}=1.",
+        exampleType: "math",
         note: "The domain restriction of ln(1+x) must be respected.",
       },
       {
@@ -295,6 +343,7 @@ const formulaCategories = [
         variables: "n is a positive constant.",
         use: "Useful for analyzing rational functions and asymptotic behavior.",
         example: "\\lim_{x\\to\\infty}\\frac{1}{x^3}=0.",
+        exampleType: "math",
         note: "This does not mean 1/xⁿ equals zero for finite x.",
       },
     ],
@@ -317,6 +366,7 @@ const formulaCategories = [
           "h is a small change in x; f(x+h) and f(x) are function values.",
         use: "Used to understand the fundamental meaning of differentiation.",
         example: "For f(x)=x², the definition simplifies to f'(x)=2x.",
+        exampleType: "text",
         note: "This definition is the foundation from which derivative rules are developed.",
       },
       {
@@ -327,6 +377,7 @@ const formulaCategories = [
         variables: "C is any constant.",
         use: "Used whenever a term contains no variable x.",
         example: "\\frac{d}{dx}[12]=0.",
+        exampleType: "math",
         note: "The derivative of a constant is always zero.",
       },
       {
@@ -338,6 +389,7 @@ const formulaCategories = [
         variables: "n is a constant exponent.",
         use: "One of the most frequently used derivative rules.",
         example: "\\frac{d}{dx}[x^5]=5x^4.",
+        exampleType: "math",
         note: "The rule also works for negative and fractional powers where the function is defined.",
       },
       {
@@ -349,6 +401,7 @@ const formulaCategories = [
         variables: "C is constant and f is differentiable.",
         use: "Useful for simplifying differentiation of polynomial terms.",
         example: "\\frac{d}{dx}[7x^3]=21x^2.",
+        exampleType: "math",
         note: "Differentiate the function and keep the constant unchanged.",
       },
       {
@@ -360,6 +413,7 @@ const formulaCategories = [
         variables: "f and g are differentiable functions.",
         use: "Useful for differentiating multi-term expressions.",
         example: "\\frac{d}{dx}[x^3+x^2]=3x^2+2x.",
+        exampleType: "math",
         note: "The same principle applies to subtraction.",
       },
       {
@@ -370,6 +424,7 @@ const formulaCategories = [
         variables: "f and g are functions of x.",
         use: "Use when two variable-dependent functions are multiplied.",
         example: "\\frac{d}{dx}[x^2\\sin x]=2x\\sin x+x^2\\cos x.",
+        exampleType: "math",
         note: "A common mistake is differentiating both factors and multiplying the derivatives.",
       },
       {
@@ -380,6 +435,7 @@ const formulaCategories = [
         variables: "f and g are functions of x.",
         use: "Useful when one differentiable function is divided by another.",
         example: "For f=x and g=x²+1, use [(x²+1)(1)-x(2x)]/(x²+1)².",
+        exampleType: "text",
         note: "Keep the denominator squared in the final expression.",
       },
       {
@@ -392,6 +448,7 @@ const formulaCategories = [
         variables: "g is the inner function and f is the outer function.",
         use: "Essential for nested functions.",
         example: "\\frac{d}{dx}[(3x+1)^5]=15(3x+1)^4.",
+        exampleType: "math",
         note: "Differentiate the outside, keep the inside, then multiply by the derivative of the inside.",
       },
       {
@@ -402,6 +459,7 @@ const formulaCategories = [
         variables: "x is the independent variable.",
         use: "Common in growth, decay, differential equations, and modeling.",
         example: "\\frac{d}{dx}[e^x]=e^x.",
+        exampleType: "math",
         note: "For e^{g(x)}, use the chain rule.",
       },
       {
@@ -413,6 +471,7 @@ const formulaCategories = [
         variables: "a is a positive constant; x is the variable.",
         use: "Useful for exponential growth and decay models.",
         example: "\\frac{d}{dx}[2^x]=2^x\\ln2.",
+        exampleType: "math",
         note: "If the exponent is a function g(x), multiply by g'(x).",
       },
       {
@@ -424,6 +483,7 @@ const formulaCategories = [
         variables: "x is the independent variable.",
         use: "Useful in logarithmic differentiation and integration.",
         example: "\\frac{d}{dx}[\\ln|x|]=\\frac1x.",
+        exampleType: "math",
         note: "For ln x specifically, x must be positive.",
       },
       {
@@ -434,6 +494,7 @@ const formulaCategories = [
         variables: "x is measured in radians.",
         use: "Essential in oscillation and periodic models.",
         example: "\\frac{d}{dx}[\\sin(3x)]=3\\cos(3x).",
+        exampleType: "math",
         note: "The chain rule is required when the argument is not simply x.",
       },
       {
@@ -444,6 +505,7 @@ const formulaCategories = [
         variables: "x is measured in radians.",
         use: "Common in periodic and harmonic models.",
         example: "\\frac{d}{dx}[\\cos(2x)]=-2\\sin(2x).",
+        exampleType: "math",
         note: "Remember the negative sign.",
       },
       {
@@ -454,6 +516,7 @@ const formulaCategories = [
         variables: "x is measured in radians.",
         use: "Useful in trigonometric differentiation.",
         example: "\\frac{d}{dx}[\\tan(4x)]=4\\sec^2(4x).",
+        exampleType: "math",
         note: "The chain rule applies to a composite tangent function.",
       },
       {
@@ -465,6 +528,7 @@ const formulaCategories = [
         variables: "f'' is the second derivative.",
         use: "Used for concavity, acceleration, and optimization tests.",
         example: "If f(x)=x³, then f'(x)=3x² and f''(x)=6x.",
+        exampleType: "text",
         note: "f''>0 generally indicates concave up; f''<0 generally indicates concave down.",
       },
       {
@@ -477,6 +541,7 @@ const formulaCategories = [
         variables: "x and y are related variables.",
         use: "Useful for circles, curves, and equations that are difficult to solve explicitly for y.",
         example: "For x²+y²=25: 2x+2y(dy/dx)=0, so dy/dx=-x/y.",
+        exampleType: "text",
         note: "Whenever differentiating a term containing y, remember the chain rule.",
       },
     ],
@@ -497,6 +562,7 @@ const formulaCategories = [
         variables: "C is an arbitrary constant.",
         use: "Used to find antiderivatives.",
         example: "\\int2x\\,dx=x^2+C.",
+        exampleType: "math",
         note: "Always include +C for an indefinite integral.",
       },
       {
@@ -508,6 +574,7 @@ const formulaCategories = [
         variables: "n is a constant.",
         use: "Useful for polynomial and power functions.",
         example: "\\int x^3\\,dx=\\frac{x^4}{4}+C.",
+        exampleType: "math",
         note: "The case n=-1 is special and gives ln|x|.",
       },
       {
@@ -518,6 +585,7 @@ const formulaCategories = [
         variables: "C and C₁ are constants.",
         use: "Useful for integrating constant terms.",
         example: "\\int5\\,dx=5x+C.",
+        exampleType: "math",
         note: "The integration constant can simply be written as C.",
       },
       {
@@ -529,6 +597,7 @@ const formulaCategories = [
         variables: "x is the integration variable.",
         use: "Common in growth and differential equations.",
         example: "\\int e^x\\,dx=e^x+C.",
+        exampleType: "math",
         note: "For e^{g(x)}, substitution or the chain-rule relationship may be needed.",
       },
       {
@@ -539,6 +608,7 @@ const formulaCategories = [
         variables: "a is constant.",
         use: "Useful for exponential models.",
         example: "\\int2^x\\,dx=\\frac{2^x}{\\ln2}+C.",
+        exampleType: "math",
         note: "The ln(a) denominator is essential.",
       },
       {
@@ -550,6 +620,7 @@ const formulaCategories = [
         variables: "x is the integration variable.",
         use: "Common in rational-function integration.",
         example: "\\int\\frac1x\\,dx=\\ln|x|+C.",
+        exampleType: "math",
         note: "The absolute value is needed for a general real-domain antiderivative.",
       },
       {
@@ -560,6 +631,7 @@ const formulaCategories = [
         variables: "x is the integration variable.",
         use: "Used in periodic and oscillatory problems.",
         example: "\\int\\sin x\\,dx=-\\cos x+C.",
+        exampleType: "math",
         note: "Differentiate the answer to verify it.",
       },
       {
@@ -570,6 +642,7 @@ const formulaCategories = [
         variables: "x is the integration variable.",
         use: "Common in trigonometric integration.",
         example: "\\int\\cos x\\,dx=\\sin x+C.",
+        exampleType: "math",
         note: "Always check by differentiation when unsure.",
       },
       {
@@ -581,6 +654,7 @@ const formulaCategories = [
         variables: "x is an angle.",
         use: "Common in trigonometric integration.",
         example: "\\int\\sec^2x\\,dx=\\tan x+C.",
+        exampleType: "math",
         note: "This formula is the reverse of d/dx[tan x].",
       },
       {
@@ -593,6 +667,7 @@ const formulaCategories = [
         variables: "a is the lower limit and b is the upper limit.",
         use: "Used for area, accumulation, displacement, work, probability, and many other quantities.",
         example: "\\int_0^2x\\,dx=2.",
+        exampleType: "math",
         note: "A definite integral produces a number, not a family of functions.",
       },
       {
@@ -603,6 +678,7 @@ const formulaCategories = [
         variables: "F'(x)=f(x).",
         use: "The standard method for evaluating many definite integrals.",
         example: "\\int_0^2x\\,dx=[x^2/2]_0^2=2.",
+        exampleType: "math",
         note: "This theorem is one of the central connections between differentiation and integration.",
       },
       {
@@ -614,7 +690,8 @@ const formulaCategories = [
           "The substitution should simplify the integral and be differentiable.",
         variables: "u=g(x).",
         use: "Useful for composite functions.",
-        example: "For ∫2x(x²+1)³dx, let u=x²+1 and du=2x dx.",
+        example: "For ∫2x(x²+1)³dx, let \\ u=x²+1 \\ and\\ du=2x dx.",
+        exampleType: "text",
         note: "For definite integrals, either change the bounds or substitute back.",
       },
       {
@@ -626,6 +703,7 @@ const formulaCategories = [
         variables: "u is chosen to differentiate; dv is chosen to integrate.",
         use: "Useful for products involving logarithms, polynomials, exponentials, and trigonometric functions.",
         example: "\\int xe^x\\,dx=xe^x-\\int e^x\\,dx=e^x(x-1)+C.",
+        exampleType: "math",
         note: "Choosing u effectively is often the key step.",
       },
     ],
@@ -647,7 +725,8 @@ const formulaCategories = [
         variables: "a and b define the interval.",
         use: "Useful for secant slopes and average velocity.",
         example:
-          "If position changes from 10 m to 30 m over 5 s, average velocity=20/5=4 m/s.",
+          "If position changes from 10 m to 30 m over 5 s, average velocity = 20/5 = 4 m/s.",
+        exampleType: "text",
         note: "This is different from instantaneous rate of change.",
       },
       {
@@ -658,7 +737,8 @@ const formulaCategories = [
         conditions: "Position must be differentiable.",
         variables: "s(t) is position and t is time.",
         use: "Used to analyze motion.",
-        example: "If s(t)=t², then v(t)=2t.",
+        example: "If s(t)=t², then \\ v(t)=2t.",
+        exampleType: "text",
         note: "Velocity includes direction; speed is the magnitude of velocity.",
       },
       {
@@ -668,7 +748,8 @@ const formulaCategories = [
         conditions: "Position must be twice differentiable.",
         variables: "s is position, v is velocity, t is time.",
         use: "Used in mechanics and motion analysis.",
-        example: "If s(t)=t³, then v=3t² and a=6t.",
+        example: "If s(t)=t³, then\\ v=3t² \\ and \\ a=6t.",
+        exampleType: "text",
         note: "Acceleration can be negative depending on the chosen coordinate direction.",
       },
       {
@@ -679,7 +760,9 @@ const formulaCategories = [
         conditions: "c must belong to the domain of f.",
         variables: "c is the candidate critical number.",
         use: "Used in optimization and graph analysis.",
-        example: "For f(x)=x², f'(x)=2x, so x=0 is a critical point.",
+        example:
+          "For f(x)=x², f'(x)=2x, so x=0 \\ is \\ a \\ critical \\ point.",
+        exampleType: "text",
         note: "Not every critical point is a maximum or minimum.",
       },
       {
@@ -691,7 +774,8 @@ const formulaCategories = [
         variables: "c is a critical point.",
         use: "Useful for local optimization.",
         example:
-          "For f(x)=x², f'(0)=0 and f''(0)=2>0, so x=0 is a local minimum.",
+          "For \\ f(x)=x², f'(0)=0 \\ and \\ f''(0)=2>0, \\ so \\ x=0 \\ is \\ a \\ local \\ minimum.",
+        exampleType: "text",
         note: "If f''(c)=0, the test is inconclusive.",
       },
       {
@@ -702,7 +786,8 @@ const formulaCategories = [
         conditions: "f must be differentiable at a.",
         variables: "a is the point of tangency.",
         use: "Useful for local approximation and geometric interpretation.",
-        example: "For f(x)=x² at a=2: y-4=4(x-2).",
+        example: "For \\ f(x)=x² \\ at \\ a=2: \\ y-4=4(x-2).",
+        exampleType: "text",
         note: "The derivative supplies the slope of the tangent line.",
       },
       {
@@ -714,6 +799,7 @@ const formulaCategories = [
         use: "Useful for estimation and error analysis.",
         example:
           "A nearby convenient value can be used to estimate square roots or other functions.",
+        exampleType: "text",
         note: "The approximation generally becomes better as x approaches a.",
       },
       {
@@ -725,6 +811,7 @@ const formulaCategories = [
         variables: "a and b are interval endpoints.",
         use: "Useful for average temperature, velocity, density, and other quantities.",
         example: "For f(x)=x on [0,2], f_avg=(1/2)∫₀²x dx=1.",
+        exampleType: "text",
         note: "The average value is not generally the same as the value at the midpoint.",
       },
       {
@@ -736,6 +823,7 @@ const formulaCategories = [
         variables: "a and b are the interval endpoints.",
         use: "Used for geometric area and accumulated quantities.",
         example: "\\int_0^2x\\,dx=2.",
+        exampleType: "math",
         note: "If f becomes negative, the definite integral gives signed rather than total geometric area.",
       },
       {
@@ -748,6 +836,7 @@ const formulaCategories = [
         use: "Useful for solids of revolution.",
         example:
           "Rotating y=x from 0 to 1 about the x-axis gives V=π∫₀¹x²dx=π/3.",
+        exampleType: "text",
         note: "Choose the disk method when perpendicular slices produce disks or washers.",
       },
       {
@@ -761,6 +850,7 @@ const formulaCategories = [
         use: "Useful when shells simplify the setup compared with disks.",
         example:
           "For rotation about the y-axis, radius is commonly x and height is f(x).",
+        exampleType: "text",
         note: "Always identify the axis of rotation before choosing a method.",
       },
       {
@@ -772,6 +862,7 @@ const formulaCategories = [
         variables: "F(x) is force and x is displacement.",
         use: "Used in mechanics and physical applications.",
         example: "If F(x)=2x, then W from 0 to 3 is ∫₀³2x dx=9.",
+        exampleType: "text",
         note: "For constant force, this reduces to W=Fd when force and displacement align.",
       },
     ],
@@ -794,6 +885,7 @@ const formulaCategories = [
         variables: "a₁ is the first term and d is the common difference.",
         use: "Useful for sequences with linear growth.",
         example: "For 2,5,8,..., a_n=2+3(n-1).",
+        exampleType: "text",
         note: "The difference between consecutive terms is d.",
       },
       {
@@ -805,6 +897,7 @@ const formulaCategories = [
         variables: "n is the number of terms.",
         use: "Useful for finite sums with linear patterns.",
         example: "1+3+5+7=16.",
+        exampleType: "math",
         note: "An equivalent formula is S_n=n(a_1+a_n)/2.",
       },
       {
@@ -815,6 +908,7 @@ const formulaCategories = [
         variables: "r is the common ratio.",
         use: "Useful for exponential growth or decay patterns.",
         example: "For 2,6,18,..., a_n=2(3^{n-1}).",
+        exampleType: "text",
         note: "The ratio can be negative or fractional.",
       },
       {
@@ -826,6 +920,7 @@ const formulaCategories = [
         variables: "a₁ is the first term and r is the common ratio.",
         use: "Useful for finite repeated growth or decay.",
         example: "1+2+4+8=15.",
+        exampleType: "math",
         note: "When r=1, the sum is simply na₁.",
       },
       {
@@ -837,6 +932,7 @@ const formulaCategories = [
         variables: "a₁ is the first term and r is the common ratio.",
         use: "Useful for infinite repeated processes and convergence problems.",
         example: "1+1/2+1/4+\\cdots=2.",
+        exampleType: "math",
         note: "If |r|≥1, the infinite geometric series does not converge to a finite sum.",
       },
       {
@@ -849,6 +945,7 @@ const formulaCategories = [
         variables: "aₙ represents the terms of the series.",
         use: "Fundamental for deciding whether an infinite sum has a finite value.",
         example: "\\sum_{n=1}^{\\infty}(1/2)^n=1.",
+        exampleType: "math",
         note: "The condition aₙ→0 is necessary but not sufficient for convergence.",
       },
       {
@@ -862,6 +959,7 @@ const formulaCategories = [
         use: "Quickly detects many divergent series.",
         example:
           "For the harmonic series, 1/n→0, so this test alone is inconclusive.",
+        exampleType: "text",
         note: "Do not conclude convergence merely because the terms approach zero.",
       },
       {
@@ -875,6 +973,7 @@ const formulaCategories = [
         use: "Especially useful for factorials and exponential terms.",
         example:
           "The ratio test is commonly effective for series containing n! or aⁿ.",
+        exampleType: "text",
         note: "The L=1 case requires another test.",
       },
       {
@@ -887,6 +986,7 @@ const formulaCategories = [
         variables: "aₙ are the series terms.",
         use: "Useful when terms contain nth powers.",
         example: "For aₙ=(1/3)ⁿ, the nth root is 1/3, so the series converges.",
+        exampleType: "text",
         note: "It is often particularly convenient for power-series expressions.",
       },
       {
@@ -899,6 +999,7 @@ const formulaCategories = [
         variables: "a is the center; f⁽ⁿ⁾ is the nth derivative.",
         use: "Useful for approximation, analysis, and numerical computation.",
         example: "For e^x centered at 0, e^x=1+x+x²/2!+x³/3!+⋯.",
+        exampleType: "text",
         note: "Having derivatives of all orders does not automatically guarantee convergence to the function.",
       },
       {
@@ -910,6 +1011,7 @@ const formulaCategories = [
         variables: "All derivatives are evaluated at zero.",
         use: "Useful for standard approximations.",
         example: "\\sin x=x-\\frac{x^3}{3!}+\\frac{x^5}{5!}-\\cdots.",
+        exampleType: "math",
         note: "Maclaurin series are simply Taylor series with a=0.",
       },
     ],
@@ -931,6 +1033,7 @@ const formulaCategories = [
           "x and y are independent variables; z is the dependent variable.",
         use: "Used to model surfaces and quantities depending on two inputs.",
         example: "f(x,y)=x²+y² describes a paraboloid.",
+        exampleType: "text",
         note: "Multivariable functions can be visualized as surfaces in three-dimensional space.",
       },
       {
@@ -942,6 +1045,7 @@ const formulaCategories = [
         variables: "Other independent variables are treated as constants.",
         use: "Useful for analyzing surfaces and multivariable rates of change.",
         example: "For f=x²y, f_x=2xy.",
+        exampleType: "text",
         note: "Only differentiate with respect to the selected variable.",
       },
       {
@@ -953,6 +1057,7 @@ const formulaCategories = [
         variables: "Other independent variables remain fixed.",
         use: "Useful for multivariable optimization and modeling.",
         example: "For f=x²y, f_y=x².",
+        exampleType: "text",
         note: "x is treated as a constant when differentiating with respect to y.",
       },
       {
@@ -964,6 +1069,7 @@ const formulaCategories = [
           "The components are partial derivatives with respect to each coordinate.",
         use: "Used for directional change, optimization, tangent planes, and geometry.",
         example: "For f=x²+y², ∇f=⟨2x,2y⟩.",
+        exampleType: "text",
         note: "The gradient points in the direction of greatest local increase.",
       },
       {
@@ -975,6 +1081,7 @@ const formulaCategories = [
         variables: "u is the direction vector.",
         use: "Useful when the direction of movement matters.",
         example: "If ∇f=⟨2,3⟩ and u=⟨1/√2,1/√2⟩, then Dᵤf=5/√2.",
+        exampleType: "text",
         note: "Normalize the direction vector before using the standard formula.",
       },
       {
@@ -985,6 +1092,7 @@ const formulaCategories = [
         variables: "(a,b) is the point of tangency.",
         use: "Useful for local approximation and surface geometry.",
         example: "For f=x²+y² at (1,1), z-2=2(x-1)+2(y-1).",
+        exampleType: "text",
         note: "The tangent plane is the multivariable analogue of the tangent line.",
       },
       {
@@ -997,6 +1105,7 @@ const formulaCategories = [
         variables: "F=⟨P,Q,R⟩.",
         use: "Important in fluid flow and physical field models.",
         example: "For F=⟨x,y,z⟩, ∇·F=3.",
+        exampleType: "text",
         note: "Positive divergence indicates net local outward behavior; negative indicates inward behavior.",
       },
       {
@@ -1008,6 +1117,7 @@ const formulaCategories = [
         variables: "F is a vector field.",
         use: "Used in fluid dynamics and electromagnetism.",
         example: "For F=⟨−y,x,0⟩, curl F=⟨0,0,2⟩.",
+        exampleType: "text",
         note: "Curl is itself a vector in three dimensions.",
       },
       {
@@ -1018,6 +1128,7 @@ const formulaCategories = [
         variables: "R is the region of integration.",
         use: "Used for volume, mass, probability, and area-weighted quantities.",
         example: "\\iint_R1\\,dA gives the area of R.",
+        exampleType: "text",
         note: "The region can often be described using iterated integrals.",
       },
       {
@@ -1028,6 +1139,7 @@ const formulaCategories = [
         variables: "V is the volume region.",
         use: "Used for mass, volume, density, and physical quantities.",
         example: "\\iiint_V1\\,dV gives the volume of V.",
+        exampleType: "text",
         note: "Coordinate changes such as cylindrical or spherical coordinates can simplify some problems.",
       },
     ],
@@ -1049,6 +1161,7 @@ const formulaCategories = [
         variables: "P, Q, and R are scalar component functions.",
         use: "Used to model velocity, force, electric fields, and other spatial quantities.",
         example: "F=⟨−y,x,0⟩ describes a rotational field around the z-axis.",
+        exampleType: "text",
         note: "Vector fields can contain both magnitude and direction information.",
       },
       {
@@ -1060,6 +1173,7 @@ const formulaCategories = [
         use: "Used for mass of wires, arc-length-weighted quantities, and geometry.",
         example:
           "A constant density integrated over a curve gives mass proportional to its length.",
+        exampleType: "text",
         note: "Parameterization is commonly used to evaluate line integrals.",
       },
       {
@@ -1071,6 +1185,7 @@ const formulaCategories = [
         variables: "d r is the differential displacement vector.",
         use: "Commonly used to calculate work done by a force field.",
         example: "Work along a path C can be written as W=∫C F·dr.",
+        exampleType: "text",
         note: "For conservative fields, the result depends only on the endpoints.",
       },
       {
@@ -1084,6 +1199,7 @@ const formulaCategories = [
         use: "Converts between circulation around a boundary and a quantity over an area.",
         example:
           "A difficult closed-curve integral can sometimes be transformed into an area integral.",
+        exampleType: "text",
         note: "Orientation matters: positive orientation is counterclockwise.",
       },
       {
@@ -1098,6 +1214,7 @@ const formulaCategories = [
         use: "Useful for converting line integrals into surface integrals and vice versa.",
         example:
           "A circulation integral around a boundary can be replaced by a curl integral over the surface.",
+        exampleType: "text",
         note: "The orientation of C and n must follow the right-hand rule.",
       },
       {
@@ -1112,6 +1229,7 @@ const formulaCategories = [
         use: "Useful for calculating flux through closed surfaces.",
         example:
           "A complicated surface flux can sometimes be converted into a simpler volume integral.",
+        exampleType: "text",
         note: "The normal vector is outward-pointing.",
       },
     ],
@@ -1135,6 +1253,7 @@ const formulaCategories = [
           "y is the dependent variable and x is the independent variable.",
         use: "Used to model changing systems.",
         example: "dy/dx=ky models exponential growth or decay.",
+        exampleType: "math",
         note: "The order of an ODE is determined by its highest derivative.",
       },
       {
@@ -1147,6 +1266,7 @@ const formulaCategories = [
         variables: "g depends on x and h depends on y.",
         use: "One of the most common exact solution techniques for first-order ODEs.",
         example: "dy/dx=ky gives dy/y=k dx.",
+        exampleType: "math",
         note: "Dividing by h(y) can exclude solutions where h(y)=0, so those solutions should be checked separately.",
       },
       {
@@ -1160,6 +1280,7 @@ const formulaCategories = [
           "y₀ is the initial amount and k is the growth/decay constant.",
         use: "Population, finance, radioactive decay, and many other models.",
         example: "If y₀=100 and k=0.05, then y(t)=100e^{0.05t}.",
+        exampleType: "text",
         note: "k>0 represents growth and k<0 represents decay.",
       },
       {
@@ -1171,6 +1292,7 @@ const formulaCategories = [
         variables: "P and Q are known functions.",
         use: "Solved using an integrating factor.",
         example: "y'+2y=x is a first-order linear ODE.",
+        exampleType: "text",
         note: "The integrating factor is μ(x)=e^{∫P(x)dx}.",
       },
       {
@@ -1182,6 +1304,7 @@ const formulaCategories = [
         variables: "P(x) comes from y'+P(x)y=Q(x).",
         use: "Standard method for first-order linear ODEs.",
         example: "For y'+2y=x, μ=e^{2x}.",
+        exampleType: "text",
         note: "The constant of integration in the exponent can be omitted because it only scales the integrating factor.",
       },
       {
@@ -1193,6 +1316,7 @@ const formulaCategories = [
         variables: "y is the unknown function.",
         use: "Used in oscillations, circuits, mechanics, and engineering.",
         example: "y''-3y'+2y=0.",
+        exampleType: "math",
         note: "The characteristic equation determines the form of the solution.",
       },
       {
@@ -1205,6 +1329,7 @@ const formulaCategories = [
         variables: "r represents exponential solution behavior.",
         use: "Used to solve second-order linear homogeneous ODEs.",
         example: "For y''-3y'+2y=0, r²-3r+2=0 gives r=1,2.",
+        exampleType: "text",
         note: "Repeated and complex roots require special solution forms.",
       },
     ],
@@ -1227,6 +1352,7 @@ const formulaCategories = [
         variables: "h is the step size.",
         use: "Useful when only values to the right are available.",
         example: "Use h=0.001 to estimate the derivative numerically.",
+        exampleType: "text",
         note: "The method has truncation error of order O(h).",
       },
       {
@@ -1238,6 +1364,7 @@ const formulaCategories = [
         variables: "h is the step size.",
         use: "Useful near a boundary where values ahead are unavailable.",
         example: "Use known values at x and x−h to estimate f'(x).",
+        exampleType: "math",
         note: "Like forward difference, the basic truncation error is O(h).",
       },
       {
@@ -1250,6 +1377,7 @@ const formulaCategories = [
         use: "Often more accurate than basic forward/backward differences.",
         example:
           "For sufficiently smooth functions, reducing h can produce a strong approximation.",
+        exampleType: "text",
         note: "The basic central-difference truncation error is O(h²).",
       },
       {
@@ -1262,6 +1390,7 @@ const formulaCategories = [
         use: "Useful for numerical curvature and differential-equation calculations.",
         example:
           "For f(x)=x², the approximation approaches 2 as h becomes small.",
+        exampleType: "text",
         note: "Very small h can increase round-off error.",
       },
       {
@@ -1276,6 +1405,7 @@ const formulaCategories = [
         use: "Numerical integration when an exact antiderivative is unavailable.",
         example:
           "Increasing n generally improves the approximation for smooth functions.",
+        exampleType: "text",
         note: "The composite trapezoidal rule has error related to h² for sufficiently smooth functions.",
       },
       {
@@ -1289,6 +1419,7 @@ const formulaCategories = [
         use: "Often provides high accuracy for smooth functions.",
         example:
           "For a smooth function, Simpson's rule can achieve much better accuracy than a comparable basic trapezoidal approximation.",
+        exampleType: "text",
         note: "The composite rule requires an even number of subintervals.",
       },
       {
@@ -1300,6 +1431,7 @@ const formulaCategories = [
         variables: "x_i^* is the midpoint of subinterval i.",
         use: "Useful for simple numerical integration.",
         example: "For each interval [xᵢ₋₁,xᵢ], evaluate f at (xᵢ₋₁+xᵢ)/2.",
+        exampleType: "text",
         note: "The composite midpoint rule has O(h²) error for sufficiently smooth functions.",
       },
       {
@@ -1312,6 +1444,7 @@ const formulaCategories = [
         variables: "x_n is the current approximation.",
         use: "Fast root-finding for many differentiable functions.",
         example: "Starting near a known root can lead to rapid convergence.",
+        exampleType: "text",
         note: "A poor initial guess can cause divergence or convergence to an unexpected root.",
       },
       {
@@ -1324,6 +1457,7 @@ const formulaCategories = [
         use: "Reliable numerical root finding.",
         example:
           "Evaluate f(m) and retain the half interval containing the sign change.",
+        exampleType: "text",
         note: "Bisection is slower than Newton-Raphson but has strong convergence guarantees under its assumptions.",
       },
     ],
@@ -1345,6 +1479,7 @@ const formulaCategories = [
         variables: "i²=-1.",
         use: "Useful in differential equations, signals, and advanced mathematics.",
         example: "z=3+4i.",
+        exampleType: "math",
         note: "a is the real part and b is the imaginary coefficient.",
       },
       {
@@ -1355,6 +1490,7 @@ const formulaCategories = [
         variables: "a and b are real.",
         use: "Useful for complex division and magnitude calculations.",
         example: "If z=3+4i, then z̄=3−4i.",
+        exampleType: "text",
         note: "z z̄=a²+b².",
       },
       {
@@ -1366,6 +1502,7 @@ const formulaCategories = [
         variables: "a and b are real and imaginary components.",
         use: "Useful in complex analysis and applied mathematics.",
         example: "|3+4i|=5.",
+        exampleType: "math",
         note: "The magnitude is always nonnegative.",
       },
       {
@@ -1377,6 +1514,7 @@ const formulaCategories = [
         variables: "i²=-1.",
         use: "Fundamental in Fourier analysis, differential equations, and signal processing.",
         example: "e^{i\\pi}=-1.",
+        exampleType: "math",
         note: "Euler's formula is one of the most important identities connecting different areas of mathematics.",
       },
     ],
@@ -1411,7 +1549,7 @@ function FormulaCard({ formula, onCopy, copied }) {
       </div>
 
       <div className="my-6 overflow-x-auto rounded-lg border border-[#E9E9E6] bg-[#F8F7F4] px-4 py-5">
-        <MathRenderer>{formula.formula}</MathRenderer>
+        <MathFormula math={formula.formula} />
       </div>
 
       <div className="space-y-5">
@@ -1457,9 +1595,12 @@ function FormulaCard({ formula, onCopy, copied }) {
               <p className="text-xs font-bold uppercase tracking-wide text-[#687481]">
                 Example
               </p>
-
               <p className="mt-1 text-sm leading-6 text-[#34404C]">
-                {formula.example}
+                {formula.exampleType === "math" ? (
+                  <MathFormula math={formula.example} displayMode={false} />
+                ) : (
+                  formula.example
+                )}
               </p>
             </div>
           </div>
@@ -1697,10 +1838,6 @@ export default function Formulas() {
         <section className="sticky top-[4.1rem] z-30 mb-12 border-y border-[#DEDEDB] bg-[#F8F7F4]/95 py-4 backdrop-blur">
           <div className="flex flex-col gap-4">
             <div className="relative">
-              <Search
-                size={19}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#687481]"
-              />
 
               <input
                 type="search"

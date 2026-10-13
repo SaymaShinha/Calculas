@@ -1189,7 +1189,7 @@ function EnhancedRuleCard({ rule, onCopy, copied }) {
 function CategoryOverview() {
   return (
     <section className="border-y border-[#E9E9E6] bg-white">
-      <div className="pml-section">
+      <div className="pml-section mx-auto max-w-[1180px] px-4 py-10 sm:px-6 lg:px-8">
         <div className="pml-eyebrow">Reference map</div>
 
         <h2 className="mt-3 text-2xl font-semibold text-[#17202A] sm:text-3xl">
@@ -1371,11 +1371,6 @@ export default function Rules() {
         <section className="sticky top-[4.1rem] z-30 mb-10 border-y border-[#DEDEDB] bg-[#F8F7F4] py-4">
           <div className="flex flex-col gap-4">
             <div className="relative">
-              <Search
-                size={19}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#687481]"
-              />
-
               <input
                 type="search"
                 value={search}
